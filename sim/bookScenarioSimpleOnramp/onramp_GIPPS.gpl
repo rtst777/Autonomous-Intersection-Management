@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "GIPPS"
+lang = "en"
+load "onramp.gpl"
+

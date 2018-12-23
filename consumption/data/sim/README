@@ -1,0 +1,4 @@
+runmovsimconsumption -f consumption_sim
+
+gnuplot plot_city_sim.gpl
+

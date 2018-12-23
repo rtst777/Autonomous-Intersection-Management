@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ADD1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
+                <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="0.0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD2" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
+                <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="7777777" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD3" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
+                <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="3333333" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="four_way_turn.xodr">
+        <Simulation timestep="0.2" crash_exit="true">
+            <TrafficComposition>
+                <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" />
+                <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficComposition>
+                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="from_left_keep_straight" />
+                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="from_left_turn_right" />
+                    <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="from_left_turn_left" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" v="30" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+        </Simulation>
+        <Routes>
+            <Route label="from_left_keep_straight">
+                <Road id="1" />
+                <Road id="7" />
+                <Road id="6" />
+            </Route>
+            <Route label="from_left_turn_right">
+                <Road id="1" />
+                <Road id="7" />
+                <Road id="2" />
+                <Road id="3" />
+            </Route>
+            <Route label="from_left_turn_left">
+                <Road id="1" />
+                <Road id="7" />
+                <Road id="4" />
+                <Road id="5" />
+            </Route>
+        </Routes>
+    </Scenario>
+</Movsim>
+

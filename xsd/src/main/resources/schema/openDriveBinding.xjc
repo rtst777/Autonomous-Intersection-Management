@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema" jxb:version="2.0">
+    <jxb:bindings schemaLocation="OpenDRIVE_1.3.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="org.movsim.network.autogen.opendrive"/>
+        </jxb:schemaBindings>
+
+    <!-- rename the value element -->
+        <!-- <jxb:bindings node="/////xsd:element[@name='roadMark']">
+            <jxb:bindings node="./xsd:element[@name='type']">
+                <jxb:property name="RoadMarkType"/>
+            </jxb:bindings>
+        </jxb:bindings>
+    -->
+    
+    </jxb:bindings>
+        
+        
+</jxb:bindings>

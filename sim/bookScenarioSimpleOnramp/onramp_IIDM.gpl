@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "IIDM"
+lang = "en"
+load "onramp.gpl"
+

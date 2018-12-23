@@ -1,0 +1,91 @@
+# movsim 
+bin/
+figs/
+csv/
+*.csv
+*.internal_xml
+*.log.*
+*.eps
+*.dot
+
+# git merge files
+*.orig
+
+# java misson control
+*.jfr
+
+########
+# IDEs #
+
+# Eclipse
+.project
+.metadata
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+.classpath
+.settings/
+.loadpath
+*.launch
+
+# intellij IDEA
+*.iml
+.idea/
+workspace.xml
+tasks.xml
+
+# SublimeText project files
+*.sublime-workspace
+*~
+
+# VisualStudio Code
+.vscode/
+
+##########
+# Java ###
+*.class
+target/
+out/
+logs/
+classes/
+
+# maven
+dependency-reduced-pom.xml
+
+# Log file
+*.log
+
+### Gradle ###
+.gradle
+build/
+
+######################
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# virtual machine crash logs
+hs_err_pid*
+
+###############
+# ignore others
+.factorypath
+int
+*highscore*
+log
+log4j.properties
+**/doc/
+
+# ignore tmp comments and mails
+README_xprj_addtl
+RoadSegment_Schelp.java
+Vehicle_Schelp.java
+sim/testing/*.txt

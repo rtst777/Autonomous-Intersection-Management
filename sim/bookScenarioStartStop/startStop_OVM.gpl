@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "OVM"
+lang = "en"
+load "startStop.gpl"
