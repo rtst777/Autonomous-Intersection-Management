@@ -35,9 +35,20 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficComposition>
-                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="from_left_keep_straight" />
-                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="from_left_turn_right" />
-                    <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="from_left_turn_left" />
+                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="route1" />
+                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="route2" />
+                    <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="route3" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" v="30" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="9">
+                <TrafficComposition>
+                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="route4" />
+                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="route5" />
+                    <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="route6" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" v="30" />
@@ -46,22 +57,44 @@
             </Road>
         </Simulation>
         <Routes>
-            <Route label="from_left_keep_straight">
-                <Road id="1" />
-                <Road id="7" />
-                <Road id="6" />
-            </Route>
-            <Route label="from_left_turn_right">
+            <!-- Yellow routes -->
+            <Route label="route1">
                 <Road id="1" />
                 <Road id="7" />
                 <Road id="2" />
                 <Road id="3" />
             </Route>
-            <Route label="from_left_turn_left">
+            <Route label="route2">
                 <Road id="1" />
                 <Road id="7" />
+                <Road id="6" />
+            </Route>
+            <Route label="route3">
+                <Road id="1" />
+                <Road id="7" />
+                <Road id="8" />
                 <Road id="4" />
                 <Road id="5" />
+            </Route>
+
+            <!-- Blue routes -->
+            <Route label="route4">
+                <Road id="9" />
+                <Road id="15" />
+                <Road id="10" />
+                <Road id="11" />
+            </Route>
+            <Route label="route5">
+                <Road id="9" />
+                <Road id="15" />
+                <Road id="14" />
+            </Route>
+            <Route label="route6">
+                <Road id="9" />
+                <Road id="15" />
+                <Road id="16" />
+                <Road id="12" />
+                <Road id="13" />
             </Route>
         </Routes>
     </Scenario>
