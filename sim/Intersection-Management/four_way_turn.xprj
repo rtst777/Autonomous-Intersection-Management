@@ -62,19 +62,19 @@
                 <Road id="1" />
                 <Road id="7" />
                 <Road id="2" />
-                <Road id="3" />
+                <Road id="3" logging="true"/>
             </Route>
             <Route label="route2">
                 <Road id="1" />
                 <Road id="7" />
-                <Road id="6" />
+                <Road id="6" logging="true"/>
             </Route>
             <Route label="route3">
                 <Road id="1" />
                 <Road id="7" />
                 <Road id="8" />
                 <Road id="4" />
-                <Road id="5" />
+                <Road id="5" logging="true"/>
             </Route>
 
             <!-- Blue routes -->
@@ -82,19 +82,19 @@
                 <Road id="9" />
                 <Road id="15" />
                 <Road id="10" />
-                <Road id="11" />
+                <Road id="11" logging="true"/>
             </Route>
             <Route label="route5">
                 <Road id="9" />
                 <Road id="15" />
-                <Road id="14" />
+                <Road id="14" logging="true"/>
             </Route>
             <Route label="route6">
                 <Road id="9" />
                 <Road id="15" />
                 <Road id="16" />
                 <Road id="12" />
-                <Road id="13" />
+                <Road id="13" logging="true"/>
             </Route>
         </Routes>
     </Scenario>
