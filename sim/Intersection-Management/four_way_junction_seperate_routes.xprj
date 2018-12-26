@@ -24,58 +24,49 @@
                 <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" />
                 <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
-            <Road id="1+">
+            <Road id="1">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300"  v="30" />
+                    <Inflow t="0" q_per_hour="300" />
                 </TrafficSource>
                 <Detectors />
             </Road>
-            <Road id="2-">
+            <Road id="2">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300"  v="30" />
+                    <Inflow t="0" q_per_hour="300" />
                 </TrafficSource>
                 <Detectors />
             </Road>
-            <Road id="3+">
-                <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300"  v="30" />
-                </TrafficSource>
-                <Detectors />
-            </Road>
-            <Road id="4-">
-                <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300"  v="30" />
-                </TrafficSource>
-                <Detectors />
-            </Road>
+            
 
             <Road id="5">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300"  v="30" />
+                    <Inflow t="0" q_per_hour="300" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="8">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="400"  v="30" />
+                    <Inflow t="0" q_per_hour="400" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="11">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="200"  v="30" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="14">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="350"  v="30" />
+                    <Inflow t="0" q_per_hour="350" />
                 </TrafficSource>
                 <Detectors />
             </Road>
+
+            
 
         </Simulation>
     </Scenario>
