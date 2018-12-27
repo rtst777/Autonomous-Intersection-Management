@@ -27,15 +27,14 @@
 package org.movsim.simulator.roadnetwork;
 
 import com.google.common.base.Preconditions;
+import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -60,6 +59,8 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     private static final Logger logger = LoggerFactory.getLogger(LaneSegment.class);
 
+    private static final boolean DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT = false;
+    private static final boolean DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE = false;
     private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
     // Lanes linkage
@@ -72,6 +73,17 @@ public class LaneSegment implements Iterable<Vehicle> {
     private Lanes.Type type;
     private final List<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
+
+    public static class FrontVehicleInfo {
+        public final Vehicle frontVehicle;
+        // the distance between the front vehicle and the current host vehicle
+        public final double precedingDistance;
+
+        public FrontVehicleInfo(Vehicle frontVehicle, double precedingDistance) {
+            this.frontVehicle = frontVehicle;
+            this.precedingDistance = precedingDistance;
+        }
+    }
 
     /**
      * Constructor.
@@ -588,7 +600,240 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the next downstream vehicle
      */
     public final Vehicle frontVehicle(Vehicle vehicle) {
-        return frontVehicle(vehicle.getRearPosition());
+        double precedingDistance = Double.MAX_VALUE;
+        Vehicle frontVehicle = null;
+
+        // find the front vehicle from the same lane
+        double vehiclePos = vehicle.getRearPosition();
+        int index = positionBinarySearch(vehiclePos);
+        int insertionPoint = -index - 1;
+        if (index > 0) {
+            // exact match found
+            frontVehicle = vehicles.get(index - 1);
+            precedingDistance = frontVehicle.getRearPosition() - vehiclePos;
+        } else if (insertionPoint > 0) {
+            frontVehicle = vehicles.get(insertionPoint - 1);
+            precedingDistance = frontVehicle.getRearPosition() - vehiclePos;
+        }
+
+        // find the front vehicle from the virtual lane
+        List<RoadSegment> virtualRoadSegments = roadSegment.getVirtualRoadSegments();
+        if (!virtualRoadSegments.isEmpty()){
+            double virtualPrecedingDistance = Double.MAX_VALUE;
+            Vehicle virtualFrontVehicle = null;
+            for (RoadSegment rs : virtualRoadSegments){
+                Iterator<LaneSegment> ls_iter = rs.laneSegmentIterator();
+                while (ls_iter.hasNext()) {
+                    LaneSegment ls = ls_iter.next();
+                    FrontVehicleInfo frontVehicleInfo = null;
+                    if (RoadSegment.overlappingRoads.contains(vehicle.roadSegmentId())){
+                        frontVehicleInfo = ls.posBinarySearchOnVirtualRoadWithoutCollisionPoint(vehicle);
+                    }
+                    else {
+                        frontVehicleInfo = ls.posSearchOnVirtualRoadWithCollisionPoint(vehicle);
+                    }
+
+                    if (frontVehicleInfo != null){
+                        virtualFrontVehicle = frontVehicleInfo.frontVehicle;
+                        virtualPrecedingDistance = frontVehicleInfo.precedingDistance;
+                    }
+
+                    // keep the closest front vehicle
+                    if (virtualPrecedingDistance < precedingDistance){
+                        frontVehicle = virtualFrontVehicle;
+                        precedingDistance = virtualPrecedingDistance;
+                    }
+                }
+            }
+        }
+
+        if (frontVehicle != null){
+            return frontVehicle;
+        }
+
+        // index == 0 or insertionPoint == 0
+        // subject vehicle is front vehicle on this road segment, so check for vehicles
+        // on sink lane segment
+        if (sinkLaneSegment != null) {
+            // didn't find a front vehicle in the current road segment, so check the next (sink) road segments
+            Vehicle sinkRearVehicle = null;
+            LaneSegment sink = sinkLaneSegment;
+            double accumDistance = roadLength();
+            do {
+                sinkRearVehicle = sink.rearVehicle();
+                if (sinkRearVehicle == null) {
+                    accumDistance += sink.roadLength();
+                }
+                sink = sink.sinkLaneSegment();
+                logger.debug("current: {}, sink: {}", this, sink);
+                if (sink == this || accumDistance > 5000) {
+                    // circular path or too far away
+                    break;
+                }
+            } while (sinkRearVehicle == null && sink != null);
+            if (sinkRearVehicle != null) {
+                // return a copy of the rear vehicle on the sink road segment, with its position
+                // set relative to the current road segment
+                final Vehicle frontSinkVehicle = new Vehicle(sinkRearVehicle);
+                frontSinkVehicle.setFrontPosition(frontSinkVehicle.getFrontPosition() + accumDistance);
+                return frontSinkVehicle;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns whether it is possible to have collision between otherVehicle and hostVehicle
+     *
+     * @param otherVehicle the vehicle on the virtual road
+     * @param hostVehicle the target vehicle
+     * @return true if otherVehicle can have collision with hostVehicle, otherwise false
+     */
+    private boolean isCollisionPossible(Vehicle otherVehicle, Vehicle hostVehicle) {
+        if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
+            logger.info("\nhost vehicle has route: " + hostVehicle.getRouteName());
+            logger.info("other vehicle has route: " + otherVehicle.getRouteName());
+        }
+
+        String routeName = hostVehicle.getRouteName();
+        List<String> collisionVehicles = RoadSegment.collisionRouteMapping.get(routeName);
+        if (collisionVehicles != null && !collisionVehicles.isEmpty()) {
+            if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
+                logger.info("is collision possible: " + collisionVehicles.contains(otherVehicle.getRouteName()) + "\n");
+            }
+            return collisionVehicles.contains(otherVehicle.getRouteName());
+        }
+        else {
+            if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
+                logger.info("is collision possible: false  \n");
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Returns the distance between the host vehicle to the potential collision point with other vehicle
+     *
+     * @param otherVehicle the vehicle on the virtual road
+     * @param hostVehicle the target vehicle
+     * @return the distance to the collision point
+     */
+    private double distanceFromVechileToCollisionPoint(Vehicle otherVehicle, Vehicle hostVehicle){
+        Map<String, Double> routeToCollisionPoint = RoadSegment.distanceToCollisionPoint.get(hostVehicle.getRouteName());
+        if (routeToCollisionPoint == null || routeToCollisionPoint.isEmpty()){
+            return -1.0;
+        }
+        else {
+            Double extraDistanceToCollisionPoint = routeToCollisionPoint.get(otherVehicle.getRouteName());
+            if (extraDistanceToCollisionPoint == null){
+                return -1.0;
+            }
+            return hostVehicle.getDistanceToRoadSegmentEnd() + extraDistanceToCollisionPoint;
+        }
+    }
+
+    /**
+     * Find the front vehicle from the virtual road, and return FrontVehicleInfo of the front vehicle
+     *
+     * @param hostVehicle
+     * @return FrontVehicleInfo of the front vehicle.
+     */
+    private FrontVehicleInfo posSearchOnVirtualRoadWithCollisionPoint(Vehicle hostVehicle){
+        double precedingDistance = Double.MAX_VALUE;
+        Vehicle frontVehicle = null;
+
+        for (Vehicle otherVehicle : vehicles){
+            if (isCollisionPossible(otherVehicle, hostVehicle)){
+                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
+                    System.out.println("\nhost vehicle has route: " + hostVehicle.getRouteName() + ", other vehicle has route: " + otherVehicle.getRouteName());
+                }
+
+                double hostVehicleToCollisionPoint = distanceFromVechileToCollisionPoint(otherVehicle, hostVehicle);
+                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
+                    System.out.println("host vehicle's distance to collision point is: " + hostVehicleToCollisionPoint);
+                }
+                if (hostVehicleToCollisionPoint < 0){
+                    continue;
+                }
+
+                double otherVehicleToCollisionPoint = distanceFromVechileToCollisionPoint(hostVehicle, otherVehicle);
+                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
+                    System.out.println("other vehicle's distance to collision point is: " + otherVehicleToCollisionPoint);
+                }
+                if (otherVehicleToCollisionPoint < 0){
+                    continue;
+                }
+
+                double hostVecPosToOtherVecPos = hostVehicleToCollisionPoint - otherVehicleToCollisionPoint;
+                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
+                    System.out.println("hostVecPosToOtherVecPos is: " + hostVecPosToOtherVecPos);
+                }
+                if (hostVecPosToOtherVecPos < 0){
+                    continue;
+                }
+
+                if (hostVecPosToOtherVecPos < precedingDistance){
+                    precedingDistance = hostVecPosToOtherVecPos;
+                    frontVehicle = otherVehicle;
+                }
+            }
+        }
+
+        if (frontVehicle == null){
+            return null;
+        }
+        else {
+            return new FrontVehicleInfo(frontVehicle, precedingDistance);
+        }
+    }
+
+    /**
+     * Find the front vehicle from the virtual road ignoring collision point, and return FrontVehicleInfo of the front vehicle
+     *
+     * @param hostVehicle
+     * @return FrontVehicleInfo of the front vehicle.
+     */
+    private FrontVehicleInfo posBinarySearchOnVirtualRoadWithoutCollisionPoint(Vehicle hostVehicle){
+        double vehiclePos = hostVehicle.getRearPosition();
+        // filter out the vehicles on the virtual road that won't cause collisions
+        List<Vehicle> possibleCollisonVehicles = vehicles.stream()
+                .filter(vehicle -> isCollisionPossible(vehicle, hostVehicle)).collect(Collectors.toList());
+
+        int low = 0;
+        int high = possibleCollisonVehicles.size() - 1;
+
+        while (low <= high) {
+            final int mid = (low + high) >> 1;
+            final double rearPos = possibleCollisonVehicles.get(mid).getRearPosition();
+            // final int compare = Double.compare(midPos, vehiclePos);
+            // note vehicles are sorted in reverse order of position
+            final int compare = Double.compare(vehiclePos, rearPos);
+            if (compare < 0) {
+                low = mid + 1;
+            } else if (compare > 0) {
+                high = mid - 1;
+            } else {
+                if (mid > 0){
+                    Vehicle frontVehicle = vehicles.get(mid - 1);
+                    double precedingDistance = frontVehicle.getRearPosition() - hostVehicle.getRearPosition();
+                    return new FrontVehicleInfo(frontVehicle, precedingDistance);
+                }
+                else {
+                    // there is no front vehicle
+                    return null;
+                }
+            }
+        }
+
+        if (low > 0){
+            Vehicle frontVehicle = vehicles.get(low - 1);
+            double precedingDistance = frontVehicle.getRearPosition() - hostVehicle.getRearPosition();
+            return new FrontVehicleInfo(frontVehicle, precedingDistance);
+        }
+        else {
+            // there is no front vehicle
+            return null;
+        }
     }
 
     private int positionBinarySearch(double vehiclePos) {

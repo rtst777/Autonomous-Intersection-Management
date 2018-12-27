@@ -101,6 +101,17 @@ public class OpenDriveHandler {
                 roadSegmentRight.setPeerRoadSegment(roadSegmentLeft);
             }
         }
+
+        // for each road, also add virtual roads (virtual road is the road containing vehicles to cause potential collision)
+        for (final RoadSegment roadSegment : roadNetwork) {
+            int roadID = roadSegment.id();
+            if (RoadSegment.virtualRoadMapping.containsKey(roadID)){
+                for (int virtualRoadID : RoadSegment.virtualRoadMapping.get(roadID)){
+                    roadSegment.addVirtualRoadSegments(roadNetwork.findById(virtualRoadID));
+                }
+            }
+        }
+
         LOG.info("created {} roadSegments.", roadNetwork.size());
     }
 

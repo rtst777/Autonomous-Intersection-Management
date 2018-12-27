@@ -133,6 +133,148 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private RoadSegment peerRoadSegment;
 
+    private List<RoadSegment> virtualRoadSegments = new ArrayList<>();
+
+    // road -> virtual roads
+    public static final Map<Integer, List<Integer>> virtualRoadMapping;
+    // route name of current vehicle -> route name of the vehicle that can have collision with the current vehicle
+    public static final Map<String, List<String>> collisionRouteMapping;
+    // route name of current vehicle ->
+    //  (route name of the vehicle that can have collision with the current vehicle -> distance from current vehicle to the collision point)
+    public static final Map<String, Map<String, Double>> distanceToCollisionPoint;
+    // road that is overlapping with other roads.
+    public static final List<Integer> overlappingRoads;
+    // the curve road which is twice the length of what it should be
+    public static final List<Integer> overLengthCurve;
+
+    static {
+        overLengthCurve = new ArrayList<Integer>(){
+            {
+                add(2);
+                add(10);
+            }
+        };
+
+        overlappingRoads = new ArrayList<Integer>() {
+            {
+                add(11);
+                add(5);
+                add(3);
+                add(13);
+            }
+        };
+
+        virtualRoadMapping = new HashMap<>();
+        virtualRoadMapping.put(11, new ArrayList<Integer>() {
+            {
+                add(5);
+            }
+        });
+        virtualRoadMapping.put(3, new ArrayList<Integer>() {
+            {
+                add(13);
+            }
+        });
+        virtualRoadMapping.put(5, new ArrayList<Integer>() {
+            {
+                add(11);
+            }
+        });
+        virtualRoadMapping.put(13, new ArrayList<Integer>() {
+            {
+                add(3);
+            }
+        });
+        virtualRoadMapping.put(1, new ArrayList<Integer>() {
+            {
+                add(9);
+            }
+        });
+        virtualRoadMapping.put(9, new ArrayList<Integer>() {
+            {
+                add(1);
+            }
+        });
+
+        collisionRouteMapping = new HashMap<>();
+        collisionRouteMapping.put("route1", new ArrayList<String>() {
+            {
+                add("route6");
+            }
+        });
+        collisionRouteMapping.put("route2", new ArrayList<String>() {
+            {
+                add("route6");
+            }
+        });
+        collisionRouteMapping.put("route3", new ArrayList<String>() {
+            {
+                add("route4");
+                add("route5");
+                add("route6");
+            }
+        });
+        collisionRouteMapping.put("route4", new ArrayList<String>() {
+            {
+                add("route3");
+            }
+        });
+        collisionRouteMapping.put("route5", new ArrayList<String>() {
+            {
+                add("route3");
+            }
+        });
+        collisionRouteMapping.put("route6", new ArrayList<String>() {
+            {
+                add("route1");
+                add("route2");
+                add("route3");
+            }
+        });
+
+        distanceToCollisionPoint = new HashMap<>();
+        Map<String, Double> route1ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route6", 15 * Math.PI / 2);
+            }
+        };
+        Map<String, Double> route2ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route6", 15.0);
+            }
+        };
+        Map<String, Double> route3ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route4", 20 + 15 * Math.PI / 2);
+                put("route5", 15 + 10 * Math.PI / 2);
+                put("route6", 15.0);
+            }
+        };
+        Map<String, Double> route4ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route3", 15 * Math.PI / 2);
+            }
+        };
+        Map<String, Double> route5ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route3", 15.0);
+            }
+        };
+        Map<String, Double> route6ToCollisionPoint = new HashMap<String, Double>() {
+            {
+                put("route1", 20 + 15 * Math.PI / 2);
+                put("route2", 15 + 10 * Math.PI / 2);
+                put("route3", 15.0);
+            }
+        };
+        distanceToCollisionPoint.put("route1", route1ToCollisionPoint);
+        distanceToCollisionPoint.put("route2", route2ToCollisionPoint);
+        distanceToCollisionPoint.put("route3", route3ToCollisionPoint);
+        distanceToCollisionPoint.put("route4", route4ToCollisionPoint);
+        distanceToCollisionPoint.put("route5", route5ToCollisionPoint);
+        distanceToCollisionPoint.put("route6", route6ToCollisionPoint);
+    }
+
     private Node origin = new NodeImpl("origin");
 
     private Node destination = new NodeImpl("destination");
@@ -1195,7 +1337,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     LOG.error(sb.toString());
                     if (isWithCrashExit) {
                         LOG.error(" !!! exit after crash !!! ");
-                        System.exit(-99);
+               //         System.exit(-99);
                     }
                 }
             }
@@ -1328,6 +1470,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         Preconditions.checkArgument(!peerRoadSegment.equals(this));
         this.peerRoadSegment = peerRoadSegment;
     }
+
+    public List<RoadSegment> getVirtualRoadSegments() {
+        return virtualRoadSegments;
+    }
+
+    public void addVirtualRoadSegments(RoadSegment roadSegment){ virtualRoadSegments.add(roadSegment);}
 
     public void setTrafficComposition(TrafficCompositionGenerator composition) {
         this.trafficComposition = composition;
