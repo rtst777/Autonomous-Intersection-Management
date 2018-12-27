@@ -3,7 +3,7 @@
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ADD1" length="6" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+                <ModelParameterIDM v0="5" T="1.2" s0="10" s1="10" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
                 <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="0.0" politeness="0.0" />
@@ -11,7 +11,7 @@
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="ADD2" length="6" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
+                <ModelParameterACC v0="5" T="1.2" s0="10" s1="10" delta="4" a="1.2" b="2.0" coolness="1.0" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
                 <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="7777777" politeness="0.0" />
@@ -19,7 +19,7 @@
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="ADD3" length="6" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="5" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
+                <ModelParameterIDM v0="5" T="1.5" s0="10" s1="10" delta="4" a="0.8" b="2.0" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="false" crit_speed_eur="1000">
                 <ModelParameterMOBIL safe_deceleration="9.0" minimum_gap="0.0" threshold_acceleration="0.0" right_bias_acceleration="3333333" politeness="0.0" />
@@ -35,8 +35,8 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficComposition>
-                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="route1" />
-                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="route2" />
+                    <VehicleType label="ADD2" fraction="0.4" relative_v0_randomization="0.2" route_label="route1" />
+                    <VehicleType label="ADD1" fraction="0.3" relative_v0_randomization="0.2" route_label="route2" />
                     <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="route3" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
@@ -44,17 +44,17 @@
                 </TrafficSource>
                 <Detectors />
             </Road>
-            <Road id="9">
+            <!-- <Road id="9">
                 <TrafficComposition>
-                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" route_label="route4" />
-                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" route_label="route5" />
+                    <VehicleType label="ADD2" fraction="0.4" relative_v0_randomization="0.2" route_label="route4" />
+                    <VehicleType label="ADD1" fraction="0.3" relative_v0_randomization="0.2" route_label="route5" />
                     <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" route_label="route6" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" v="30" />
                 </TrafficSource>
                 <Detectors />
-            </Road>
+            </Road> -->
         </Simulation>
         <Routes>
             <!-- Yellow routes -->
@@ -62,19 +62,20 @@
                 <Road id="1" />
                 <Road id="7" />
                 <Road id="2" />
-                <Road id="3" logging="true"/>
+                <Road id="17" />
+                <Road id="3" />
             </Route>
             <Route label="route2">
                 <Road id="1" />
                 <Road id="7" />
-                <Road id="6" logging="true"/>
+                <Road id="6" />
             </Route>
             <Route label="route3">
                 <Road id="1" />
                 <Road id="7" />
                 <Road id="8" />
                 <Road id="4" />
-                <Road id="5" logging="true"/>
+                <Road id="5" />
             </Route>
 
             <!-- Blue routes -->
@@ -82,20 +83,23 @@
                 <Road id="9" />
                 <Road id="15" />
                 <Road id="10" />
-                <Road id="11" logging="true"/>
+                <Road id="11" />
             </Route>
             <Route label="route5">
                 <Road id="9" />
                 <Road id="15" />
-                <Road id="14" logging="true"/>
+                <Road id="14" />
             </Route>
             <Route label="route6">
                 <Road id="9" />
                 <Road id="15" />
                 <Road id="16" />
                 <Road id="12" />
-                <Road id="13" logging="true"/>
+                <Road id="13" />
+                <Road id="17" />
+                <Road id="3" />
             </Route>
         </Routes>
     </Scenario>
 </Movsim>
+
