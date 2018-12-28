@@ -17,7 +17,7 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="four_way_junction_seperate_routes.xodr">
+    <Scenario network_filename="four_way_junction_fat.xodr">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" />
@@ -26,13 +26,13 @@
             </TrafficComposition>
             <Road id="111">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="222">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
@@ -51,28 +51,28 @@
 
             <Road id="5">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="8">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="400" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="11">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="200" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="14">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="350" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
