@@ -17,37 +17,48 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="four_way_junction_seperate_routes.xodr">
+    <Scenario network_filename="four_way_junction_fat.xodr">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" />
                 <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" />
                 <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
-            <Road id="1">
+            <Road id="111">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="100" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="222">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="100" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <!-- <Road id="3+">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="300" />
                 </TrafficSource>
                 <Detectors />
             </Road>
-            <Road id="2">
+            <Road id="4-">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="300" />
                 </TrafficSource>
                 <Detectors />
-            </Road>
-            
+            </Road> -->
 
             <Road id="5">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="300" />
+                    <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="8">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="400" />
+                    <Inflow t="0" q_per_hour="150" />
                 </TrafficSource>
                 <Detectors />
             </Road>
@@ -61,12 +72,38 @@
 
             <Road id="14">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="350" />
+                    <Inflow t="0" q_per_hour="150" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
+            <!-- <Road id="17">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="250" />
+                </TrafficSource>
+                <Detectors />
+            </Road> -->
+
+            <!-- <Road id="20">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="300" />
+                </TrafficSource>
+                <Detectors />
+            </Road> -->
             
+            <!-- <Road id="26">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="150" />
+                </TrafficSource>
+                <Detectors />
+            </Road> -->
+
+            <!-- <Road id="23">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="300" />
+                </TrafficSource>
+                <Detectors />
+            </Road> -->
 
         </Simulation>
     </Scenario>
