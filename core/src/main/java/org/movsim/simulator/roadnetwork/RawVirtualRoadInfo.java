@@ -10,8 +10,6 @@ import java.util.Set;
  */
 public class RawVirtualRoadInfo {
     // The values we load from yaml file is userID, we need to transform the userID to roadID
-    public Map<Integer, List<Integer>> rawVirtualRoadMapping;
     public Map<Integer, Map<Integer, Double>> rawDistanceOffsetDueToCollisionPoint;
-    public Set<Integer> rawOverlappingRoads;
-    public Set<Integer> rawOverLengthCurve;
+    public Map<Integer, Double> rawProblematicCurve;
 }

@@ -26,6 +26,7 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.autogen.ModelParameterIDM;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterIDM;
 import org.slf4j.Logger;
@@ -106,7 +107,7 @@ public class IDM extends LongitudinalModelBase {
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         // TODO_ethan support end_based  getNetDistance
         // Local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
+        final double s = VirtualRoadService.getPrecedingDistanceToFrontVehicle(me, frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
 

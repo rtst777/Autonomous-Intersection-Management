@@ -600,6 +600,11 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the next downstream vehicle
      */
     public final Vehicle frontVehicle(Vehicle vehicle) {
+
+        if (vehicle.getId() == 5){
+            int x = 1;
+        }
+
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
 
@@ -626,15 +631,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 Iterator<LaneSegment> ls_iter = rs.laneSegmentIterator();
                 while (ls_iter.hasNext()) {
                     LaneSegment ls = ls_iter.next();
-                    FrontVehicleInfo frontVehicleInfo = null;
-                    // TODO_ethan combine the below two method to a single binary search
-                    if (VirtualRoadService.overlappingRoads.contains(vehicle.roadSegmentId())){
-                        frontVehicleInfo = ls.posBinarySearchOnVirtualRoadWithoutCollisionPoint(vehicle);
-                    }
-                    else {
-                        frontVehicleInfo = ls.posSearchOnVirtualRoadWithCollisionPoint(vehicle);
-                    }
-
+                    FrontVehicleInfo frontVehicleInfo = ls.positionSearchOnVirtualRoad(vehicle);
                     if (frontVehicleInfo != null){
                         virtualFrontVehicle = frontVehicleInfo.frontVehicle;
                         virtualPrecedingDistance = frontVehicleInfo.precedingDistance;
@@ -695,14 +692,22 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param hostVehicle
      * @return FrontVehicleInfo of the front vehicle.
      */
-    private FrontVehicleInfo posSearchOnVirtualRoadWithCollisionPoint(Vehicle hostVehicle){
+    private FrontVehicleInfo positionSearchOnVirtualRoad(Vehicle hostVehicle){
+        double hostVehicleToVirtualRoadSegmentEnd =
+                VirtualRoadService.getPrecedingDistanceToVirtualRoad(this.roadSegment(), hostVehicle);
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
 
         for (Vehicle otherVehicle : vehicles) {
-            double hostVecPosToOtherVecPos = VirtualRoadService.getVirtualPrecedingDistance(otherVehicle, hostVehicle);
-            if (hostVecPosToOtherVecPos < 0) {
+            if (hostVehicleToVirtualRoadSegmentEnd < 0) {
                 continue;
+            }
+
+            double otherVehicleToRoadSegmentEnd = otherVehicle.getDistanceToRoadSegmentEnd();
+            double hostVecPosToOtherVecPos = hostVehicleToVirtualRoadSegmentEnd - otherVehicleToRoadSegmentEnd;
+            if (hostVecPosToOtherVecPos < 0) {
+                // note vehicles are sorted in reverse order of position
+                break;
             }
 
             if (hostVecPosToOtherVecPos < precedingDistance) {
@@ -716,56 +721,6 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         else {
             return new FrontVehicleInfo(frontVehicle, precedingDistance);
-        }
-    }
-
-    /**
-     * Find the front vehicle from the virtual road ignoring collision point, and return FrontVehicleInfo of the front vehicle
-     *
-     * @param hostVehicle
-     * @return FrontVehicleInfo of the front vehicle.
-     */
-    private FrontVehicleInfo posBinarySearchOnVirtualRoadWithoutCollisionPoint(Vehicle hostVehicle){
-        double vehiclePos = hostVehicle.getRearPosition();
-
-        int low = 0;
-        int high = vehicles.size() - 1;
-
-        if (high > 0){
-            int x = 1;
-        }
-
-        while (low <= high) {
-            final int mid = (low + high) >> 1;
-            final double rearPos = vehicles.get(mid).getRearPosition();
-            // final int compare = Double.compare(midPos, vehiclePos);
-            // note vehicles are sorted in reverse order of position
-            final int compare = Double.compare(vehiclePos, rearPos);
-            if (compare < 0) {
-                low = mid + 1;
-            } else if (compare > 0) {
-                high = mid - 1;
-            } else {
-                if (mid > 0){
-                    Vehicle frontVehicle = vehicles.get(mid - 1);
-                    double precedingDistance = frontVehicle.getRearPosition() - hostVehicle.getRearPosition();
-                    return new FrontVehicleInfo(frontVehicle, precedingDistance);
-                }
-                else {
-                    // there is no front vehicle
-                    return null;
-                }
-            }
-        }
-
-        if (low > 0){
-            Vehicle frontVehicle = vehicles.get(low - 1);
-            double precedingDistance = frontVehicle.getRearPosition() - hostVehicle.getRearPosition();
-            return new FrontVehicleInfo(frontVehicle, precedingDistance);
-        }
-        else {
-            // there is no front vehicle
-            return null;
         }
     }
 

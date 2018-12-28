@@ -817,11 +817,9 @@ public class Vehicle {
             }
         }
 
-        // workaround for the overlength problem of the curve road
-        if (VirtualRoadService.overLengthCurve.contains(roadSegmentId())){
-            // make the position change * 2
-            frontPosition = frontPositionOld + 2 * (frontPosition - frontPositionOld);
-        }
+        // workaround for the incorrect length problem of the curve road
+        frontPosition = frontPositionOld +
+                VirtualRoadService.getPositionFactor(roadSegmentId()) * (frontPosition - frontPositionOld);
 
         energyModel.incrementConsumption(speed, acc, dt);
     }
