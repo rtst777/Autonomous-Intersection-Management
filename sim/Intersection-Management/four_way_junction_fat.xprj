@@ -24,18 +24,18 @@
                 <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" />
                 <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
-            <Road id="111">
+            <!-- <Road id="111">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
-            </Road>
-            <Road id="222">
+            </Road> -->
+            <!-- <Road id="222">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
-            </Road>
+            </Road> -->
             <!-- <Road id="3+">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="300" />
@@ -49,7 +49,7 @@
                 <Detectors />
             </Road> -->
 
-            <Road id="5">
+            <!-- <Road id="5">
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
@@ -75,7 +75,7 @@
                     <Inflow t="0" q_per_hour="100" />
                 </TrafficSource>
                 <Detectors />
-            </Road>
+            </Road> -->
 
             <!-- <Road id="17">
                 <TrafficSource logging="false">
