@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ADD1" length="5" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="2" T="1.2" s0="10" s1="2" delta="4" a="1.0" b="1.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD2" length="5" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="4" T="1.2" s0="10" s1="2" delta="4" a="1.0" b="1.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD3" length="5" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="4" T="1.2" s0="10" s1="2" delta="4" a="1.0" b="1.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="four_way_junction_without_routes.xodr">
+        <Simulation timestep="0.2" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.0" />
+                <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.0" />
+                <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.0" />
+            </TrafficComposition>
+<!--            <Road id="1">-->
+<!--                <TrafficComposition>-->
+<!--                    <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.0" />-->
+<!--                </TrafficComposition>-->
+<!--                <TrafficSource logging="false">-->
+<!--                    <Inflow t="5" q_per_hour="90" />-->
+<!--                </TrafficSource>-->
+<!--                <Detectors />-->
+<!--            </Road>-->
+            <Road id="2">
+                <TrafficComposition>
+                    <VehicleType label="ADD1" fraction="1" relative_v0_randomization="0.0" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="1" q_per_hour="150" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+
+            <Road id="5">
+                <TrafficComposition>
+                    <VehicleType label="ADD2" fraction="1" relative_v0_randomization="0.0" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="2" q_per_hour="150" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+<!--            <Road id="8">-->
+<!--                <TrafficComposition>-->
+<!--                    <VehicleType label="ADD3" fraction="1" relative_v0_randomization="0.0" />-->
+<!--                </TrafficComposition>-->
+<!--                <TrafficSource logging="false">-->
+<!--                    <Inflow t="3" q_per_hour="150" />-->
+<!--                </TrafficSource>-->
+<!--                <Detectors />-->
+<!--            </Road>-->
+
+<!--            <Road id="11">-->
+<!--                <TrafficComposition>-->
+<!--                    <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.0" />-->
+<!--                </TrafficComposition>-->
+<!--                <TrafficSource logging="false">-->
+<!--                    <Inflow t="3" q_per_hour="150" />-->
+<!--                </TrafficSource>-->
+<!--                <Detectors />-->
+<!--            </Road>-->
+
+<!--            <Road id="14">-->
+<!--                <TrafficComposition>-->
+<!--                    <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.0" />-->
+<!--                </TrafficComposition>-->
+<!--                <TrafficSource logging="false">-->
+<!--                    <Inflow t="5" q_per_hour="50" />-->
+<!--                </TrafficSource>-->
+<!--                <Detectors />-->
+<!--            </Road>-->
+
+        </Simulation>
+    </Scenario>
+</Movsim>
+
