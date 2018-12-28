@@ -17,6 +17,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
@@ -817,7 +818,7 @@ public class Vehicle {
         }
 
         // workaround for the overlength problem of the curve road
-        if (RoadSegment.overLengthCurve.contains(roadSegmentId())){
+        if (VirtualRoadService.overLengthCurve.contains(roadSegmentId())){
             // make the position change * 2
             frontPosition = frontPositionOld + 2 * (frontPosition - frontPositionOld);
         }

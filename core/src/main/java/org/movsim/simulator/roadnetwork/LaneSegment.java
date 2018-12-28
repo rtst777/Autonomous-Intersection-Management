@@ -618,6 +618,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
         // find the front vehicle from the virtual lane
         List<RoadSegment> virtualRoadSegments = roadSegment.getVirtualRoadSegments();
+        boolean updateVirtualPrecedingDistance = false;
         if (!virtualRoadSegments.isEmpty()){
             double virtualPrecedingDistance = Double.MAX_VALUE;
             Vehicle virtualFrontVehicle = null;
@@ -626,7 +627,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                 while (ls_iter.hasNext()) {
                     LaneSegment ls = ls_iter.next();
                     FrontVehicleInfo frontVehicleInfo = null;
-                    if (RoadSegment.overlappingRoads.contains(vehicle.roadSegmentId())){
+                    // TODO_ethan combine the below two method to a single binary search
+                    if (VirtualRoadService.overlappingRoads.contains(vehicle.roadSegmentId())){
                         frontVehicleInfo = ls.posBinarySearchOnVirtualRoadWithoutCollisionPoint(vehicle);
                     }
                     else {
@@ -642,8 +644,13 @@ public class LaneSegment implements Iterable<Vehicle> {
                     if (virtualPrecedingDistance < precedingDistance){
                         frontVehicle = virtualFrontVehicle;
                         precedingDistance = virtualPrecedingDistance;
+                        updateVirtualPrecedingDistance = true;
                     }
                 }
+            }
+
+            if (updateVirtualPrecedingDistance){
+                VirtualRoadService.updatePrecedingVirtualDistance(vehicle, frontVehicle, precedingDistance);
             }
         }
 
@@ -683,29 +690,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Transform the hostVehicle to the virtual road, where the otherVehicle resides, then compute and return the
-     * distance from the host vehicle to the end of the virtual road
-     *
-     * @param otherVehicle the vehicle on the virtual road
-     * @param hostVehicle the target vehicle
-     * @return the distance from the host vehicle to the end of the virtual road
-     */
-    private double getDistanceToVirtualRoadSegmentEnd(Vehicle otherVehicle, Vehicle hostVehicle){
-        Map<Integer, Double> distanceOffsets = RoadSegment.distanceOffsetDueToCollisionPoint.get(hostVehicle.roadSegmentId());
-        if (distanceOffsets == null || distanceOffsets.isEmpty()){
-            return -1.0;
-        }
-        else {
-            Double distanceOffset = distanceOffsets.get(otherVehicle.roadSegmentId());
-            if (distanceOffset == null){
-                return -1.0;
-            }
-
-            return hostVehicle.getDistanceToRoadSegmentEnd() + distanceOffset;
-        }
-    }
-
-    /**
      * Find the front vehicle from the virtual road, and return FrontVehicleInfo of the front vehicle
      *
      * @param hostVehicle
@@ -716,13 +700,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         Vehicle frontVehicle = null;
 
         for (Vehicle otherVehicle : vehicles) {
-            double hostVehicleToVirtualRoadSegmentEnd = getDistanceToVirtualRoadSegmentEnd(otherVehicle, hostVehicle);
-            if (hostVehicleToVirtualRoadSegmentEnd < 0) {
-                continue;
-            }
-
-            double otherVehicleToRoadSegmentEnd = otherVehicle.getDistanceToRoadSegmentEnd();
-            double hostVecPosToOtherVecPos = hostVehicleToVirtualRoadSegmentEnd - otherVehicleToRoadSegmentEnd;
+            double hostVecPosToOtherVecPos = VirtualRoadService.getVirtualPrecedingDistance(otherVehicle, hostVehicle);
             if (hostVecPosToOtherVecPos < 0) {
                 continue;
             }

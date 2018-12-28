@@ -12,6 +12,11 @@
     <description>Movsim core simulation component.</description>
     <dependencies>
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.21</version>
+        </dependency>
+        <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimXsd</artifactId>
             <version>${project.version}</version>

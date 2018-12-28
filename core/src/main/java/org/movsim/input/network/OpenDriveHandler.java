@@ -51,6 +51,7 @@ public class OpenDriveHandler {
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, File file) {
         OpenDRIVE openDriveNetwork = InputLoader.unmarshallOpenDriveNetwork(file);
         OpenDriveHandler openDriveHandlerJaxb = new OpenDriveHandler();
+        VirtualRoadService.setVirtualRoadConfigFilePath(file);
         return openDriveHandlerJaxb.create(openDriveNetwork, roadNetwork);
     }
 
@@ -103,17 +104,10 @@ public class OpenDriveHandler {
         }
 
         // Initialize all the related information for virtual roads
-        RoadSegment.initializeVirtualRoadInfo(roadNetwork);
+        VirtualRoadService.initializeVirtualRoadService(roadNetwork);
 
         // for each road, also add virtual roads (virtual road is the road containing vehicles to cause potential collision)
-        for (final RoadSegment roadSegment : roadNetwork) {
-            int roadID = roadSegment.id();
-            if (RoadSegment.virtualRoadMapping.containsKey(roadID)){
-                for (int virtualRoadID : RoadSegment.virtualRoadMapping.get(roadID)){
-                    roadSegment.addVirtualRoadSegments(roadNetwork.findById(virtualRoadID));
-                }
-            }
-        }
+        VirtualRoadService.addVirtualRoads(roadNetwork);
 
         LOG.info("created {} roadSegments.", roadNetwork.size());
     }
