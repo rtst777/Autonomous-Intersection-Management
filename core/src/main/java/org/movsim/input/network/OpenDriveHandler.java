@@ -102,6 +102,9 @@ public class OpenDriveHandler {
             }
         }
 
+        // Initialize all the related information for virtual roads
+        RoadSegment.initializeVirtualRoadInfo(roadNetwork);
+
         // for each road, also add virtual roads (virtual road is the road containing vehicles to cause potential collision)
         for (final RoadSegment roadSegment : roadNetwork) {
             int roadID = roadSegment.id();

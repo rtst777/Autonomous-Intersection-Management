@@ -2,25 +2,25 @@
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
  * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
- * 
+ *
  * This file is part of
- * 
+ *
  * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
+ *
  * MovSim is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * MovSim is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with MovSim. If not, see <http://www.gnu.org/licenses/>
  * or <http://www.movsim.org>.
- * 
+ *
  * -----------------------------------------------------------------------------------------
  */
 
@@ -683,52 +683,25 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns whether it is possible to have collision between otherVehicle and hostVehicle
+     * Transform the hostVehicle to the virtual road, where the otherVehicle resides, then compute and return the
+     * distance from the host vehicle to the end of the virtual road
      *
      * @param otherVehicle the vehicle on the virtual road
      * @param hostVehicle the target vehicle
-     * @return true if otherVehicle can have collision with hostVehicle, otherwise false
+     * @return the distance from the host vehicle to the end of the virtual road
      */
-    private boolean isCollisionPossible(Vehicle otherVehicle, Vehicle hostVehicle) {
-        if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
-            logger.info("\nhost vehicle has route: " + hostVehicle.getRouteName());
-            logger.info("other vehicle has route: " + otherVehicle.getRouteName());
-        }
-
-        String routeName = hostVehicle.getRouteName();
-        List<String> collisionVehicles = RoadSegment.collisionRouteMapping.get(routeName);
-        if (collisionVehicles != null && !collisionVehicles.isEmpty()) {
-            if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
-                logger.info("is collision possible: " + collisionVehicles.contains(otherVehicle.getRouteName()) + "\n");
-            }
-            return collisionVehicles.contains(otherVehicle.getRouteName());
-        }
-        else {
-            if (DEBUG_VIRTUAL_PLATONNING_COLLISION_POINT){
-                logger.info("is collision possible: false  \n");
-            }
-            return false;
-        }
-    }
-
-    /**
-     * Returns the distance between the host vehicle to the potential collision point with other vehicle
-     *
-     * @param otherVehicle the vehicle on the virtual road
-     * @param hostVehicle the target vehicle
-     * @return the distance to the collision point
-     */
-    private double distanceFromVechileToCollisionPoint(Vehicle otherVehicle, Vehicle hostVehicle){
-        Map<String, Double> routeToCollisionPoint = RoadSegment.distanceToCollisionPoint.get(hostVehicle.getRouteName());
-        if (routeToCollisionPoint == null || routeToCollisionPoint.isEmpty()){
+    private double getDistanceToVirtualRoadSegmentEnd(Vehicle otherVehicle, Vehicle hostVehicle){
+        Map<Integer, Double> distanceOffsets = RoadSegment.distanceOffsetDueToCollisionPoint.get(hostVehicle.roadSegmentId());
+        if (distanceOffsets == null || distanceOffsets.isEmpty()){
             return -1.0;
         }
         else {
-            Double extraDistanceToCollisionPoint = routeToCollisionPoint.get(otherVehicle.getRouteName());
-            if (extraDistanceToCollisionPoint == null){
+            Double distanceOffset = distanceOffsets.get(otherVehicle.roadSegmentId());
+            if (distanceOffset == null){
                 return -1.0;
             }
-            return hostVehicle.getDistanceToRoadSegmentEnd() + extraDistanceToCollisionPoint;
+
+            return hostVehicle.getDistanceToRoadSegmentEnd() + distanceOffset;
         }
     }
 
@@ -742,40 +715,21 @@ public class LaneSegment implements Iterable<Vehicle> {
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
 
-        for (Vehicle otherVehicle : vehicles){
-            if (isCollisionPossible(otherVehicle, hostVehicle)){
-                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
-                    System.out.println("\nhost vehicle has route: " + hostVehicle.getRouteName() + ", other vehicle has route: " + otherVehicle.getRouteName());
-                }
+        for (Vehicle otherVehicle : vehicles) {
+            double hostVehicleToVirtualRoadSegmentEnd = getDistanceToVirtualRoadSegmentEnd(otherVehicle, hostVehicle);
+            if (hostVehicleToVirtualRoadSegmentEnd < 0) {
+                continue;
+            }
 
-                double hostVehicleToCollisionPoint = distanceFromVechileToCollisionPoint(otherVehicle, hostVehicle);
-                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
-                    System.out.println("host vehicle's distance to collision point is: " + hostVehicleToCollisionPoint);
-                }
-                if (hostVehicleToCollisionPoint < 0){
-                    continue;
-                }
+            double otherVehicleToRoadSegmentEnd = otherVehicle.getDistanceToRoadSegmentEnd();
+            double hostVecPosToOtherVecPos = hostVehicleToVirtualRoadSegmentEnd - otherVehicleToRoadSegmentEnd;
+            if (hostVecPosToOtherVecPos < 0) {
+                continue;
+            }
 
-                double otherVehicleToCollisionPoint = distanceFromVechileToCollisionPoint(hostVehicle, otherVehicle);
-                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
-                    System.out.println("other vehicle's distance to collision point is: " + otherVehicleToCollisionPoint);
-                }
-                if (otherVehicleToCollisionPoint < 0){
-                    continue;
-                }
-
-                double hostVecPosToOtherVecPos = hostVehicleToCollisionPoint - otherVehicleToCollisionPoint;
-                if (DEBUG_VIRTUAL_PLATONNING_COLLISION_DISTANCE){
-                    System.out.println("hostVecPosToOtherVecPos is: " + hostVecPosToOtherVecPos);
-                }
-                if (hostVecPosToOtherVecPos < 0){
-                    continue;
-                }
-
-                if (hostVecPosToOtherVecPos < precedingDistance){
-                    precedingDistance = hostVecPosToOtherVecPos;
-                    frontVehicle = otherVehicle;
-                }
+            if (hostVecPosToOtherVecPos < precedingDistance) {
+                precedingDistance = hostVecPosToOtherVecPos;
+                frontVehicle = otherVehicle;
             }
         }
 
@@ -795,16 +749,17 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     private FrontVehicleInfo posBinarySearchOnVirtualRoadWithoutCollisionPoint(Vehicle hostVehicle){
         double vehiclePos = hostVehicle.getRearPosition();
-        // filter out the vehicles on the virtual road that won't cause collisions
-        List<Vehicle> possibleCollisonVehicles = vehicles.stream()
-                .filter(vehicle -> isCollisionPossible(vehicle, hostVehicle)).collect(Collectors.toList());
 
         int low = 0;
-        int high = possibleCollisonVehicles.size() - 1;
+        int high = vehicles.size() - 1;
+
+        if (high > 0){
+            int x = 1;
+        }
 
         while (low <= high) {
             final int mid = (low + high) >> 1;
-            final double rearPos = possibleCollisonVehicles.get(mid).getRearPosition();
+            final double rearPos = vehicles.get(mid).getRearPosition();
             // final int compare = Double.compare(midPos, vehiclePos);
             // note vehicles are sorted in reverse order of position
             final int compare = Double.compare(vehiclePos, rearPos);

@@ -18,7 +18,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.movsim.roadmappings.Customer;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.VirtualRoadInfo;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
@@ -30,8 +32,11 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 import javax.annotation.CheckForNull;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -135,144 +140,164 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private List<RoadSegment> virtualRoadSegments = new ArrayList<>();
 
-    // road -> virtual roads
-    public static final Map<Integer, List<Integer>> virtualRoadMapping;
-    // route name of current vehicle -> route name of the vehicle that can have collision with the current vehicle
-    public static final Map<String, List<String>> collisionRouteMapping;
-    // route name of current vehicle ->
-    //  (route name of the vehicle that can have collision with the current vehicle -> distance from current vehicle to the collision point)
-    public static final Map<String, Map<String, Double>> distanceToCollisionPoint;
-    // road that is overlapping with other roads.
-    public static final List<Integer> overlappingRoads;
-    // the curve road which is twice the length of what it should be
-    public static final List<Integer> overLengthCurve;
+    private static String virtualRoadConfigFilePath = null;
 
-    static {
-        overLengthCurve = new ArrayList<Integer>(){
+    public static Map<String, Integer> userIdToRoadId = new HashMap<>();
+
+    // road -> roads which are possible to have collision
+    public static Map<Integer, List<Integer>> virtualRoadMapping;
+    // the distance offset we need to apply when transform the vehicle to the virtual road.
+    // e.g.
+    //  roadSeg1 * * X             (roadSeg1 is 2 unit away from collision point)
+    //               *
+    //               *
+    //               *
+    //             roadSeg2        (roadSeg2 is 3 unit away from collision point)
+    //
+    //  We define distanceOffsetDueToCollisionPoint[1][2] = 2 - 3 = -1
+    //            distanceOffsetDueToCollisionPoint[2][1] = 3 - 2 = 1
+    public static Map<Integer, Map<Integer, Double>> distanceOffsetDueToCollisionPoint;
+    // road that is overlapping with other roads.
+    public static Set<Integer> overlappingRoads;
+    // the curve road which is twice the length of what it should be
+    public static Set<Integer> overLengthCurve;
+
+    public static void initializeVirtualRoadInfo(RoadNetwork roadNetwork){
+        // create userID to roadID mapping
+        for (final RoadSegment roadSegment : roadNetwork) {
+            userIdToRoadId.put(roadSegment.userId(), roadSegment.id());
+        }
+
+        overLengthCurve = new HashSet<Integer>(){
             {
-                add(2);
-                add(10);
+                add(userIdToRoadId.get("12"));
+                add(userIdToRoadId.get("6"));
             }
         };
 
-        overlappingRoads = new ArrayList<Integer>() {
+        overlappingRoads = new HashSet<Integer>() {
             {
-                add(11);
-                add(5);
-                add(3);
-                add(13);
+                add(userIdToRoadId.get("2"));
+                add(userIdToRoadId.get("5"));
+                add(userIdToRoadId.get("8"));
+                add(userIdToRoadId.get("1"));
+                add(userIdToRoadId.get("14"));
+                add(userIdToRoadId.get("11"));
             }
         };
 
         virtualRoadMapping = new HashMap<>();
-        virtualRoadMapping.put(11, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("2"), new ArrayList<Integer>() {
             {
-                add(5);
+                add(userIdToRoadId.get("5"));
+                add(userIdToRoadId.get("8"));
+                add(userIdToRoadId.get("14"));
+//                add(userIdToRoadId.get("15"));
             }
         });
-        virtualRoadMapping.put(3, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("5"), new ArrayList<Integer>() {
             {
-                add(13);
+                add(userIdToRoadId.get("2"));
+                add(userIdToRoadId.get("8"));
+                add(userIdToRoadId.get("14"));
+//                add(userIdToRoadId.get("15"));
             }
         });
-        virtualRoadMapping.put(5, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("8"), new ArrayList<Integer>() {
             {
-                add(11);
+                add(userIdToRoadId.get("2"));
+                add(userIdToRoadId.get("5"));
+                add(userIdToRoadId.get("14"));
+//                add(userIdToRoadId.get("15"));
+                add(userIdToRoadId.get("11"));
+//                add(userIdToRoadId.get("12"));
+                add(userIdToRoadId.get("1"));
             }
         });
-        virtualRoadMapping.put(13, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("1"), new ArrayList<Integer>() {
             {
-                add(3);
+                add(userIdToRoadId.get("14"));
+                add(userIdToRoadId.get("11"));
+                add(userIdToRoadId.get("8"));
+//                add(userIdToRoadId.get("9"));
             }
         });
-        virtualRoadMapping.put(1, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("11"), new ArrayList<Integer>() {
             {
-                add(9);
+                add(userIdToRoadId.get("1"));
+                add(userIdToRoadId.get("14"));
+                add(userIdToRoadId.get("8"));
+//                add(userIdToRoadId.get("9"));
             }
         });
-        virtualRoadMapping.put(9, new ArrayList<Integer>() {
+        virtualRoadMapping.put(userIdToRoadId.get("14"), new ArrayList<Integer>() {
             {
-                add(1);
+                add(userIdToRoadId.get("1"));
+                add(userIdToRoadId.get("11"));
+                add(userIdToRoadId.get("8"));
+//                add(userIdToRoadId.get("9"));
+                add(userIdToRoadId.get("5"));
+//                add(userIdToRoadId.get("6"));
+                add(userIdToRoadId.get("2"));
             }
         });
+        // TODO_ethan add virtual road and distanceOffsetDueToCollisionPoint  to the exit overlapping roads
+        // TODO_ethan also add virtual road in the intersection (after that, need to implement end segment based getNetDistance)
 
-        collisionRouteMapping = new HashMap<>();
-        collisionRouteMapping.put("route1", new ArrayList<String>() {
+        distanceOffsetDueToCollisionPoint = new HashMap<>();
+        Map<Integer, Double> road1ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route6");
+                put(userIdToRoadId.get("8"), -10 * Math.PI / 2);
             }
-        });
-        collisionRouteMapping.put("route2", new ArrayList<String>() {
+        };
+        Map<Integer, Double> road11ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route6");
+                put(userIdToRoadId.get("8"), -20.0);
             }
-        });
-        collisionRouteMapping.put("route3", new ArrayList<String>() {
+        };
+        Map<Integer, Double> road14ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route4");
-                add("route5");
-                add("route6");
+                put(userIdToRoadId.get("5"), 20.0);
+                put(userIdToRoadId.get("2"), 10 * Math.PI / 2);
+                put(userIdToRoadId.get("8"), -10 * Math.PI / 2);
             }
-        });
-        collisionRouteMapping.put("route4", new ArrayList<String>() {
+        };
+        Map<Integer, Double> road2ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route3");
+                put(userIdToRoadId.get("14"), -10 * Math.PI / 2);
             }
-        });
-        collisionRouteMapping.put("route5", new ArrayList<String>() {
+        };
+        Map<Integer, Double> road5ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route3");
+                put(userIdToRoadId.get("14"), -20.0);
             }
-        });
-        collisionRouteMapping.put("route6", new ArrayList<String>() {
+        };
+        Map<Integer, Double> road8ToCollisionPoint = new HashMap<Integer, Double>() {
             {
-                add("route1");
-                add("route2");
-                add("route3");
+                put(userIdToRoadId.get("14"), -10 * Math.PI / 2);
+                put(userIdToRoadId.get("1"), 10 * Math.PI / 2);
+                put(userIdToRoadId.get("11"), 20.0);
             }
-        });
+        };
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("1"), road1ToCollisionPoint);
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("14"), road14ToCollisionPoint);
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("11"), road11ToCollisionPoint);
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("2"), road2ToCollisionPoint);
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("5"), road5ToCollisionPoint);
+        distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get("8"), road8ToCollisionPoint);
 
-        distanceToCollisionPoint = new HashMap<>();
-        Map<String, Double> route1ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route6", 15 * Math.PI / 2);
-            }
-        };
-        Map<String, Double> route2ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route6", 15.0);
-            }
-        };
-        Map<String, Double> route3ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route4", 20 + 15 * Math.PI / 2);
-                put("route5", 15 + 10 * Math.PI / 2);
-                put("route6", 15.0);
-            }
-        };
-        Map<String, Double> route4ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route3", 15 * Math.PI / 2);
-            }
-        };
-        Map<String, Double> route5ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route3", 15.0);
-            }
-        };
-        Map<String, Double> route6ToCollisionPoint = new HashMap<String, Double>() {
-            {
-                put("route1", 20 + 15 * Math.PI / 2);
-                put("route2", 15 + 10 * Math.PI / 2);
-                put("route3", 15.0);
-            }
-        };
-        distanceToCollisionPoint.put("route1", route1ToCollisionPoint);
-        distanceToCollisionPoint.put("route2", route2ToCollisionPoint);
-        distanceToCollisionPoint.put("route3", route3ToCollisionPoint);
-        distanceToCollisionPoint.put("route4", route4ToCollisionPoint);
-        distanceToCollisionPoint.put("route5", route5ToCollisionPoint);
-        distanceToCollisionPoint.put("route6", route6ToCollisionPoint);
+
+
+
+        Yaml yaml = new Yaml(new Constructor(VirtualRoadInfo.class));
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(virtualRoadConfigFilePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        VirtualRoadInfo virtualRoadInfo = yaml.load(inputStream);
+        int x = 1;
     }
 
     private Node origin = new NodeImpl("origin");

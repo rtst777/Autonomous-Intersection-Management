@@ -571,6 +571,7 @@ public class Vehicle {
         if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
         }
+        // TODO add collision offset if it is virtual front vehicle
         return frontVehicle.getRearPosition() - getFrontPosition();
     }
 
