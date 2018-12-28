@@ -2,12 +2,12 @@
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
 
-    <road name="R1" length="1200.0"  ="111" junction="1">
+    <road name="R1" length="1200.0" id="111" junction="1">
         <link>
             <successor elementType="road" elementId="1111" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-421.5" y="300.0" hdg="0.0" length="680">
+            <geometry s="0.0" x="-451.5" y="300.0" hdg="0.0" length="680">
                 <line />
             </geometry>
         </planView>
@@ -30,7 +30,7 @@
             <successor elementType="road" elementId="11111" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="258.5" y="300.0" hdg="0.0" length="90">
+            <geometry s="0.0" x="228.5" y="300.0" hdg="0.0" length="120">
                 <line />
             </geometry>
         </planView>
@@ -95,7 +95,7 @@
             <successor elementType="road" elementId="22222" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="348.5" y="300.0" hdg="3.1415926" length="90">
+            <geometry s="0.0" x="348.5" y="300.0" hdg="3.1415926" length="120">
                 <line />
             </geometry>
         </planView>
@@ -117,7 +117,7 @@
         <link>
         </link>
         <planView>
-            <geometry s="0.0" x="258.5" y="300.0" hdg="3.1415926" length="680">
+            <geometry s="0.0" x="228.5" y="300.0" hdg="3.1415926" length="680">
                 <line />
             </geometry>
         </planView>
@@ -212,8 +212,8 @@
             <successor elementType="road" elementId="7" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="348.5" y="300" hdg="3.1415926" length="70.68583471">
-                <arc curvature="-0.022222222" />
+            <geometry s="0.0" x="348.5" y="300" hdg="3.1415926" length="94.24777961">
+                <arc curvature="-0.0166666666" />
             </geometry>
         </planView>
         <lanes>
@@ -237,7 +237,7 @@
             <predecessor elementType="road" elementId="6" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="303.5" y="345" hdg="1.5707963" length="680.0">
+            <geometry s="0.0" x="288.5" y="360" hdg="1.5707963" length="680.0">
                 <line />
             </geometry>
         </planView>
@@ -287,8 +287,8 @@
             <successor elementType="road" elementId="10" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="348.5" y="300" hdg="3.1415926" length="70.68583471">
-                <arc curvature="0.022222222" />
+            <geometry s="0.0" x="348.5" y="300" hdg="3.1415926" length="94.24777961">
+                <arc curvature="0.0166666666" />
             </geometry>
         </planView>
         <lanes>
@@ -311,7 +311,7 @@
             <predecessor elementType="road" elementId="9" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="303.5" y="255" hdg="-1.5707963" length="680">
+            <geometry s="0.0" x="288.5" y="240" hdg="-1.5707963" length="680">
                 <line />
             </geometry>
         </planView>
@@ -337,7 +337,7 @@
             <successor elementType="road" elementId="12" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-421.5" y="300" hdg="6.2831852" length="680.0">
+            <geometry s="0.0" x="-451.5" y="300" hdg="6.2831852" length="680.0">
                 <line />
             </geometry>
         </planView>
@@ -361,8 +361,8 @@
             <successor elementType="road" elementId="13" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="258.5" y="300" hdg="6.2831852" length="70.68583471">
-                <arc curvature="-0.022222222" />
+            <geometry s="0.0" x="228.5" y="300" hdg="6.2831852" length="94.24777961">
+                <arc curvature="-0.0166666666" />
             </geometry>
         </planView>
         <lanes>
@@ -386,7 +386,7 @@
             <predecessor elementType="road" elementId="12" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="303.5" y="255" hdg="4.7123889" length="680.0">
+            <geometry s="0.0" x="288.5" y="240" hdg="4.7123889" length="680.0">
                 <line />
             </geometry>
         </planView>
@@ -412,7 +412,7 @@
             <successor elementType="road" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-421.5" y="300" hdg="6.2831852" length="680.0">
+            <geometry s="0.0" x="-451.5" y="300" hdg="6.2831852" length="680.0">
                 <line />
             </geometry>
         </planView>
@@ -430,15 +430,14 @@
         </lanes>
     </road>
 
-
     <road id="15" name="road_1_left_turn" length="1000" junction="-1">
         <link>
             <predecessor elementType="road" elementId="14" contactPoint="end" />
             <successor elementType="road" elementId="16" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="258.5" y="300" hdg="0" length="70.68583471">
-                <arc curvature="0.022222222" />
+            <geometry s="0.0" x="228.5" y="300" hdg="0" length="94.24777961">
+                <arc curvature="0.01666666662" />
             </geometry>
         </planView>
         <lanes>
@@ -461,7 +460,7 @@
             <predecessor elementType="road" elementId="15" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="303.5" y="345" hdg="1.5707963" length="680.0">
+            <geometry s="0.0" x="288.5" y="360" hdg="1.5707963" length="680.0">
                 <line />
             </geometry>
         </planView>
