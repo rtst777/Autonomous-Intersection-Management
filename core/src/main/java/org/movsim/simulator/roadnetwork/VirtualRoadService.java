@@ -50,34 +50,38 @@ public class VirtualRoadService {
 
     // Must call this method before using other methods in this class
     public static void initializeVirtualRoadService(RoadNetwork roadNetwork){
-        // create rawVirtualRoadInfo
+        userIdToRoadId = new HashMap<>();
+        distanceOffsetDueToCollisionPoint = new HashMap<>();
+        problematicCurve = new HashMap<>();
+
+        // create rawVirtualRoadInfo if virtual road config file is present
         Yaml yaml = new Yaml(new Constructor(RawVirtualRoadInfo.class));
         RawVirtualRoadInfo rawVirtualRoadInfo = null;
-        try (InputStream inputStream = new FileInputStream(virtualRoadConfigFilePath)) {
-            rawVirtualRoadInfo = yaml.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File virtualRoadConfigFile = new File(virtualRoadConfigFilePath);
+        if (virtualRoadConfigFile.isFile() && virtualRoadConfigFile.canRead()) {
+            try (InputStream inputStream = new FileInputStream(virtualRoadConfigFile)) {
+                rawVirtualRoadInfo = yaml.load(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        // create userID to roadID mapping
-        userIdToRoadId = new HashMap<>();
-        for (final RoadSegment roadSegment : roadNetwork) {
-            userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
-        }
+            // create userID to roadID mapping
+            for (final RoadSegment roadSegment : roadNetwork) {
+                userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
+            }
 
-        distanceOffsetDueToCollisionPoint = new HashMap<>();
-        rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint.forEach((key, value) -> {
-            Map<Integer, Double> distanceOffsets = new HashMap<>();
-            value.forEach((inner_key, inner_value) -> {
-                distanceOffsets.put(userIdToRoadId.get(inner_key), inner_value);
+            rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint.forEach((key, value) -> {
+                Map<Integer, Double> distanceOffsets = new HashMap<>();
+                value.forEach((inner_key, inner_value) -> {
+                    distanceOffsets.put(userIdToRoadId.get(inner_key), inner_value);
+                });
+                distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get(key), distanceOffsets);
             });
-            distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get(key), distanceOffsets);
-        });
 
-        problematicCurve = new HashMap<>();
-        rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
-            problematicCurve.put(userIdToRoadId.get(key), value);
-        });
+            rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
+                problematicCurve.put(userIdToRoadId.get(key), value);
+            });
+        }
 
         isBasedOnRoadID = true;
     }
