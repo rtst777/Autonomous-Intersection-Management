@@ -35,6 +35,10 @@ public class VirtualRoadService {
 
     private static boolean isBasedOnRoadID = false;
 
+    // map from vehicle's id to its front vehicle's id (consider virtual road)
+    // This field is currently only used for debugging/visualization purpose
+    public static Map<Long, Long> frontVehicleConsiderVirtualRoad = new HashMap<>();
+
     /**
      * get the virtual road config file name by using roadConfigFile.
      * e.g.
@@ -70,6 +74,7 @@ public class VirtualRoadService {
                 userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
             }
 
+            // replace the userID with roadID in RawVirtualRoadInfo
             rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint.forEach((key, value) -> {
                 Map<Integer, Double> distanceOffsets = new HashMap<>();
                 value.forEach((inner_key, inner_value) -> {

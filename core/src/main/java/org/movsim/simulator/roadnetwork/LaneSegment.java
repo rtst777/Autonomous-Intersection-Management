@@ -600,11 +600,6 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the next downstream vehicle
      */
     public final Vehicle frontVehicle(Vehicle vehicle) {
-
-        if (vehicle.getId() == 5){
-            int x = 1;
-        }
-
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
 
@@ -652,8 +647,11 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
 
         if (frontVehicle != null){
+            VirtualRoadService.frontVehicleConsiderVirtualRoad.put(vehicle.getId(), frontVehicle.getId());
             return frontVehicle;
         }
+
+        // TODO(ethan) also attemp to find front vehicle in the sink road of the virtual road
 
         // index == 0 or insertionPoint == 0
         // subject vehicle is front vehicle on this road segment, so check for vehicles
@@ -680,6 +678,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // set relative to the current road segment
                 final Vehicle frontSinkVehicle = new Vehicle(sinkRearVehicle);
                 frontSinkVehicle.setFrontPosition(frontSinkVehicle.getFrontPosition() + accumDistance);
+
+                VirtualRoadService.frontVehicleConsiderVirtualRoad.put(vehicle.getId(), frontSinkVehicle.getId());
                 return frontSinkVehicle;
             }
         }

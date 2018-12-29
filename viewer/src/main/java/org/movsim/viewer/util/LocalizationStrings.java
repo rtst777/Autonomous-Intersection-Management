@@ -140,7 +140,7 @@ public class LocalizationStrings extends ListResourceBundle {
                     // vehicle information popup window
                     {
                             "VehiclePopup",
-                            "Vehicle\n  id: %d\n label: %s\n type: %s\n lane: %d\n  pos: %.0fm\n  vel: %.0f km/h\n  acc: %.4f m/s\u00B2\n  distance: %.0fm\n  exit: %s" },
+                            "Vehicle\n  id: %d\n front_vehicle_id: %d\n label: %s\n type: %s\n lane: %d\n  pos: %.0fm\n  vel: %.0f km/h\n  acc: %.4f m/s\u00B2\n  distance: %.0fm\n  exit: %s" },
                     { "VehiclePopupNoExit", "end of road" },
 
                     // status messages

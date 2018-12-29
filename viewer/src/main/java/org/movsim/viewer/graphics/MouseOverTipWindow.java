@@ -19,6 +19,7 @@ import java.awt.Window;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
@@ -73,9 +74,11 @@ class MouseOverTipWindow extends Window {
         }
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         final String string =
-                String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(), vehicle.type(),
-                        vehicle.lane(), vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed() * Units.MS_TO_KMH,
-                        vehiclePhysical.getAcc(), vehicle.totalTravelDistance(), exitString);
+                String.format(this.trafficCanvas.popupString, vehicle.getId(),
+                        VirtualRoadService.frontVehicleConsiderVirtualRoad.getOrDefault(vehicle.getId(), Long.valueOf(-1)),
+                        vehicle.getLabel(), vehicle.type(), vehicle.lane(), vehiclePhysical.getFrontPosition(),
+                        vehiclePhysical.getSpeed() * Units.MS_TO_KMH, vehiclePhysical.getAcc(),
+                        vehicle.totalTravelDistance(), exitString);
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
         removeAll();
