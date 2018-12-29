@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.movsim.simulator.roadnetwork.Lanes;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -350,7 +351,8 @@ public abstract class RoadMapping {
      * @return polygon representing vehicle
      */
     public PolygonFloat mapFloat(Vehicle vehicle) {
-        final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
+        final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition()
+                        / VirtualRoadService.getPositionFactor(vehicle.roadSegmentId()),
                 -laneCenterOffset(vehicle.getContinuousLane()));
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }

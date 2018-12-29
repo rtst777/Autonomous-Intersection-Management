@@ -816,11 +816,6 @@ public class Vehicle {
                 acc = 0;
             }
         }
-
-        // workaround for the incorrect length problem of the curve road
-        frontPosition = frontPositionOld +
-                VirtualRoadService.getPositionFactor(roadSegmentId()) * (frontPosition - frontPositionOld);
-
         energyModel.incrementConsumption(speed, acc, dt);
     }
 

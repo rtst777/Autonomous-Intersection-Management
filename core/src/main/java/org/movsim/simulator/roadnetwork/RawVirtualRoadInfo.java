@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * Storage for all the raw information about the virtual roads. It is raw information because it is using userID
- * instead of roadID. RawVirtualRoadInfo should only be used to initialize VirtualRoadService.
+ * instead of roadID.
  */
 public class RawVirtualRoadInfo {
     // The values we load from yaml file is userID, we need to transform the userID to roadID

@@ -102,7 +102,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      */
     private String roadName;
 
-    private final double roadLength;
+    private double roadLength;
 
     private final int laneCount;
 
@@ -208,6 +208,13 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this(roadLength, laneCount);
         this.directionType = roadSegmentDirection;
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
+    }
+
+    /**
+     * workaround for the problematic curve length
+     */
+    public void adjustRoadSegmentLength(){
+        this.roadLength *= VirtualRoadService.getPositionFactorByUserID(userId());
     }
 
     /**

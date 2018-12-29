@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class VirtualRoadService {
-    private static String virtualRoadConfigFilePath;
+    public static RawVirtualRoadInfo rawVirtualRoadInfo = null;
 
     private static Map<Integer, Integer> userIdToRoadId;
 
@@ -40,16 +40,27 @@ public class VirtualRoadService {
     public static Map<Long, Long> frontVehicleConsiderVirtualRoad = new HashMap<>();
 
     /**
-     * get the virtual road config file name by using roadConfigFile.
-     * e.g.
+     * load the virtual road config file
+     * Note:
      *  if the file path of roadConfigFile is: xyz/abc/config.xodr
      *  the virtual road config file path would be: xyz/abc/config.yaml
      *
      * @param roadConfigFile
      */
-    public static void setVirtualRoadConfigFilePath(File roadConfigFile){
+    public static void loadRawVirtualRoadConfiguration(File roadConfigFile){
         int index = roadConfigFile.getAbsolutePath().indexOf(".");
-        virtualRoadConfigFilePath = roadConfigFile.getAbsolutePath().substring(0,index) + ".yaml";
+        String virtualRoadConfigFilePath = roadConfigFile.getAbsolutePath().substring(0,index) + ".yaml";
+
+        // create rawVirtualRoadInfo if virtual road config file is present
+        Yaml yaml = new Yaml(new Constructor(RawVirtualRoadInfo.class));
+        File virtualRoadConfigFile = new File(virtualRoadConfigFilePath);
+        if (virtualRoadConfigFile.isFile() && virtualRoadConfigFile.canRead()) {
+            try (InputStream inputStream = new FileInputStream(virtualRoadConfigFile)) {
+                rawVirtualRoadInfo = yaml.load(inputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Must call this method before using other methods in this class
@@ -59,16 +70,7 @@ public class VirtualRoadService {
         problematicCurve = new HashMap<>();
 
         // create rawVirtualRoadInfo if virtual road config file is present
-        Yaml yaml = new Yaml(new Constructor(RawVirtualRoadInfo.class));
-        RawVirtualRoadInfo rawVirtualRoadInfo = null;
-        File virtualRoadConfigFile = new File(virtualRoadConfigFilePath);
-        if (virtualRoadConfigFile.isFile() && virtualRoadConfigFile.canRead()) {
-            try (InputStream inputStream = new FileInputStream(virtualRoadConfigFile)) {
-                rawVirtualRoadInfo = yaml.load(inputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        if (rawVirtualRoadInfo != null) {
             // create userID to roadID mapping
             for (final RoadSegment roadSegment : roadNetwork) {
                 userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
@@ -173,7 +175,7 @@ public class VirtualRoadService {
     }
 
     /**
-     * If the road is problematic road, return the  factor need to apply on the vehicle's position in order to address
+     * If the road is problematic road, return the factor need to apply on the vehicle's position in order to address
      * the incorrect length problem of the road; otherwise return 1
      *
      * @param roadSegmentId
@@ -181,6 +183,10 @@ public class VirtualRoadService {
      */
     public static double getPositionFactor(int roadSegmentId){
         return problematicCurve.getOrDefault(roadSegmentId, 1.0);
+    }
+
+    public static double getPositionFactorByUserID(String roadSegmentUserId){
+        return rawVirtualRoadInfo.rawProblematicCurve.getOrDefault(Integer.parseInt(roadSegmentUserId), 1.0);
     }
 
     private static class VehiclePair {

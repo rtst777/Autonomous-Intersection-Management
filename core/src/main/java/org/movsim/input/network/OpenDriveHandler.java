@@ -51,7 +51,7 @@ public class OpenDriveHandler {
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, File file) {
         OpenDRIVE openDriveNetwork = InputLoader.unmarshallOpenDriveNetwork(file);
         OpenDriveHandler openDriveHandlerJaxb = new OpenDriveHandler();
-        VirtualRoadService.setVirtualRoadConfigFilePath(file);
+        VirtualRoadService.loadRawVirtualRoadConfiguration(file);
         return openDriveHandlerJaxb.create(openDriveNetwork, roadNetwork);
     }
 
@@ -157,6 +157,7 @@ public class OpenDriveHandler {
                 new RoadSegment(roadMapping.roadLength(), lanes.size(), roadMapping, RoadSegmentDirection.FORWARD);
 
         roadSegment.setUserId(getRoadSegmentId(road.getId(), laneType, hasPeer));
+        roadSegment.adjustRoadSegmentLength();
         roadSegment.setUserRoadname(road.getName());
         if (road.isSetType() && !road.getType().isEmpty()) {
             if (road.getType().size() > 1) {
