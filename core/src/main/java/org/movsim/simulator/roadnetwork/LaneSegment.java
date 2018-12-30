@@ -695,14 +695,14 @@ public class LaneSegment implements Iterable<Vehicle> {
     private FrontVehicleInfo positionSearchOnVirtualRoad(Vehicle hostVehicle){
         double hostVehicleToVirtualRoadSegmentEnd =
                 VirtualRoadService.getPrecedingDistanceToVirtualRoad(this.roadSegment(), hostVehicle);
+        if (hostVehicleToVirtualRoadSegmentEnd < 0) {
+            return null;
+        }
+
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
 
         for (Vehicle otherVehicle : vehicles) {
-            if (hostVehicleToVirtualRoadSegmentEnd < 0) {
-                continue;
-            }
-
             double otherVehicleToRoadSegmentEnd = otherVehicle.getDistanceToRoadSegmentEnd();
             double hostVecPosToOtherVecPos = hostVehicleToVirtualRoadSegmentEnd - otherVehicleToRoadSegmentEnd;
             if (hostVecPosToOtherVecPos < 0) {

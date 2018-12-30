@@ -105,7 +105,6 @@ public class IDM extends LongitudinalModelBase {
 
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
-        // TODO_ethan support end_based  getNetDistance
         // Local dynamical variables
         final double s = VirtualRoadService.getPrecedingDistanceToFrontVehicle(me, frontVehicle);
         final double v = me.getSpeed();

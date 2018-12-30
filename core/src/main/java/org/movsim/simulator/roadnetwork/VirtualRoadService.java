@@ -139,6 +139,8 @@ public class VirtualRoadService {
                 return -1.0;
             }
 
+            // TODO(ethan) add threshold checking for PrecedingDistanceToVirtualRoad, if smaller than threshold, return -1.0
+
             return hostVehicle.getDistanceToRoadSegmentEnd() + distanceOffset;
         }
     }
