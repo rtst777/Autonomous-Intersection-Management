@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.*;
 
 public class VirtualRoadService {
-    public static RawVirtualRoadInfo rawVirtualRoadInfo = null;
+    private static RawVirtualRoadInfo rawVirtualRoadInfo = null;
 
     private static Map<Integer, Integer> userIdToRoadId;
 
@@ -150,13 +150,13 @@ public class VirtualRoadService {
     private static Map<VehiclePair, Double> virtualPrecedingDistanceCache = new HashMap<>();
 
     /**
-     * Return the preceding distance from the host vehicle to front vehicle
+     * Return the preceding distance from the front position of host vehicle to the rear position of front vehicle
      * The preceding distance can be virtual preceding distance (if front vehicle is on the virtual road)
      * or normal preceding distance (if front vehicle is on the same road as the host vehicle)
      *
      * @param hostVehicle the target vehicle
      * @param frontVehicle the front vehicle
-     * @return the preceding distance from the host vehicle to preceding vehicle
+     * @return the preceding distance from the front position of host vehicle to the rear position of front vehicle
      */
     public static double getPrecedingDistanceToFrontVehicle(Vehicle hostVehicle, Vehicle frontVehicle) {
         if (!isBasedOnRoadID){
@@ -168,8 +168,10 @@ public class VirtualRoadService {
             return MovsimConstants.GAP_INFINITY;
         }
 
-        return virtualPrecedingDistanceCache.getOrDefault(new VehiclePair(hostVehicle, frontVehicle),
-                frontVehicle.getRearPosition() - hostVehicle.getFrontPosition());
+        double frontPositionDifference = virtualPrecedingDistanceCache.getOrDefault(new VehiclePair(hostVehicle, frontVehicle),
+                frontVehicle.getFrontPosition() - hostVehicle.getFrontPosition());
+
+        return frontPositionDifference - frontVehicle.getLength();
     }
 
     public static void updatePrecedingVirtualDistance(Vehicle hostVehicle, Vehicle precedingVehicle, double distance){
