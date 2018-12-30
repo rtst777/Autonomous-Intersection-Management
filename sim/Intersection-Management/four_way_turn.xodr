@@ -8,7 +8,7 @@
             <successor elementType="junction" elementId="1" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="939.5" y="100" hdg="3.1415926" length="200">
+            <geometry s="0.0" x="1139.5" y="100" hdg="3.1415926" length="400">
                 <line />
             </geometry>
         </planView>
@@ -97,7 +97,7 @@
             <predecessor elementType="junction" elementId="5" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="718.5" y="90" hdg="-1.5707963" length="210">
+            <geometry s="0.0" x="718.5" y="90" hdg="-1.5707963" length="200">
                 <line />
             </geometry>
         </planView>
@@ -117,7 +117,7 @@
             <predecessor elementType="junction" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="738.5" y="100" hdg="3.1415926" length="240">
+            <geometry s="0.0" x="738.5" y="100" hdg="3.1415926" length="230">
                 <line />
             </geometry>
         </planView>
@@ -185,7 +185,7 @@
             <successor elementType="junction" elementId="6" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="497.5" y="100" hdg="6.2831852" length="200">
+            <geometry s="0.0" x="297.5" y="100" hdg="6.2831852" length="400">
                 <line />
             </geometry>
         </planView>
@@ -226,7 +226,7 @@
             <predecessor elementType="junction" elementId="8" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="718.5" y="80" hdg="4.7123889" length="210">
+            <geometry s="0.0" x="718.5" y="80" hdg="4.7123889" length="190">
                 <line />
             </geometry>
         </planView>
@@ -267,7 +267,7 @@
             <predecessor elementType="junction" elementId="10" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="718.5" y="110" hdg="1.5707963" length="210">
+            <geometry s="0.0" x="718.5" y="110" hdg="1.5707963" length="220">
                 <line />
             </geometry>
         </planView>
@@ -287,7 +287,7 @@
             <predecessor elementType="junction" elementId="7" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="698.5" y="100" hdg="6.2831852" length="240">
+            <geometry s="0.0" x="698.5" y="100" hdg="6.2831852" length="241">
                 <line />
             </geometry>
         </planView>

@@ -17,7 +17,7 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="four_way_junction_fat.xodr">
+    <Scenario network_filename="simple_wide_four_way_intersection.xodr">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.0" />
