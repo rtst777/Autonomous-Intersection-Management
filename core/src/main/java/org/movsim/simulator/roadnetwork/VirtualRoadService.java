@@ -1,5 +1,8 @@
 package org.movsim.simulator.roadnetwork;
 
+import com.hubspot.jinjava.Jinjava;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.movsim.simulator.MovsimConstants;
@@ -7,10 +10,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class VirtualRoadService {
@@ -52,13 +53,26 @@ public class VirtualRoadService {
         String virtualRoadConfigFilePath = roadConfigFile.getAbsolutePath().substring(0,index) + ".yaml";
 
         // create rawVirtualRoadInfo if virtual road config file is present
-        Yaml yaml = new Yaml(new Constructor(RawVirtualRoadInfo.class));
         File virtualRoadConfigFile = new File(virtualRoadConfigFilePath);
         if (virtualRoadConfigFile.isFile() && virtualRoadConfigFile.canRead()) {
-            try (InputStream inputStream = new FileInputStream(virtualRoadConfigFile)) {
+            InputStream inputStream = null;
+            try {
+                String template = FileUtils.readFileToString(virtualRoadConfigFile, StandardCharsets.UTF_8);
+                Jinjava jinjava = new Jinjava();
+                String renderedTemplate = jinjava.render(template, null);
+                inputStream = new ByteArrayInputStream(renderedTemplate.getBytes(StandardCharsets.UTF_8));
+                Yaml yaml = new Yaml(new Constructor(RawVirtualRoadInfo.class));
                 rawVirtualRoadInfo = yaml.load(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (inputStream != null){
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
