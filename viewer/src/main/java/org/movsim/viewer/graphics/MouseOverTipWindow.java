@@ -76,7 +76,8 @@ class MouseOverTipWindow extends Window {
         final String string =
                 String.format(this.trafficCanvas.popupString, vehicle.getId(),
                         VirtualRoadService.frontVehicleConsiderVirtualRoad.getOrDefault(vehicle.getId(), Long.valueOf(-1)),
-                        vehicle.getLabel(), vehicle.type(), vehicle.lane(), vehiclePhysical.getFrontPosition(),
+                        VirtualRoadService.roadIdToUserId.get(vehicle.roadSegmentId()), vehicle.getLabel(),
+                        vehicle.type(), vehicle.lane(), vehiclePhysical.getFrontPosition(),
                         vehiclePhysical.getSpeed() * Units.MS_TO_KMH, vehiclePhysical.getAcc(),
                         vehicle.totalTravelDistance(), exitString);
         final Label label = new Label(string, Label.LEFT);

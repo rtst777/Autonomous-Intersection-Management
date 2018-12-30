@@ -16,6 +16,16 @@ rawProblematicCurve:
    6: {{scaling_down_factor}}
    12: {{scaling_down_factor}} 
 
+rawCollisionDistanceThreshold:
+   2222:
+      15: {{2 * full_grid}}
+   15:
+      2222: {{big_curve_side_comp}}
+   1111:
+      9: {{2 * full_grid}}
+   9:
+      1111: {{big_curve_side_comp}}
+
 rawDistanceOffsetDueToCollisionPoint: 
    111: 
       8: {{2 * full_grid - big_curve_mid_comp - big_curve_side_comp}} 

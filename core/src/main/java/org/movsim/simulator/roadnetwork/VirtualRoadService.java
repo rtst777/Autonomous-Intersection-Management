@@ -19,7 +19,7 @@ public class VirtualRoadService {
 
     private static Map<Integer, Integer> userIdToRoadId;
 
-    // the distance offset we need to apply when transform the vehicle to the virtual road.
+    // The distance offset we need to apply when transform the vehicle to the virtual road.
     // e.g.
     //  roadSeg1 * * X             (roadSeg1 is 2 unit away from collision point)
     //               *
@@ -30,6 +30,19 @@ public class VirtualRoadService {
     //  We define distanceOffsetDueToCollisionPoint[1][2] = 2 - 3 = -1
     //            distanceOffsetDueToCollisionPoint[2][1] = 3 - 2 = 1
     private static Map<Integer, Map<Integer, Double>> distanceOffsetDueToCollisionPoint;
+
+    // The distance between the collision point to the end of road segment (i.e. the collision distance threshold).
+    // If the distance from vehicle to end of segment is smaller than the collision distance threshold, the vehicle
+    // can ignore this collision point.
+    //
+    // e.g.
+    //  vehicle - - - X - -END      The distance from vehicle to end of segment is 5, the collision distance threshold
+    //                              is 2. 5 > 2, so the collision point need to be considered
+    //
+    //  - X - - vehicle - -END      The distance from vehicle to end of segment is 2, the collision distance threshold
+    //                              is 4. 2 < 4, so the collision point don't need to be considered
+    private static Map<Integer, Map<Integer, Double>> collisionDistanceThreshold;
+
     // the id of the (curve) road which has incorrect length -> the factor need to apply on the vehicle position on
     // that road
     private static Map<Integer, Double> problematicCurve;
@@ -39,6 +52,8 @@ public class VirtualRoadService {
     // map from vehicle's id to its front vehicle's id (consider virtual road)
     // This field is currently only used for debugging/visualization purpose
     public static Map<Long, Long> frontVehicleConsiderVirtualRoad = new HashMap<>();
+    // for debugging purpose
+    public static Map<Integer, Integer> roadIdToUserId = new HashMap<>();
 
     /**
      * load the virtual road config file
@@ -77,10 +92,16 @@ public class VirtualRoadService {
         }
     }
 
-    // Must call this method before using other methods in this class
+    /**
+     * Initialize the RoadService by converting the userID in rawVirtualRoadInfo (if exist) to roadID
+     * Note: this method must be called before calling any other methods in this class
+     *
+     * @param roadNetwork
+     */
     public static void initializeVirtualRoadService(RoadNetwork roadNetwork){
         userIdToRoadId = new HashMap<>();
         distanceOffsetDueToCollisionPoint = new HashMap<>();
+        collisionDistanceThreshold = new HashMap<>();
         problematicCurve = new HashMap<>();
 
         // create rawVirtualRoadInfo if virtual road config file is present
@@ -88,6 +109,7 @@ public class VirtualRoadService {
             // create userID to roadID mapping
             for (final RoadSegment roadSegment : roadNetwork) {
                 userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
+                roadIdToUserId.put(roadSegment.id(), Integer.parseInt(roadSegment.userId()));
             }
 
             // replace the userID with roadID in RawVirtualRoadInfo
@@ -97,6 +119,14 @@ public class VirtualRoadService {
                     distanceOffsets.put(userIdToRoadId.get(inner_key), inner_value);
                 });
                 distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get(key), distanceOffsets);
+            });
+
+            rawVirtualRoadInfo.rawCollisionDistanceThreshold.forEach((key, value) -> {
+                Map<Integer, Double> distanceThresholds = new HashMap<>();
+                value.forEach((inner_key, inner_value) -> {
+                    distanceThresholds.put(userIdToRoadId.get(inner_key), inner_value);
+                });
+                collisionDistanceThreshold.put(userIdToRoadId.get(key), distanceThresholds);
             });
 
             rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
@@ -153,9 +183,17 @@ public class VirtualRoadService {
                 return -1.0;
             }
 
-            // TODO(ethan) add threshold checking for PrecedingDistanceToVirtualRoad, if smaller than threshold, return -1.0
+            double precedingDistanceToVirtualRoad = hostVehicle.getDistanceToRoadSegmentEnd() + distanceOffset;
+            Map<Integer, Double> distanceThresholds = collisionDistanceThreshold.get(hostVehicle.roadSegmentId());
+            if (distanceThresholds != null && !distanceThresholds.isEmpty()){
+                Double distanceThreshold = distanceThresholds.get(virtualRoad.id());
+                if (distanceThreshold != null && distanceThreshold >= hostVehicle.getDistanceToRoadSegmentEnd()){
+                    // this collision point can be ignored by hostVehicle
+                    return -0.1;
+                }
+            }
 
-            return hostVehicle.getDistanceToRoadSegmentEnd() + distanceOffset;
+            return precedingDistanceToVirtualRoad;
         }
     }
 
