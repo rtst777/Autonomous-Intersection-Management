@@ -84,7 +84,7 @@ public class VirtualRoadService {
         problematicCurve = new HashMap<>();
 
         // create rawVirtualRoadInfo if virtual road config file is present
-        if (rawVirtualRoadInfo != null) {
+        if (rawVirtualRoadInfo != null && roadNetwork != null) {
             // create userID to roadID mapping
             for (final RoadSegment roadSegment : roadNetwork) {
                 userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
@@ -190,6 +190,17 @@ public class VirtualRoadService {
 
     public static void updatePrecedingVirtualDistance(Vehicle hostVehicle, Vehicle precedingVehicle, double distance){
         virtualPrecedingDistanceCache.put(new VehiclePair(hostVehicle, precedingVehicle), distance);
+    }
+
+    /**
+     * Return true if frontVehicle is on the virtual road, false if on the same road as hostVehicle
+     *
+     * @param hostVehicle the target vehicle
+     * @param frontVehicle the front vehicle
+     * @return true if frontVehicle is on the virtual road
+     */
+    public static boolean isFrontVehicleVirtual(Vehicle hostVehicle, Vehicle frontVehicle){
+        return virtualPrecedingDistanceCache.containsKey(new VehiclePair(hostVehicle, frontVehicle));
     }
 
     /**

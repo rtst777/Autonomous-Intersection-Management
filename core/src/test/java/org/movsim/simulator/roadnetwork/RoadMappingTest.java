@@ -197,6 +197,7 @@ public class RoadMappingTest {
         laneGeometries.setRight(new LaneGeometry(laneCount, laneWidth));
         RoadGeometry roadGeometry = new RoadGeometry(geometry, laneGeometries);
         RoadMapping roadMapping = RoadMappingLine.create(roadGeometry);
+        VirtualRoadService.initializeVirtualRoadService(null);
         System.out.println(roadMapping.map(0));
         System.out.println(roadMapping.map(0, laneWidth));
         System.out.println(roadMapping.map(0, 2 * laneWidth));

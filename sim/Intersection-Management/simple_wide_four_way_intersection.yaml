@@ -11,10 +11,10 @@
 
 # real road length = length in xml * factor
 rawProblematicCurve: 
-   {15: {{scaling_up_factor}}, 
-    9: {{scaling_up_factor}}, 
-    6: {{scaling_down_factor}}, 
-    12: {{scaling_down_factor}}}  
+   15: {{scaling_up_factor}}
+   9: {{scaling_up_factor}}
+   6: {{scaling_down_factor}}
+   12: {{scaling_down_factor}} 
 
 rawDistanceOffsetDueToCollisionPoint: 
    111: 
