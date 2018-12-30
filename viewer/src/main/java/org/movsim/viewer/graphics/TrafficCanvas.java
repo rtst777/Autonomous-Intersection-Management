@@ -559,6 +559,15 @@ public class TrafficCanvas extends SimulationCanvasBase
             g.setPaint(brakeLightColor);
             g.draw(vehiclePath);
         }
+
+        // draw vehicle ID
+        final int fontHeight = 9;
+        final Font font = new Font(FONT_NAME, Font.PLAIN, fontHeight);
+        g.setFont(font);
+        g.setColor(Color.BLACK);
+        double centerX = (polygon.getXPoint(0) + polygon.getXPoint(1) + polygon.getXPoint(2) + polygon.getXPoint(3)) / 4.0;
+        double centerY = (polygon.getYPoint(0) + polygon.getYPoint(1) + polygon.getYPoint(2) + polygon.getYPoint(3)) / 4.0;
+        TrafficCanvasUtils.drawText(String.valueOf(vehicle.getId()), centerX, centerY, font, g);
     }
 
     /**
@@ -596,9 +605,9 @@ public class TrafficCanvas extends SimulationCanvasBase
             drawFlowConservingBottlenecks(g);
         }
 
-        if (drawRoadId) {
-            drawRoadSectionIds(g);
-        }
+//        if (drawRoadId) {
+//            drawRoadSectionIds(g);
+//        }
 
         if (drawNotifyObjects) {
             drawNotifyObjects(g);

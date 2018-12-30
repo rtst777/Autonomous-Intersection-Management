@@ -35,6 +35,15 @@ public final class TrafficCanvasUtils {
         return rect;
     }
 
+    static void drawText(String text, double x, double y, Font font, Graphics2D g) {
+        FontRenderContext frc = g.getFontRenderContext();
+        GlyphVector gv = font.createGlyphVector(frc, text); //$NON-NLS-1$
+        AffineTransform at = AffineTransform.getTranslateInstance(x, y);
+        Shape glyph = gv.getOutline();
+        Shape transformedGlyph = at.createTransformedShape(glyph);
+        g.fill(transformedGlyph);
+    }
+
     static void drawTextRotated(String text, PosTheta posTheta, Font font, Graphics2D g) {
         FontRenderContext frc = g.getFontRenderContext();
         GlyphVector gv = font.createGlyphVector(frc, text); //$NON-NLS-1$
