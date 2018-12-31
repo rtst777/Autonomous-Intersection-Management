@@ -683,6 +683,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                 return frontSinkVehicle;
             }
         }
+
+        VirtualRoadService.frontVehicleConsiderVirtualRoad.remove(vehicle.getId());
         return null;
     }
 
