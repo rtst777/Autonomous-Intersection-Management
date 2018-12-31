@@ -1,7 +1,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import com.hubspot.jinjava.Jinjava;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,7 +16,7 @@ import java.util.*;
 public class VirtualRoadService {
     private static RawVirtualRoadInfo rawVirtualRoadInfo = null;
 
-    private static Map<Integer, Integer> userIdToRoadId;
+    private static Map<String, Integer> userIdToRoadId;
 
     // The distance offset we need to apply when transform the vehicle to the virtual road.
     // e.g.
@@ -53,7 +52,7 @@ public class VirtualRoadService {
     // This field is currently only used for debugging/visualization purpose
     public static Map<Long, Long> frontVehicleConsiderVirtualRoad = new HashMap<>();
     // for debugging purpose
-    public static Map<Integer, Integer> roadIdToUserId = new HashMap<>();
+    public static Map<Integer, String> roadIdToUserId = new HashMap<>();
 
     /**
      * load the virtual road config file
@@ -108,30 +107,36 @@ public class VirtualRoadService {
         if (rawVirtualRoadInfo != null && roadNetwork != null) {
             // create userID to roadID mapping
             for (final RoadSegment roadSegment : roadNetwork) {
-                userIdToRoadId.put(Integer.parseInt(roadSegment.userId()), roadSegment.id());
-                roadIdToUserId.put(roadSegment.id(), Integer.parseInt(roadSegment.userId()));
+                userIdToRoadId.put(roadSegment.userId(), roadSegment.id());
+                roadIdToUserId.put(roadSegment.id(), roadSegment.userId());
             }
 
             // replace the userID with roadID in RawVirtualRoadInfo
-            rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint.forEach((key, value) -> {
-                Map<Integer, Double> distanceOffsets = new HashMap<>();
-                value.forEach((inner_key, inner_value) -> {
-                    distanceOffsets.put(userIdToRoadId.get(inner_key), inner_value);
+            if (rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint != null){
+                rawVirtualRoadInfo.rawDistanceOffsetDueToCollisionPoint.forEach((key, value) -> {
+                    Map<Integer, Double> distanceOffsets = new HashMap<>();
+                    value.forEach((inner_key, inner_value) -> {
+                        distanceOffsets.put(userIdToRoadId.get(inner_key), inner_value);
+                    });
+                    distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get(key), distanceOffsets);
                 });
-                distanceOffsetDueToCollisionPoint.put(userIdToRoadId.get(key), distanceOffsets);
-            });
+            }
 
-            rawVirtualRoadInfo.rawCollisionDistanceThreshold.forEach((key, value) -> {
-                Map<Integer, Double> distanceThresholds = new HashMap<>();
-                value.forEach((inner_key, inner_value) -> {
-                    distanceThresholds.put(userIdToRoadId.get(inner_key), inner_value);
+            if (rawVirtualRoadInfo.rawCollisionDistanceThreshold != null){
+                rawVirtualRoadInfo.rawCollisionDistanceThreshold.forEach((key, value) -> {
+                    Map<Integer, Double> distanceThresholds = new HashMap<>();
+                    value.forEach((inner_key, inner_value) -> {
+                        distanceThresholds.put(userIdToRoadId.get(inner_key), inner_value);
+                    });
+                    collisionDistanceThreshold.put(userIdToRoadId.get(key), distanceThresholds);
                 });
-                collisionDistanceThreshold.put(userIdToRoadId.get(key), distanceThresholds);
-            });
+            }
 
-            rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
-                problematicCurve.put(userIdToRoadId.get(key), value);
-            });
+            if (rawVirtualRoadInfo.rawProblematicCurve != null) {
+                rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
+                    problematicCurve.put(userIdToRoadId.get(key), value);
+                });
+            }
         }
 
         isBasedOnRoadID = true;
@@ -253,7 +258,11 @@ public class VirtualRoadService {
     }
 
     public static double getPositionFactorByUserID(String roadSegmentUserId){
-        return rawVirtualRoadInfo.rawProblematicCurve.getOrDefault(Integer.parseInt(roadSegmentUserId), 1.0);
+        if (rawVirtualRoadInfo == null || rawVirtualRoadInfo.rawProblematicCurve == null){
+            return 1.0;
+        }
+
+        return rawVirtualRoadInfo.rawProblematicCurve.getOrDefault(roadSegmentUserId, 1.0);
     }
 
     private static class VehiclePair {
