@@ -6,18 +6,30 @@ rawProblematicCurve: {}
 rawCollisionDistanceThreshold: {}
 
 rawDistanceOffsetDueToCollisionPoint: 
-   "101+": 
-      "104+": {{grid}} 
-      "106-": {{0 - grid}}
-   "103-": 
-      "104+": {{0 - grid}} 
-      "106-": {{grid}} 
-   "104+": 
-      "101+": {{0 - grid}} 
-      "103-": {{grid}} 
-   "106-": 
-      "101+": {{grid}} 
-      "103-": {{0 - grid}}
+  "101+": 
+    "104+": {{grid}} 
+    "106-": {{0 - grid}}
+  "103-": 
+    "104+": {{0 - grid}} 
+    "106-": {{grid}} 
+  "104+": 
+    "101+": {{0 - grid}} 
+    "103-": {{grid}} 
+  "106-": 
+    "101+": {{grid}} 
+    "103-": {{0 - grid}}
 
+rawIntersectionThroughput:
+  "TrafficLight":
+    - "2+"
+    - "2-"
+    - "5+"
+    - "5-"
+  "VCACC":
+    - "102+"
+    - "102-"
+    - "105+"
+    - "105-"
 
-
+metricsDisplayX: 560
+metricsDisplayY: 0

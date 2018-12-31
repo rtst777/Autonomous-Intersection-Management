@@ -298,6 +298,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public void removeVehicle(int index) {
         vehicles.remove(index);
+        VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
     }
 
     /**
@@ -313,6 +314,7 @@ public class LaneSegment implements Iterable<Vehicle> {
             final Vehicle vehicle = vehicles.get(i);
             if (vehicle.getId() == vehicleId) {
                 vehicles.remove(i);
+                VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
                 return;
             }
         }
@@ -324,6 +326,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void removeFrontVehicleOnLane() {
         if (!vehicles.isEmpty()) {
             vehicles.remove(0);
+            VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
         }
     }
 
@@ -345,8 +348,7 @@ public class LaneSegment implements Iterable<Vehicle> {
             ++count;
         }
 
-        // TODO (ethan) add logic to collect throughput
-
+        VirtualRoadService.recordIntersectionThroughput(count, roadSegment.id());
         return count;
     }
 
@@ -855,6 +857,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                         rearPositionOnNewRoadSegment, exitEndPos);
                 // remove vehicle from this road segment
                 vehicles.remove(0);
+                VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
                 --count;
                 ++removedVehicleCount;
                 // put the vehicle onto the new road segment (note that even when a road segment

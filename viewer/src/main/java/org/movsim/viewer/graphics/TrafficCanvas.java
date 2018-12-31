@@ -33,8 +33,12 @@ import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionDelay;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionMetrics;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionThroughput;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
@@ -528,9 +532,46 @@ public class TrafficCanvas extends SimulationCanvasBase
                     drawVehicle(g, roadMapping, vehicle);
                 }
             }
+            drawMetrics(g);
             totalAnimationTime += System.currentTimeMillis() - timeBeforePaint_ms;
             drawAfterVehiclesMoved(g, simulationRunnable.simulationTime(), simulationRunnable.iterationCount());
         }
+    }
+
+    private void drawMetrics(Graphics2D g){
+        final int fontHeight = 30;
+        final Font font = new Font(FONT_NAME, Font.PLAIN, fontHeight);
+        g.setFont(font);
+
+        double centerX = VirtualRoadService.getMetricsDisplayX();
+        double centerY = VirtualRoadService.getMetricsDisplayY();
+
+        int metricsIndex = 0;
+        if (!VirtualRoadService.getIntersectionMetrics().isEmpty()){
+            g.setColor(Color.black);
+            TrafficCanvasUtils.drawText("IntersectionThroughput:", centerX, centerY, font, g);
+            for (IntersectionThroughput intersectionThroughput : VirtualRoadService.getIntersectionMetrics()){
+                g.setColor(IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length]);
+                centerY += fontHeight;
+                String display = intersectionThroughput.getName() + ": " + intersectionThroughput.getValue();
+                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
+                metricsIndex++;
+            }
+        }
+
+        if (!VirtualRoadService.getIntersectionDelaysMetrics().isEmpty()){
+            g.setColor(Color.black);
+            centerY += fontHeight;
+            TrafficCanvasUtils.drawText("IntersectionDelay:", centerX, centerY, font, g);
+            for (IntersectionDelay intersectionDelay : VirtualRoadService.getIntersectionDelaysMetrics()){
+                g.setColor(IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length]);
+                centerY += fontHeight;
+                String display = intersectionDelay.getName() + ": " + intersectionDelay.getValue();
+                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
+                metricsIndex++;
+            }
+        }
+
     }
 
     private void drawVehicle(Graphics2D g, RoadMapping roadMapping, Vehicle vehicle) {

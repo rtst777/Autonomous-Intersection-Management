@@ -13,4 +13,9 @@ public class RawVirtualRoadInfo {
     public Map<String, Map<String, Double>> rawDistanceOffsetDueToCollisionPoint;
     public Map<String, Map<String, Double>> rawCollisionDistanceThreshold;
     public Map<String, Double> rawProblematicCurve;
+    // metrics name -> list of intersection roads
+    public Map<String, List<String>> rawIntersectionThroughput;
+    public Map<String, List<String>> rawIntersectionDelay;
+    public double metricsDisplayX;
+    public double metricsDisplayY;
 }

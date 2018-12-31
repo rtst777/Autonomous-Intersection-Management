@@ -122,6 +122,8 @@ public class Vehicle {
 
     private double totalTravelTime = 0;
 
+    // TODO(ethan) add totalTravelTimeOnCurrentRoad    should be reset to 0 every time vehicle moved to other lane
+
     private double speed;
 
     /**
@@ -825,6 +827,10 @@ public class Vehicle {
      * @param dt delta-t, simulation time interval, seconds
      */
     public void updatePositionAndSpeed(double dt) {
+
+        // TODO ethan  create totalIntersectionTravelTime. Update totalIntersectionTravelTime only if it is on intersection road
+        // TODO ethan  create a method getDesiredIntersectionTravelTime(roadSeg)    roadSeg.roadLength() / getLongitudinalModel().getDesiredSpeed()
+
         totalTravelTime += dt;
         frontPositionOld = frontPosition;
         if (longitudinalModel != null && longitudinalModel.isCA()) {

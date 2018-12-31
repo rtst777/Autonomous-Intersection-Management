@@ -5,10 +5,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionDelay;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionMetrics;
+import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionThroughput;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import javax.lang.model.type.IntersectionType;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -42,9 +46,16 @@ public class VirtualRoadService {
     //                              is 4. 2 < 4, so the collision point don't need to be considered
     private static Map<Integer, Map<Integer, Double>> collisionDistanceThreshold;
 
-    // the id of the (curve) road which has incorrect length -> the factor need to apply on the vehicle position on
+    // The id of the (curve) road which has incorrect length -> the factor need to apply on the vehicle position on
     // that road
     private static Map<Integer, Double> problematicCurve;
+
+    private static List<IntersectionThroughput> intersectionThroughputMetrics;
+    private static List<IntersectionDelay> intersectionDelaysMetrics;
+    // The coordinates where we display the metrics value on the UI. The values should not be displayed when there is
+    // no metrics registered
+    private static double metricsDisplayX;
+    private static double metricsDisplayY;
 
     private static boolean isBasedOnRoadID = false;
 
@@ -99,6 +110,8 @@ public class VirtualRoadService {
         distanceOffsetDueToCollisionPoint = new HashMap<>();
         collisionDistanceThreshold = new HashMap<>();
         problematicCurve = new HashMap<>();
+        intersectionThroughputMetrics = new ArrayList<>();
+        intersectionDelaysMetrics = new ArrayList<>();
 
         // create rawVirtualRoadInfo if virtual road config file is present
         if (rawVirtualRoadInfo != null && roadNetwork != null) {
@@ -122,8 +135,8 @@ public class VirtualRoadService {
             if (rawVirtualRoadInfo.rawCollisionDistanceThreshold != null){
                 rawVirtualRoadInfo.rawCollisionDistanceThreshold.forEach((key, value) -> {
                     Map<Integer, Double> distanceThresholds = new HashMap<>();
-                    value.forEach((inner_key, inner_value) -> {
-                        distanceThresholds.put(userIdToRoadId.get(inner_key), inner_value);
+                    value.forEach((innerKey, innerValue) -> {
+                        distanceThresholds.put(userIdToRoadId.get(innerKey), innerValue);
                     });
                     collisionDistanceThreshold.put(userIdToRoadId.get(key), distanceThresholds);
                 });
@@ -134,6 +147,17 @@ public class VirtualRoadService {
                     problematicCurve.put(userIdToRoadId.get(key), value);
                 });
             }
+
+            if (rawVirtualRoadInfo.rawIntersectionThroughput != null){
+                rawVirtualRoadInfo.rawIntersectionThroughput.forEach((key, value) -> {
+                    List<Integer> intersectionRoads = new ArrayList<>();
+                    value.forEach(roadID -> intersectionRoads.add(userIdToRoadId.get(roadID)));
+                    intersectionThroughputMetrics.add(new IntersectionThroughput(key, intersectionRoads));
+                });
+            }
+
+            metricsDisplayX = rawVirtualRoadInfo.metricsDisplayX;
+            metricsDisplayY = rawVirtualRoadInfo.metricsDisplayY;
         }
 
         isBasedOnRoadID = true;
@@ -244,6 +268,31 @@ public class VirtualRoadService {
         }
 
         return rawVirtualRoadInfo.rawProblematicCurve.getOrDefault(roadSegmentUserId, 1.0);
+    }
+
+    // currently simply add this method right after all vehicle.remove
+    public static void recordIntersectionThroughput(Number value, Integer roadID){
+        intersectionThroughputMetrics.forEach(metrics -> metrics.record(value, roadID));
+    }
+
+    public static void recordIntersectionDelay(){
+        // TODO(ethan)
+    }
+
+    public static List<IntersectionThroughput> getIntersectionMetrics() {
+        return intersectionThroughputMetrics;
+    }
+
+    public static List<IntersectionDelay> getIntersectionDelaysMetrics() {
+        return intersectionDelaysMetrics;
+    }
+
+    public static double getMetricsDisplayX() {
+        return metricsDisplayX;
+    }
+
+    public static double getMetricsDisplayY() {
+        return metricsDisplayY;
     }
 
     private static class VehiclePair {
