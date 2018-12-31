@@ -76,12 +76,14 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     public static class FrontVehicleInfo {
         public final Vehicle frontVehicle;
-        // the distance between the front vehicle and the current host vehicle
+        // the front position difference between the front vehicle and the current host vehicle
         public final double precedingDistance;
+        public final boolean isVirtualFrontVehicle;
 
-        public FrontVehicleInfo(Vehicle frontVehicle, double precedingDistance) {
+        public FrontVehicleInfo(Vehicle frontVehicle, double precedingDistance, boolean isVirtualFrontVehicle) {
             this.frontVehicle = frontVehicle;
             this.precedingDistance = precedingDistance;
+            this.isVirtualFrontVehicle = isVirtualFrontVehicle;
         }
     }
 
@@ -342,6 +344,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             --vehicleCount;
             ++count;
         }
+
+        // TODO (ethan) add logic to collect throughput
+
         return count;
     }
 
@@ -602,6 +607,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public final Vehicle frontVehicle(Vehicle vehicle) {
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
+        boolean isVirtualFrontVehicle = false;
 
         // find the front vehicle from the same lane
         double vehiclePos = vehicle.getRearPosition();
@@ -610,15 +616,14 @@ public class LaneSegment implements Iterable<Vehicle> {
         if (index > 0) {
             // exact match found
             frontVehicle = vehicles.get(index - 1);
-            precedingDistance = frontVehicle.getRearPosition() - vehiclePos;
+            precedingDistance = frontVehicle.getFrontPosition() - vehicle.getFrontPosition();
         } else if (insertionPoint > 0) {
             frontVehicle = vehicles.get(insertionPoint - 1);
-            precedingDistance = frontVehicle.getRearPosition() - vehiclePos;
+            precedingDistance = frontVehicle.getFrontPosition() - vehicle.getFrontPosition();
         }
 
         // find the front vehicle from the virtual lane
         List<RoadSegment> virtualRoadSegments = roadSegment.getVirtualRoadSegments();
-        boolean updateVirtualPrecedingDistance = false;
         if (!virtualRoadSegments.isEmpty()){
             double virtualPrecedingDistance = Double.MAX_VALUE;
             Vehicle virtualFrontVehicle = null;
@@ -636,18 +641,14 @@ public class LaneSegment implements Iterable<Vehicle> {
                     if (virtualPrecedingDistance < precedingDistance){
                         frontVehicle = virtualFrontVehicle;
                         precedingDistance = virtualPrecedingDistance;
-                        updateVirtualPrecedingDistance = true;
+                        isVirtualFrontVehicle = true;
                     }
                 }
-            }
-
-            if (updateVirtualPrecedingDistance){
-                VirtualRoadService.updatePrecedingVirtualDistance(vehicle, frontVehicle, precedingDistance);
             }
         }
 
         if (frontVehicle != null){
-            VirtualRoadService.frontVehicleConsiderVirtualRoad.put(vehicle.getId(), frontVehicle.getId());
+            vehicle.setFrontVehicleInfo(new FrontVehicleInfo(frontVehicle, precedingDistance, isVirtualFrontVehicle));
             return frontVehicle;
         }
 
@@ -679,12 +680,13 @@ public class LaneSegment implements Iterable<Vehicle> {
                 final Vehicle frontSinkVehicle = new Vehicle(sinkRearVehicle);
                 frontSinkVehicle.setFrontPosition(frontSinkVehicle.getFrontPosition() + accumDistance);
 
-                VirtualRoadService.frontVehicleConsiderVirtualRoad.put(vehicle.getId(), frontSinkVehicle.getId());
+                vehicle.setFrontVehicleInfo(new FrontVehicleInfo(frontSinkVehicle,
+                        frontSinkVehicle.getFrontPosition() - vehicle.getFrontPosition(), false));
                 return frontSinkVehicle;
             }
         }
 
-        VirtualRoadService.frontVehicleConsiderVirtualRoad.remove(vehicle.getId());
+        vehicle.setFrontVehicleInfo(null);
         return null;
     }
 
@@ -722,7 +724,7 @@ public class LaneSegment implements Iterable<Vehicle> {
             return null;
         }
         else {
-            return new FrontVehicleInfo(frontVehicle, precedingDistance);
+            return new FrontVehicleInfo(frontVehicle, precedingDistance, true);
         }
     }
 

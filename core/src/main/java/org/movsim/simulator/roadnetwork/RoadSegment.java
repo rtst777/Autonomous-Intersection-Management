@@ -1176,7 +1176,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 }
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
-                if (netDistance < 0 && !VirtualRoadService.isFrontVehicleVirtual(vehicle, vehFront)) {
+                if (netDistance < 0 && !vehicle.isVirtualFrontVehicle(vehFront)) {
                     LOG.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
                     sb.append(String.format("Crash of Vehicle i=%d (vehId=%d) at x=%.4f ", index, vehicle.getId(),

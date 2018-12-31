@@ -48,10 +48,7 @@ public class VirtualRoadService {
 
     private static boolean isBasedOnRoadID = false;
 
-    // map from vehicle's id to its front vehicle's id (consider virtual road)
-    // This field is currently only used for debugging/visualization purpose
-    public static Map<Long, Long> frontVehicleConsiderVirtualRoad = new HashMap<>();
-    // for debugging purpose
+    // Only for debugging purpose
     public static Map<Integer, String> roadIdToUserId = new HashMap<>();
 
     /**
@@ -202,10 +199,6 @@ public class VirtualRoadService {
         }
     }
 
-    // Whenever we assign a virtual preceding vehicle to host vehicle, we will cache the distance between them to avoid
-    // redundant computation
-    private static Map<VehiclePair, Double> virtualPrecedingDistanceCache = new HashMap<>();
-
     /**
      * Return the preceding distance from the front position of host vehicle to the rear position of front vehicle
      * The preceding distance can be virtual preceding distance (if front vehicle is on the virtual road)
@@ -225,25 +218,13 @@ public class VirtualRoadService {
             return MovsimConstants.GAP_INFINITY;
         }
 
-        double frontPositionDifference = virtualPrecedingDistanceCache.getOrDefault(new VehiclePair(hostVehicle, frontVehicle),
-                frontVehicle.getFrontPosition() - hostVehicle.getFrontPosition());
-
-        return frontPositionDifference - frontVehicle.getLength();
-    }
-
-    public static void updatePrecedingVirtualDistance(Vehicle hostVehicle, Vehicle precedingVehicle, double distance){
-        virtualPrecedingDistanceCache.put(new VehiclePair(hostVehicle, precedingVehicle), distance);
-    }
-
-    /**
-     * Return true if frontVehicle is on the virtual road, false if on the same road as hostVehicle
-     *
-     * @param hostVehicle the target vehicle
-     * @param frontVehicle the front vehicle
-     * @return true if frontVehicle is on the virtual road
-     */
-    public static boolean isFrontVehicleVirtual(Vehicle hostVehicle, Vehicle frontVehicle){
-        return virtualPrecedingDistanceCache.containsKey(new VehiclePair(hostVehicle, frontVehicle));
+        double frontPositionDifference = hostVehicle.getPrecedingDistanceToFrontVehicle();
+        if (frontPositionDifference < 0){
+            return frontVehicle.getRearPosition() - hostVehicle.getFrontPosition();
+        }
+        else {
+            return frontPositionDifference - frontVehicle.getLength();
+        }
     }
 
     /**

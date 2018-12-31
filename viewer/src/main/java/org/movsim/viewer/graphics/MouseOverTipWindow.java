@@ -74,8 +74,7 @@ class MouseOverTipWindow extends Window {
         }
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         final String string =
-                String.format(this.trafficCanvas.popupString, vehicle.getId(),
-                        VirtualRoadService.frontVehicleConsiderVirtualRoad.getOrDefault(vehicle.getId(), Long.valueOf(-1)),
+                String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getFrontVehicleID(),
                         VirtualRoadService.roadIdToUserId.get(vehicle.roadSegmentId()), vehicle.getLabel(),
                         vehicle.type(), vehicle.lane(), vehiclePhysical.getFrontPosition(),
                         vehiclePhysical.getSpeed() * Units.MS_TO_KMH, vehiclePhysical.getAcc(),

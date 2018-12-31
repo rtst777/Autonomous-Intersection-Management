@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -229,6 +231,56 @@ public class Vehicle {
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
     private int originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+
+    // Note: this field will not record front vehicle for all the cases. It only works under the road cases for VCACC
+    private LaneSegment.FrontVehicleInfo frontVehicleInfo = null;
+
+    /**
+     * Returns the vehicle ID of the front vehicle. Return -1 if no front vehicle
+     *
+     * @return the vehicle ID of the front vehicle.
+     */
+    public long getFrontVehicleID(){
+        if (frontVehicleInfo == null){
+            return -1;
+        }
+        return frontVehicleInfo.frontVehicle.getId();
+    }
+
+    public void setFrontVehicleInfo(LaneSegment.FrontVehicleInfo frontVehicleInfo){
+        this.frontVehicleInfo = frontVehicleInfo;
+    }
+
+    public LaneSegment.FrontVehicleInfo getFrontVehicleInfo() {
+        return frontVehicleInfo;
+    }
+
+    /**
+     * Returns the front position difference between the front vehicle and the host vehicle. Return -1 if no front vehicle
+     *
+     * @return the front position difference between the front vehicle and the host vehicle
+     */
+    public double getPrecedingDistanceToFrontVehicle(){
+        if (frontVehicleInfo == null){
+            return -1.0;
+        }
+        return frontVehicleInfo.precedingDistance;
+    }
+
+    /**
+     * Returns true if the target vehicle is the virtual front vehicle
+     *
+     * @return true if the target vehicle is the virtual front vehicle.
+     */
+    public boolean isVirtualFrontVehicle(Vehicle targetVehicle){
+        if (frontVehicleInfo == null){
+            return false;
+        }
+        if (!frontVehicleInfo.isVirtualFrontVehicle){
+            return false;
+        }
+        return frontVehicleInfo.frontVehicle.equals(targetVehicle);
+    }
 
     /**
      * Resets the next id.
