@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="IDM1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="10" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDM2" length="10" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="7" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDM3" length="16" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="trafficlight_intersection_comparison.xodr">
+        <Simulation timestep="0.2" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="IDM1" fraction="0.7" relative_v0_randomization="0.0" />
+                <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.0" />
+                <VehicleType label="IDM3" fraction="0.1" relative_v0_randomization="0.0" />
+            </TrafficComposition>
+            <Road id="1+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="3-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="4+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="6-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="101+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="103-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="104+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="106-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="210" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+        </Simulation>
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="plan1"  >
+                <Phase duration="30">
+                    <TrafficLightState type="stop_left" status="Red" condition="request"/>
+                    <TrafficLightState type="stop_right" status="Red" condition="request"/>
+                    <TrafficLightState type="stop_down" status="Green" condition="clear"/>
+                    <TrafficLightState type="stop_up" status="Green" condition="clear"/>
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="stop_left" status="Red" />
+                    <TrafficLightState type="stop_right" status="Red" />
+                    <TrafficLightState type="stop_down" status="GreenRed" />
+                    <TrafficLightState type="stop_up" status="GreenRed" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="stop_left" status="Red" />
+                    <TrafficLightState type="stop_right" status="Red" />
+                    <TrafficLightState type="stop_down" status="Red" />
+                    <TrafficLightState type="stop_up" status="Red" />
+                </Phase>
+                <Phase duration="30">
+                    <TrafficLightState type="stop_left" status="Green" condition="clear"/>
+                    <TrafficLightState type="stop_right" status="Green" condition="clear"/>
+                    <TrafficLightState type="stop_down" status="Red" />
+                    <TrafficLightState type="stop_up" status="Red" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="stop_left" status="GreenRed" />
+                    <TrafficLightState type="stop_right" status="GreenRed" />
+                    <TrafficLightState type="stop_down" status="Red" />
+                    <TrafficLightState type="stop_up" status="Red" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="stop_left" status="Red" />
+                    <TrafficLightState type="stop_right" status="Red" />
+                    <TrafficLightState type="stop_down" status="Red" />
+                    <TrafficLightState type="stop_up" status="Red" />
+                </Phase>
+            </ControllerGroup>
+        </TrafficLights>
+    </Scenario>
+</Movsim>
+

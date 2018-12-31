@@ -1,0 +1,23 @@
+{% set grid = 10.0 %}
+
+# real road length = length in xml * factor
+rawProblematicCurve: {}
+
+rawCollisionDistanceThreshold: {}
+
+rawDistanceOffsetDueToCollisionPoint: 
+   "101+": 
+      "104+": {{grid}} 
+      "106-": {{0 - grid}}
+   "103-": 
+      "104+": {{0 - grid}} 
+      "106-": {{grid}} 
+   "104+": 
+      "101+": {{0 - grid}} 
+      "103-": {{grid}} 
+   "106-": 
+      "101+": {{grid}} 
+      "103-": {{0 - grid}}
+
+
+
