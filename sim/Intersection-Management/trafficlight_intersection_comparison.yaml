@@ -31,5 +31,25 @@ rawIntersectionThroughput:
     - "105+"
     - "105-"
 
-metricsDisplayX: 560
-metricsDisplayY: 0
+rawIntersectionDelay:
+  "TrafficLight":
+    - "1+"
+    - "2+"
+    - "2-"
+    - "3-"
+    - "4+"
+    - "5+"
+    - "5-"
+    - "6-"
+  "VCACC":
+    - "101+"
+    - "102+"
+    - "102-"
+    - "103-"
+    - "104+"
+    - "105+"
+    - "105-"
+    - "106-"
+
+metricsDisplayX: 430
+metricsDisplayY: -120

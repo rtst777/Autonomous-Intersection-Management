@@ -297,8 +297,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param index index of vehicle to remove
      */
     public void removeVehicle(int index) {
-        vehicles.remove(index);
+        Vehicle veh = vehicles.remove(index);
         VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
+        VirtualRoadService.recordIntersectionDelay(veh.getTotalDelayOnTheCurrentRoad(), roadSegment.id());
     }
 
     /**
@@ -313,8 +314,9 @@ public class LaneSegment implements Iterable<Vehicle> {
         for (int i = 0; i < count; ++i) {
             final Vehicle vehicle = vehicles.get(i);
             if (vehicle.getId() == vehicleId) {
-                vehicles.remove(i);
+                Vehicle veh = vehicles.remove(i);
                 VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
+                VirtualRoadService.recordIntersectionDelay(veh.getTotalDelayOnTheCurrentRoad(), roadSegment.id());
                 return;
             }
         }
@@ -325,8 +327,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public void removeFrontVehicleOnLane() {
         if (!vehicles.isEmpty()) {
-            vehicles.remove(0);
+            Vehicle veh = vehicles.remove(0);
             VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
+            VirtualRoadService.recordIntersectionDelay(veh.getTotalDelayOnTheCurrentRoad(), roadSegment.id());
         }
     }
 
@@ -342,7 +345,8 @@ public class LaneSegment implements Iterable<Vehicle> {
         // remove any vehicles that have gone past the end of this road segment
         while (vehicleCount > 0 && vehicles.get(0).getRearPosition() > roadLength) {
             sink.recordRemovedVehicle(vehicles.get(0));
-            vehicles.remove(0);
+            Vehicle veh = vehicles.remove(0);
+            VirtualRoadService.recordIntersectionDelay(veh.getTotalDelayOnTheCurrentRoad(), roadSegment.id());
             ++removedVehicleCount;
             --vehicleCount;
             ++count;
@@ -853,11 +857,12 @@ public class LaneSegment implements Iterable<Vehicle> {
                     }
                 }
                 final int laneOnNewRoadSegment = sinkLaneSegment.lane();
+                VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
+                VirtualRoadService.recordIntersectionDelay(vehicle.getTotalDelayOnTheCurrentRoad(), roadSegment.id());
                 vehicle.moveToNewRoadSegment(sinkLaneSegment.roadSegment(), laneOnNewRoadSegment,
                         rearPositionOnNewRoadSegment, exitEndPos);
                 // remove vehicle from this road segment
                 vehicles.remove(0);
-                VirtualRoadService.recordIntersectionThroughput(1, roadSegment.id());
                 --count;
                 ++removedVehicleCount;
                 // put the vehicle onto the new road segment (note that even when a road segment

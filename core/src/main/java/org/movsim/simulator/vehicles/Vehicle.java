@@ -122,7 +122,7 @@ public class Vehicle {
 
     private double totalTravelTime = 0;
 
-    // TODO(ethan) add totalTravelTimeOnCurrentRoad    should be reset to 0 every time vehicle moved to other lane
+    private double totalTravelTimeOnCurrentRoad = 0;
 
     private double speed;
 
@@ -822,15 +822,24 @@ public class Vehicle {
     }
 
     /**
+     * Compute and return the time delay on the current road, also reset totalTravelTimeOnCurrentRoad
+     *
+     * @return the time delay on the current road
+     */
+    public double getTotalDelayOnTheCurrentRoad(){
+        double desiredTime = roadSegment.roadLength() / getLongitudinalModel().getDesiredSpeed();
+        double delayedTime = totalTravelTimeOnCurrentRoad - desiredTime;
+        totalTravelTimeOnCurrentRoad = 0;
+        return delayedTime;
+    }
+
+    /**
      * Update position and speed. Case distinction between cellular automata, Newell and continuos models/iterated maps
      *
      * @param dt delta-t, simulation time interval, seconds
      */
     public void updatePositionAndSpeed(double dt) {
-
-        // TODO ethan  create totalIntersectionTravelTime. Update totalIntersectionTravelTime only if it is on intersection road
-        // TODO ethan  create a method getDesiredIntersectionTravelTime(roadSeg)    roadSeg.roadLength() / getLongitudinalModel().getDesiredSpeed()
-
+        totalTravelTimeOnCurrentRoad += dt;
         totalTravelTime += dt;
         frontPositionOld = frontPosition;
         if (longitudinalModel != null && longitudinalModel.isCA()) {

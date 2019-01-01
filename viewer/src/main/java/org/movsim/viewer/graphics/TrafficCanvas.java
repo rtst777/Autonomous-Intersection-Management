@@ -55,6 +55,7 @@ import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.awt.resources.awt;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -63,6 +64,8 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -539,39 +542,73 @@ public class TrafficCanvas extends SimulationCanvasBase
     }
 
     private void drawMetrics(Graphics2D g){
-        final int fontHeight = 30;
-        final Font font = new Font(FONT_NAME, Font.PLAIN, fontHeight);
+        final int fontHeight = 20;
+        final Font font = new Font("DialogInput", Font.BOLD, fontHeight);
         g.setFont(font);
 
         double centerX = VirtualRoadService.getMetricsDisplayX();
         double centerY = VirtualRoadService.getMetricsDisplayY();
 
+        // draw background
+//        g.setColor(new Color(233, 233, 233));
+//        g.fillRect((int)(centerX - fontHeight * 0.4), (int)(centerY - fontHeight * 0.4), fontHeight * 16, fontHeight * 5);
+
         int metricsIndex = 0;
+        Map<String, Color> metricsColor = new HashMap<>(); // we want the metrics with the same name have the same color
+        Map<String, Long> metricsThroughput = new HashMap<>();
+
+        // draw intersection throughput metrics
         if (!VirtualRoadService.getIntersectionMetrics().isEmpty()){
             g.setColor(Color.black);
-            TrafficCanvasUtils.drawText("IntersectionThroughput:", centerX, centerY, font, g);
+//            TrafficCanvasUtils.drawText("IntersectionThroughput:", centerX, centerY, font, g);
             for (IntersectionThroughput intersectionThroughput : VirtualRoadService.getIntersectionMetrics()){
-                g.setColor(IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length]);
-                centerY += fontHeight;
-                String display = intersectionThroughput.getName() + ": " + intersectionThroughput.getValue();
-                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
-                metricsIndex++;
+                String metricsName = intersectionThroughput.getName();
+                if (metricsColor.containsKey(metricsName)){
+                    g.setColor(metricsColor.get(metricsName));
+                }
+                else {
+                    Color color = IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length];
+                    metricsColor.put(metricsName, color);
+                    g.setColor(color);
+                    metricsIndex++;
+                }
+
+                long throughput = intersectionThroughput.getValue().longValue();
+                metricsThroughput.put(metricsName, throughput);
+//                centerY += fontHeight * 1.2;
+//                String display = metricsName + ": " + throughput;
+//                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
             }
         }
 
+        // draw intersection delay metrics
+        // FIXME currently we assume intersection delay and intersection throughput come as a pair
+        NumberFormat formatter = new DecimalFormat("#0.000");
         if (!VirtualRoadService.getIntersectionDelaysMetrics().isEmpty()){
             g.setColor(Color.black);
             centerY += fontHeight;
-            TrafficCanvasUtils.drawText("IntersectionDelay:", centerX, centerY, font, g);
+            TrafficCanvasUtils.drawText("Average Intersection Delay:", centerX, centerY, font, g);
             for (IntersectionDelay intersectionDelay : VirtualRoadService.getIntersectionDelaysMetrics()){
-                g.setColor(IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length]);
-                centerY += fontHeight;
-                String display = intersectionDelay.getName() + ": " + intersectionDelay.getValue();
+                String metricsName = intersectionDelay.getName();
+                if (metricsColor.containsKey(metricsName)){
+                    g.setColor(metricsColor.get(metricsName));
+                }
+                else {
+                    Color color = IntersectionMetrics.METRICS_COLORS[metricsIndex % IntersectionMetrics.METRICS_COLORS.length];
+                    metricsColor.put(metricsName, color);
+                    g.setColor(color);
+                    metricsIndex++;
+                }
+
+                double totalDelay = intersectionDelay.getValue().doubleValue();
+                long numVehPassIntersection = metricsThroughput.getOrDefault(metricsName, Long.MIN_VALUE);
+                numVehPassIntersection = numVehPassIntersection == 0 ? 1 : numVehPassIntersection;  // to avoid divide by 0
+                double avgDelay = totalDelay / numVehPassIntersection;
+                centerY += fontHeight * 1.2;
+                String display = metricsName + ": " + formatter.format(avgDelay) + " s";
                 TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
-                metricsIndex++;
             }
         }
-
     }
 
     private void drawVehicle(Graphics2D g, RoadMapping roadMapping, Vehicle vehicle) {

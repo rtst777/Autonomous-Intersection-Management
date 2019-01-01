@@ -1,25 +1,42 @@
 package org.movsim.simulator.roadnetwork.IntersectionMetrics;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
- * Intersection delay (measured in s/veh) is the difference between the time a vehicle takes to reach the exit of the
- * network and the minimum time it could possibly take, tideal, which is the time the vehicle would spend if it
- * was the only vehicle in the network and it could always pass intersections without impediment.
+ * Intersection delay is the difference between the time a vehicle takes to reach the exit of the road network and the
+ * minimum time it could possibly take, which is the time the vehicle would spend if it was the only vehicle in the
+ * road network and it could always pass intersections without impediment. This metrics record the total delay across
+ * all the vehicles
  * */
-// TODO(ethan)
 public class IntersectionDelay implements IntersectionMetrics {
+
+    private final String metricsName;
+    private Set<Integer> intersectionRoads;
+    // TODO(ethan) replace double with threadsafe data if there is concurrent access
+    private double totalDelayTime;
+
+    public IntersectionDelay(String metricsName, List<Integer> intersectionRoads){
+        this.metricsName = metricsName;
+        this.intersectionRoads = new HashSet<>(intersectionRoads);
+        this.totalDelayTime = 0;
+    }
 
     @Override
     public String getName() {
-        return null;
+        return metricsName;
     }
 
     @Override
     public Number getValue() {
-        return null;
+        return totalDelayTime;
     }
 
     @Override
     public void record(Number value, Integer roadID) {
-
+        if (intersectionRoads.contains(roadID)) {
+            totalDelayTime += value.doubleValue();
+        }
     }
 }

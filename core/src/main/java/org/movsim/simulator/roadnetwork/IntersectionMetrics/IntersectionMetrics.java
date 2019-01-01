@@ -4,7 +4,7 @@ import java.awt.*;
 
 public interface IntersectionMetrics {
 
-    Color[] METRICS_COLORS = new Color[]{ Color.BLUE, Color.ORANGE, Color.PINK };
+    Color[] METRICS_COLORS = new Color[]{ new Color(220, 0, 0), Color.BLUE, Color.YELLOW, Color.PINK, Color.MAGENTA };
 
     /**
      * Return the name of metrics

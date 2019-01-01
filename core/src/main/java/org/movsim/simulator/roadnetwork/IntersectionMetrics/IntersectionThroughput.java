@@ -8,6 +8,7 @@ import java.util.Set;
 /**
  * Intersection throughput is the total number of vehicles passing the intersection
  * */
+// FIXME movsim intentionally limit the maximum number of vehicle can exist in the road network, which limit maximum throughput
 public class IntersectionThroughput implements IntersectionMetrics{
 
     private final String metricsName;

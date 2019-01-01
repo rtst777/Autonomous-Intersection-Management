@@ -156,6 +156,14 @@ public class VirtualRoadService {
                 });
             }
 
+            if (rawVirtualRoadInfo.rawIntersectionDelay != null){
+                rawVirtualRoadInfo.rawIntersectionDelay.forEach((key, value) -> {
+                    List<Integer> intersectionRoads = new ArrayList<>();
+                    value.forEach(roadID -> intersectionRoads.add(userIdToRoadId.get(roadID)));
+                    intersectionDelaysMetrics.add(new IntersectionDelay(key, intersectionRoads));
+                });
+            }
+
             metricsDisplayX = rawVirtualRoadInfo.metricsDisplayX;
             metricsDisplayY = rawVirtualRoadInfo.metricsDisplayY;
         }
@@ -275,8 +283,8 @@ public class VirtualRoadService {
         intersectionThroughputMetrics.forEach(metrics -> metrics.record(value, roadID));
     }
 
-    public static void recordIntersectionDelay(){
-        // TODO(ethan)
+    public static void recordIntersectionDelay(Number value, Integer roadID){
+        intersectionDelaysMetrics.forEach(metrics -> metrics.record(value, roadID));
     }
 
     public static List<IntersectionThroughput> getIntersectionMetrics() {
