@@ -576,18 +576,20 @@ public class TrafficCanvas extends SimulationCanvasBase
                 long throughput = intersectionThroughput.getValue().longValue();
                 metricsThroughput.put(metricsName, throughput);
 //                centerY += fontHeight * 1.2;
-//                String display = metricsName + ": " + throughput;
-//                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
+//                String displayMetrics = metricsName + ": " + throughput;
+//                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
             }
         }
 
         // draw intersection delay metrics
         // FIXME currently we assume intersection delay and intersection throughput come as a pair
-        NumberFormat formatter = new DecimalFormat("#0.000");
         if (!VirtualRoadService.getIntersectionDelaysMetrics().isEmpty()){
+            NumberFormat formatter = new DecimalFormat("#0.000");
             g.setColor(Color.black);
             centerY += fontHeight;
-            TrafficCanvasUtils.drawText("Average Intersection Delay:", centerX, centerY, font, g);
+            String intersectionDelayType = metricsThroughput.isEmpty() ?
+                    "Total Intersection Delay:" : "Average Intersection Delay:";
+            TrafficCanvasUtils.drawText(intersectionDelayType, centerX, centerY, font, g);
             for (IntersectionDelay intersectionDelay : VirtualRoadService.getIntersectionDelaysMetrics()){
                 String metricsName = intersectionDelay.getName();
                 if (metricsColor.containsKey(metricsName)){
@@ -601,12 +603,12 @@ public class TrafficCanvas extends SimulationCanvasBase
                 }
 
                 double totalDelay = intersectionDelay.getValue().doubleValue();
-                long numVehPassIntersection = metricsThroughput.getOrDefault(metricsName, Long.MIN_VALUE);
+                long numVehPassIntersection = metricsThroughput.getOrDefault(metricsName, (long)1);
                 numVehPassIntersection = numVehPassIntersection == 0 ? 1 : numVehPassIntersection;  // to avoid divide by 0
                 double avgDelay = totalDelay / numVehPassIntersection;
                 centerY += fontHeight * 1.2;
-                String display = metricsName + ": " + formatter.format(avgDelay) + " s";
-                TrafficCanvasUtils.drawText(display, centerX + fontHeight, centerY, font, g);
+                String displayMetrics = metricsName + ": " + formatter.format(avgDelay) + " s";
+                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
             }
         }
     }
