@@ -3,12 +3,12 @@
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="IDM1" length="6" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="10" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+                <ModelParameterIDM v0="8" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="IDM2" length="10" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="7" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+                <ModelParameterIDM v0="6.5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="IDM3" length="16" maximum_deceleration="9">

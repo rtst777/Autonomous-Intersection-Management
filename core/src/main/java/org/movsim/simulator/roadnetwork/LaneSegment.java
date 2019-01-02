@@ -614,6 +614,9 @@ public class LaneSegment implements Iterable<Vehicle> {
         double precedingDistance = Double.MAX_VALUE;
         Vehicle frontVehicle = null;
         boolean isVirtualFrontVehicle = false;
+        // save the info of front vehicle on the same road, in case of cyclic dead lock
+        Vehicle frontVehicleSameRoad = null;
+        double precedingDistanceSameRoad = Double.MAX_VALUE;
 
         // find the front vehicle from the same lane
         double vehiclePos = vehicle.getRearPosition();
@@ -623,9 +626,13 @@ public class LaneSegment implements Iterable<Vehicle> {
             // exact match found
             frontVehicle = vehicles.get(index - 1);
             precedingDistance = frontVehicle.getFrontPosition() - vehicle.getFrontPosition();
+            frontVehicleSameRoad = frontVehicle;
+            precedingDistanceSameRoad = precedingDistance;
         } else if (insertionPoint > 0) {
             frontVehicle = vehicles.get(insertionPoint - 1);
             precedingDistance = frontVehicle.getFrontPosition() - vehicle.getFrontPosition();
+            frontVehicleSameRoad = frontVehicle;
+            precedingDistanceSameRoad = precedingDistance;
         }
 
         // find the front vehicle from the virtual lane
@@ -653,12 +660,19 @@ public class LaneSegment implements Iterable<Vehicle> {
             }
         }
 
-        if (frontVehicle != null){
-            vehicle.setFrontVehicleInfo(new FrontVehicleInfo(frontVehicle, precedingDistance, isVirtualFrontVehicle));
-            return frontVehicle;
+        if (isVirtualFrontVehicle){
+            if (!frontVehicle.isAncestorVehicle(vehicle)){
+                vehicle.setFrontVehicleInfo(new FrontVehicleInfo(frontVehicle, precedingDistance, true));
+                return frontVehicle;
+            }
         }
 
-        // TODO(ethan) also attemp to find front vehicle in the sink road of the virtual road
+        if (frontVehicleSameRoad != null){
+            vehicle.setFrontVehicleInfo(new FrontVehicleInfo(frontVehicleSameRoad, precedingDistanceSameRoad, false));
+            return frontVehicleSameRoad;
+        }
+
+        // TODO(ethan) also attempt to find front vehicle in the sink road of the virtual road
 
         // index == 0 or insertionPoint == 0
         // subject vehicle is front vehicle on this road segment, so check for vehicles

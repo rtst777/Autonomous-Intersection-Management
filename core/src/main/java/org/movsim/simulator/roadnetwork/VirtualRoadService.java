@@ -40,10 +40,10 @@ public class VirtualRoadService {
     //
     // e.g.
     //  vehicle - - - X - -END      The distance from vehicle to end of segment is 5, the collision distance threshold
-    //                              is 2. 5 > 2, so the collision point need to be considered
+    //                              is 2; 5 > 2, so the collision point need to be considered
     //
     //  - X - - vehicle - -END      The distance from vehicle to end of segment is 2, the collision distance threshold
-    //                              is 4. 2 < 4, so the collision point don't need to be considered
+    //                              is 4; 2 < 4, so the collision point don't need to be considered
     private static Map<Integer, Map<Integer, Double>> collisionDistanceThreshold;
 
     // The id of the (curve) road which has incorrect length -> the factor need to apply on the vehicle position on
@@ -57,10 +57,18 @@ public class VirtualRoadService {
     private static double metricsDisplayX;
     private static double metricsDisplayY;
 
-    private static boolean isBasedOnRoadID = false;
+    // e.g. if levelOfAncestorVehicle = 2, we only consider the front vehicle of the current vehicle and the front vehicle
+    // of the front vehicle of the current vehicle as the ancestor vehicle of the current vehicle
+    private static int levelOfAncestorVehicle = 4;
+
+    private static boolean isInitialized = false;
 
     // Only for debugging purpose
     public static Map<Integer, String> roadIdToUserId = new HashMap<>();
+
+    public static int getLevelOfAncestorVehicle() {
+        return levelOfAncestorVehicle;
+    }
 
     /**
      * load the virtual road config file
@@ -164,11 +172,14 @@ public class VirtualRoadService {
                 });
             }
 
+            if (rawVirtualRoadInfo.levelOfAncestorVehicle > 0){
+                levelOfAncestorVehicle = rawVirtualRoadInfo.levelOfAncestorVehicle;
+            }
             metricsDisplayX = rawVirtualRoadInfo.metricsDisplayX;
             metricsDisplayY = rawVirtualRoadInfo.metricsDisplayY;
         }
 
-        isBasedOnRoadID = true;
+        isInitialized = true;
     }
 
     /**
@@ -178,7 +189,7 @@ public class VirtualRoadService {
      * @param roadNetwork
      */
     public static void addVirtualRoads(RoadNetwork roadNetwork){
-        if (!isBasedOnRoadID){
+        if (!isInitialized){
             System.err.println("VirtualRoadService is used without being initialized");
             System.exit(-1);
         }
@@ -202,7 +213,7 @@ public class VirtualRoadService {
      * @return the distance from the host vehicle to the end of the virtual road
      */
     public static double getPrecedingDistanceToVirtualRoad(RoadSegment virtualRoad, Vehicle hostVehicle){
-        if (!isBasedOnRoadID){
+        if (!isInitialized){
             System.err.println("VirtualRoadService is used without being initialized");
             System.exit(-1);
         }
@@ -241,7 +252,7 @@ public class VirtualRoadService {
      * @return the preceding distance from the front position of host vehicle to the rear position of front vehicle
      */
     public static double getPrecedingDistanceToFrontVehicle(Vehicle hostVehicle, Vehicle frontVehicle) {
-        if (!isBasedOnRoadID){
+        if (!isInitialized){
             System.err.println("VirtualRoadService is used without being initialized");
             System.exit(-1);
         }

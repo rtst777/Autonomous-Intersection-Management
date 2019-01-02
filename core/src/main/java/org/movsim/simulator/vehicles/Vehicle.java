@@ -258,6 +258,39 @@ public class Vehicle {
     }
 
     /**
+     * Return true if the target vehicle is the ancestor vehicle of the current vehicle.
+     * The ancestor vehicle of the current vehicle can be the front vehicle of the current vehicle, the front vehicle
+     * of the front vehicle of the current vehicle, the font vehicle of the font vehicle of the font vehicle of the
+     * current vehicle...
+     *
+     * @param targetVehicle
+     * @return true if the target vehicle is the ancestor vehicle of the current vehicle.
+     */
+    public boolean isAncestorVehicle(Vehicle targetVehicle){
+        if (targetVehicle == null){
+            return false;
+        }
+
+        int ancestorVehicleLevelCnt = VirtualRoadService.getLevelOfAncestorVehicle();
+        Vehicle currentVehicle = this;
+        while (ancestorVehicleLevelCnt > 0){
+            if (currentVehicle.frontVehicleInfo == null){
+                return false;
+            }
+
+            Vehicle frontVehicle = currentVehicle.frontVehicleInfo.frontVehicle;
+            if (frontVehicle.equals(targetVehicle)){
+                return true;
+            }
+
+            currentVehicle = frontVehicle;
+            ancestorVehicleLevelCnt--;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the front position difference between the front vehicle and the host vehicle. Return -1 if no front vehicle
      *
      * @return the front position difference between the front vehicle and the host vehicle

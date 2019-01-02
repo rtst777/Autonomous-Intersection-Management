@@ -16,6 +16,7 @@ public class RawVirtualRoadInfo {
     // metrics name -> list of intersection roads
     public Map<String, List<String>> rawIntersectionThroughput;
     public Map<String, List<String>> rawIntersectionDelay;
+    public int levelOfAncestorVehicle;
     public double metricsDisplayX;
     public double metricsDisplayY;
 }

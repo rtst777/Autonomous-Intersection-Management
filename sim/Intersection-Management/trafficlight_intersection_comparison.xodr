@@ -7,7 +7,7 @@
             <successor elementType="junction" elementId="1001" contactPoint="end"/>
         </link>
         <planView>
-            <geometry s="0.0" x="88.0" y="300.0" hdg="0.0" length="220.0">
+            <geometry s="0.0" x="108.0" y="300.0" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -26,7 +26,7 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="218" id="r1_1" orientation="+" name="stop_left" />
+            <signal s="198" id="r1_1" orientation="+" name="stop_left" />
         </signals>
     </road>
 
@@ -61,7 +61,7 @@
             <predecessor elementType="junction" elementId="1" />
         </link>
         <planView>
-            <geometry s="0.0" x="328.5" y="300.0" hdg="0.0" length="220.0">
+            <geometry s="0.0" x="328.5" y="300.0" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -171,7 +171,7 @@
             <successor elementType="junction" elementId="1001" contactPoint="end"/>
         </link>
         <planView>
-            <geometry s="0.0" x="588.0" y="300.0" hdg="0.0" length="220.0">
+            <geometry s="0.0" x="608.0" y="300.0" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -222,7 +222,7 @@
             <predecessor elementType="junction" elementId="1" />
         </link>
         <planView>
-            <geometry s="0.0" x="828.5" y="300.0" hdg="0.0" length="220.0">
+            <geometry s="0.0" x="828.5" y="300.0" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
