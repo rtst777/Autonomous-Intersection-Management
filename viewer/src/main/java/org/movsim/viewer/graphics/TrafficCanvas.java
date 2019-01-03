@@ -542,7 +542,7 @@ public class TrafficCanvas extends SimulationCanvasBase
     }
 
     private void drawMetrics(Graphics2D g){
-        final int fontHeight = 20;
+        final int fontHeight = VirtualRoadService.getMetricsFont();
         final Font font = new Font("DialogInput", Font.BOLD, fontHeight);
         g.setFont(font);
 
@@ -641,7 +641,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         }
 
         // draw vehicle ID
-        final int fontHeight = 9;
+        final int fontHeight = VirtualRoadService.getVehicleIdFont();
         final Font font = new Font(FONT_NAME, Font.PLAIN, fontHeight);
         g.setFont(font);
         g.setColor(Color.BLACK);

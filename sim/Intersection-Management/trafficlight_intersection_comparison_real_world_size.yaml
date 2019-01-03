@@ -1,4 +1,4 @@
-{% set grid = 10.0 %}
+{% set grid = 5.0 %}
 
 # real road length = length in xml * factor
 rawProblematicCurve: {}
@@ -52,4 +52,6 @@ rawIntersectionDelay:
     - "106-"
 
 metricsDisplayX: 430
-metricsDisplayY: -120
+metricsDisplayY: -180
+vehicleIdFont: 7
+metricsFont: 17

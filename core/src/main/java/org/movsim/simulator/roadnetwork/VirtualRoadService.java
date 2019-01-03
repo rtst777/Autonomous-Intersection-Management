@@ -57,6 +57,10 @@ public class VirtualRoadService {
     private static double metricsDisplayX;
     private static double metricsDisplayY;
 
+    // for debugging purpose
+    private static int vehicleIdFont = 9;
+    private static int metricsFont = 20;
+
     // e.g. if levelOfAncestorVehicle = 2, we only consider the front vehicle of the current vehicle and the front vehicle
     // of the front vehicle of the current vehicle as the ancestor vehicle of the current vehicle
     private static int levelOfAncestorVehicle = 4;
@@ -175,8 +179,15 @@ public class VirtualRoadService {
             if (rawVirtualRoadInfo.levelOfAncestorVehicle > 0){
                 levelOfAncestorVehicle = rawVirtualRoadInfo.levelOfAncestorVehicle;
             }
+
             metricsDisplayX = rawVirtualRoadInfo.metricsDisplayX;
             metricsDisplayY = rawVirtualRoadInfo.metricsDisplayY;
+            if (rawVirtualRoadInfo.vehicleIdFont != 0){
+                vehicleIdFont = rawVirtualRoadInfo.vehicleIdFont;
+            }
+            if (rawVirtualRoadInfo.metricsFont != 0){
+                metricsFont = rawVirtualRoadInfo.metricsFont;
+            }
         }
 
         isInitialized = true;
@@ -313,6 +324,10 @@ public class VirtualRoadService {
     public static double getMetricsDisplayY() {
         return metricsDisplayY;
     }
+
+    public static int getVehicleIdFont() { return vehicleIdFont; }
+
+    public static int getMetricsFont() { return metricsFont; }
 
     private static class VehiclePair {
         Vehicle hostVehicle;

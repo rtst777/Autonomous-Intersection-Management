@@ -19,4 +19,6 @@ public class RawVirtualRoadInfo {
     public int levelOfAncestorVehicle;
     public double metricsDisplayX;
     public double metricsDisplayY;
+    public int vehicleIdFont;
+    public int metricsFont;
 }

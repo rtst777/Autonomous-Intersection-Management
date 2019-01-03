@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Movsim>
     <VehiclePrototypes>
-        <VehiclePrototypeConfiguration label="IDM1" length="4.5" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="IDM1" length="4.5" width="1.9" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterIDM v0="8" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="IDM2" length="7" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="IDM2" length="6" width="2" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterIDM v0="6.5" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="IDM3" length="12" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="IDM3" length="12" width="2.4" maximum_deceleration="9">
             <AccelerationModelType>
                 <ModelParameterIDM v0="5" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="trafficlight_intersection_comparison.xodr">
+    <Scenario network_filename="trafficlight_intersection_comparison_real_world_size.xodr">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="IDM1" fraction="0.7" relative_v0_randomization="0.0" />
@@ -26,49 +26,49 @@
             </TrafficComposition>
             <Road id="1+">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="3-">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="4+">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="6-">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="101+">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="103-">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="104+">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             <Road id="106-">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="210" />
+                    <Inflow t="0" q_per_hour="200" />
                 </TrafficSource>
                 <Detectors />
             </Road>
