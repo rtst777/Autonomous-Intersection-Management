@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Movsim>
     <VehiclePrototypes>
-        <VehiclePrototypeConfiguration label="ADD1" length="10" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="ADD1" length="5" width="3.7" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+                <ModelParameterIDM v0="3" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="ADD2" length="10" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="ADD2" length="5" width="3.7" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
+                <ModelParameterIDM v0="3" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
-        <VehiclePrototypeConfiguration label="ADD3" length="10" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="ADD3" length="5" width="3.7" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterIDM v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+                <ModelParameterIDM v0="3" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="four_way_junction_slim_all.xodr">
+    <Scenario network_filename="full_slim_four_way_intersection.xodr">
         <Simulation timestep="0.2" crash_exit="false">
             <TrafficComposition>
                 <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" />
