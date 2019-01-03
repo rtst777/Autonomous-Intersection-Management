@@ -854,7 +854,7 @@
         </link>
         <planView>
             <geometry s="0.0" x="20" y="320" hdg="-1.5707963" length="31.415926">
-                <arc curvature="0.052" />
+                <arc curvature="0.05" />
             </geometry>
         </planView>
         <lanes>
