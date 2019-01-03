@@ -46,8 +46,7 @@ public class VirtualRoadService {
     //                              is 4; 2 < 4, so the collision point don't need to be considered
     private static Map<Integer, Map<Integer, Double>> collisionDistanceThreshold;
 
-    // The id of the (curve) road which has incorrect length -> the factor need to apply on the vehicle position on
-    // that road
+    // The id of the (curve) road which has incorrect length -> the factor need to apply on the length of that road
     private static Map<Integer, Double> problematicCurve;
 
     private static List<IntersectionThroughput> intersectionThroughputMetrics;
@@ -112,8 +111,7 @@ public class VirtualRoadService {
     }
 
     /**
-     * Initialize the RoadService by converting the userID in rawVirtualRoadInfo (if exist) to roadID
-     * Note: this method must be called before calling any other methods in this class
+     * Initialize the RoadService, meanwhile converting the userID in rawVirtualRoadInfo (if exist) to roadID
      *
      * @param roadNetwork
      */
@@ -193,17 +191,20 @@ public class VirtualRoadService {
         isInitialized = true;
     }
 
-    /**
-     * Add virtual roads (virtual road is the road containing vehicles to cause potential collision)
-     * to each road
-     *
-     * @param roadNetwork
-     */
-    public static void addVirtualRoads(RoadNetwork roadNetwork){
+    private static void checkInitialization(){
         if (!isInitialized){
             System.err.println("VirtualRoadService is used without being initialized");
             System.exit(-1);
         }
+    }
+
+    /**
+     * Add virtual roads (virtual road is the road containing vehicles to cause potential collision) to each road
+     *
+     * @param roadNetwork
+     */
+    public static void addVirtualRoads(RoadNetwork roadNetwork){
+        checkInitialization();
 
         for (final RoadSegment roadSegment : roadNetwork) {
             int roadID = roadSegment.id();
@@ -224,10 +225,7 @@ public class VirtualRoadService {
      * @return the distance from the host vehicle to the end of the virtual road
      */
     public static double getPrecedingDistanceToVirtualRoad(RoadSegment virtualRoad, Vehicle hostVehicle){
-        if (!isInitialized){
-            System.err.println("VirtualRoadService is used without being initialized");
-            System.exit(-1);
-        }
+        checkInitialization();
 
         Map<Integer, Double> distanceOffsets = distanceOffsetDueToCollisionPoint.get(hostVehicle.roadSegmentId());
         if (distanceOffsets == null || distanceOffsets.isEmpty()){
@@ -254,7 +252,7 @@ public class VirtualRoadService {
     }
 
     /**
-     * Return the preceding distance from the front position of host vehicle to the rear position of front vehicle
+     * Return the preceding distance from the front position of host vehicle to the rear position of front vehicle.
      * The preceding distance can be virtual preceding distance (if front vehicle is on the virtual road)
      * or normal preceding distance (if front vehicle is on the same road as the host vehicle)
      *
@@ -263,10 +261,7 @@ public class VirtualRoadService {
      * @return the preceding distance from the front position of host vehicle to the rear position of front vehicle
      */
     public static double getPrecedingDistanceToFrontVehicle(Vehicle hostVehicle, Vehicle frontVehicle) {
-        if (!isInitialized){
-            System.err.println("VirtualRoadService is used without being initialized");
-            System.exit(-1);
-        }
+        checkInitialization();
 
         if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
@@ -289,6 +284,7 @@ public class VirtualRoadService {
      * @return the factor need to apply on the vehicle's position in order to address the incorrect length problem of the road
      */
     public static double getPositionFactor(int roadSegmentId){
+        checkInitialization();
         return problematicCurve.getOrDefault(roadSegmentId, 1.0);
     }
 
@@ -302,10 +298,12 @@ public class VirtualRoadService {
 
     // currently simply add this method right after all vehicle.remove
     public static void recordIntersectionThroughput(Number value, Integer roadID){
+        checkInitialization();
         intersectionThroughputMetrics.forEach(metrics -> metrics.record(value, roadID));
     }
 
     public static void recordIntersectionDelay(Number value, Integer roadID){
+        checkInitialization();
         intersectionDelaysMetrics.forEach(metrics -> metrics.record(value, roadID));
     }
 
