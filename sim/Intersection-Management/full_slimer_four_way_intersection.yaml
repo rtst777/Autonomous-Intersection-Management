@@ -1,0 +1,407 @@
+# define variables
+{% set scaling_up_factor = 1.33333 %}
+{% set scaling_down_factor = 0.8 %}
+{% set small_curve = 11.7810 %}
+{% set big_curve_mid_comp = 3.5474 %}
+{% set big_curve_side_comp = 8.0438 %}
+{% set half_grid = 2.5 %}
+{% set long_straight_road = 220.0 %}
+
+{% set big_curve = big_curve_side_comp * 2 + big_curve_mid_comp %}
+{% set full_grid = half_grid * 2 %}
+
+# real road length = length in xml * factor
+rawProblematicCurve: 
+   "15": {{scaling_up_factor}}
+   "27": {{scaling_up_factor}}
+   "9": {{scaling_up_factor}}
+   "21": {{scaling_up_factor}}
+   "6": {{scaling_down_factor}}
+   "24": {{scaling_down_factor}} 
+   "12": {{scaling_down_factor}} 
+   "18": {{scaling_down_factor}} 
+
+rawCollisionDistanceThreshold:
+   # emerge from right side
+   "2222":
+      "15": {{2 * full_grid}}
+      "4444": {{2.5 * full_grid}}
+      "27": {{2 * full_grid}}
+      "3333": {{1.5 * full_grid}}
+   "9":
+      "1111": {{big_curve_side_comp}}
+      "4444": {{big_curve_mid_comp + big_curve_side_comp}}
+      "21": {{big_curve_side_comp}}
+      "27": {{big_curve_mid_comp + big_curve_side_comp}}
+   # emerge from left side   
+   "15":
+      "2222": {{big_curve_side_comp}}
+      "21": {{big_curve_side_comp + big_curve_mid_comp}}
+      "3333": {{big_curve_side_comp + big_curve_mid_comp}}
+      "27": {{big_curve_side_comp}}
+   "1111":
+      "9": {{2 * full_grid}}
+      "4444": {{1.5 * full_grid}}
+      "21": {{2 * full_grid}}
+      "3333": {{2.5 * full_grid}}
+   # emerge from down side
+   "21":
+      "9": {{big_curve_side_comp + big_curve_mid_comp}}
+      "1111": {{big_curve_side_comp + big_curve_mid_comp}}
+      "15": {{big_curve_side_comp}}
+      "3333": {{big_curve_side_comp}} 
+   "4444":
+      "1111": {{2.5 * full_grid}}
+      "9": {{2 * full_grid}}
+      "27": {{2 * full_grid}}
+      "2222": {{1.5 * full_grid}}
+   # emerge from up side
+   "27":
+      "15": {{big_curve_mid_comp + big_curve_side_comp}}
+      "2222": {{big_curve_mid_comp + big_curve_side_comp}}
+      "9": {{big_curve_side_comp}}
+      "4444": {{big_curve_side_comp}}
+   "3333": 
+      "2222": {{2.5 * full_grid}}
+      "15": {{2 * full_grid}}
+      "21": {{2 * full_grid}}
+      "1111": {{1.5 * full_grid}}
+
+rawDistanceOffsetDueToCollisionPoint: 
+  # emerge from left side
+   "111": 
+      "14": 0.0
+      "11": 0.0
+      "8": {{2 * full_grid - big_curve_mid_comp - big_curve_side_comp}} 
+      "9": {{2 * full_grid}}
+      "20": {{2 * full_grid - big_curve_side_comp}}
+      "444": {{2.5 * full_grid - 1.5 * full_grid}}
+      "17": {{4 * full_grid - small_curve}}
+      "21": {{2 * full_grid + big_curve_side_comp + big_curve_mid_comp}}
+      "4444": {{2.5 * full_grid + 2.5 * full_grid}}
+      "18": {{4 * full_grid}}
+      "333": {{1.5 * full_grid - 2.5 * full_grid}}
+      "26": {{4 * full_grid - big_curve}}
+      "3333": {{1.5 * full_grid + 1.5 * full_grid}}
+      "27": {{4 * full_grid}}
+      "15": {{big_curve}}
+      "12": {{small_curve}}
+   "11": 
+      "111": 0.0
+      "14": 0.0
+      "8": {{small_curve - big_curve}}
+      "9": {{small_curve}}
+      "333": {{small_curve - 4 * full_grid}}
+      "33333": {{small_curve}}
+      "1111": {{4 * full_grid}}
+      "15": {{big_curve}}
+   "14":
+      "111": 0.0
+      "11": 0.0
+      "5": {{big_curve - small_curve}}
+      "6": {{big_curve}}
+      "222": {{big_curve_mid_comp + big_curve_side_comp - 2 * full_grid}}
+      "2222": {{big_curve_mid_comp + big_curve_side_comp - 2 * full_grid}}
+      "20": {{big_curve_side_comp - big_curve_mid_comp - big_curve_side_comp}}
+      "444": {{big_curve - 4 * full_grid}}
+      "21": {{big_curve_side_comp + big_curve_side_comp}}
+      "4444": {{big_curve}}
+      "333": {{big_curve_side_comp - 2 * full_grid}}
+      "26": {{big_curve_side_comp + big_curve_mid_comp - big_curve_side_comp}}
+      "3333": {{big_curve_side_comp + 2 * full_grid}}
+      "27": {{big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "1111": {{4 * full_grid}}
+      "12": {{small_curve}}
+   "15": 
+      "6": 0.0
+      "5": {{0 - small_curve}}
+      "2222": {{0 - big_curve_side_comp + 2 * full_grid}}  
+      "222": {{0 - big_curve_side_comp - 2 * full_grid}} 
+      "4444": {{0.0}}
+      "21": {{0 - big_curve_side_comp - big_curve_mid_comp + big_curve_side_comp}}
+      "3333": {{0 - big_curve_side_comp - big_curve_mid_comp + 2 * full_grid}}
+      "27": {{0 - big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp}}
+      "26": {{0 - big_curve_side_comp - big_curve_side_comp}}
+      "44444": {{long_straight_road}}
+      "7": {{long_straight_road}}
+   "1111": 
+      "9": {{big_curve_side_comp - 2 * full_grid}}
+      "3333": {{0 - 2.5 * full_grid + 1.5 * full_grid}} 
+      "27": 0.0
+      "18": 0.0
+      "17": {{0 - small_curve}}
+      "4444": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
+      "444": {{0 - 1.5 * full_grid - 1.5 * full_grid}}
+      "21": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "20": {{0 - 2 * full_grid - big_curve_side_comp}}
+      "28": {{long_straight_road}}
+      "19": {{long_straight_road}}
+   "12": 
+      "9": 0.0 
+      "3333": 0.0
+      "33333": {{long_straight_road}}
+      "10": {{long_straight_road}}
+   # emerge from right side
+   "5": 
+      "222": 0.0
+      "8": 0.0
+      "14": {{small_curve - big_curve}}
+      "15": {{small_curve}}
+      "444": {{small_curve - 4 * full_grid}}
+      "4444": {{small_curve}}
+      "2222": {{4 * full_grid}}
+      "9": {{big_curve}}
+   "222": 
+      "5": 0.0
+      "8": 0.0
+      "14": {{2 * full_grid - big_curve_mid_comp - big_curve_side_comp}}
+      "15": {{2 * full_grid + big_curve_side_comp}}
+      "444": {{1.5 * full_grid - 2.5 * full_grid}} 
+      "4444": {{1.5 * full_grid + 1.5 * full_grid}}
+      "20": {{4 * full_grid - big_curve}} 
+      "21": {{4 * full_grid}}
+      "26": {{2 * full_grid - big_curve_side_comp}} 
+      "27": {{2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "333": {{2 * full_grid - 1.5 * full_grid}}
+      "3333": {{2.5 * full_grid + 2.5 * full_grid}}
+      "6": {{small_curve}}
+      "9": {{big_curve}}
+   "8":
+      "222": 0.0
+      "5": 0.0
+      "111": {{big_curve_mid_comp + big_curve_side_comp - 2 * full_grid}}
+      "1111": {{big_curve_mid_comp + big_curve_side_comp + 2 * full_grid}}
+      "11": {{big_curve - small_curve}}
+      "12": {{big_curve}}
+      "20": {{4 * full_grid - big_curve}}
+      "21": {{4 * full_grid}}
+      "444": {{1.5 * full_grid - 2.5 * full_grid}}
+      "4444": {{1.5 * full_grid + 1.5 * full_grid}}
+      "26": {{big_curve_side_comp - big_curve_mid_comp - big_curve_side_comp}}
+      "27": {{big_curve_side_comp + big_curve_side_comp}}
+      "333": {{big_curve - 4 * full_grid}}
+      "3333": {{big_curve}}
+      "2222": {{4 * full_grid}}
+      "6": {{small_curve}}
+   "6": 
+      "15": 0.0
+      "4444": 0.0
+      "44444": {{long_straight_road}}
+      "16": {{long_straight_road}}
+   "2222": 
+      "15": {{0 - 2 * full_grid + big_curve_side_comp}}
+      "4444": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
+      "21": 0.0
+      "26": {{0 - 2 * full_grid - big_curve_side_comp}}
+      "27": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "333": {{0 - 1.5 * full_grid - 1.5 * full_grid}}
+      "3333": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
+      "24": 0.0
+      "23": {{0 - small_curve}}
+      "25": {{long_straight_road}}
+      "22": {{long_straight_road}}
+   "9": 
+      "1111": {{0 - big_curve_side_comp + 2 * full_grid}}
+      "111": {{0 - big_curve_side_comp - 2 * full_grid}}
+      "12": 0.0
+      "11": {{0 - small_curve}}
+      "4444": {{0 - big_curve_mid_comp - big_curve_side_comp + 2 * full_grid}}
+      "21": {{0 - big_curve_side_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "20": {{0 - big_curve_side_comp - big_curve_side_comp}}
+      "3333": 0.0
+      "27": {{0 - big_curve_side_comp - big_curve_mid_comp + big_curve_side_comp}}
+      "33333": {{long_straight_road}}
+      "13": {{long_straight_road}}
+   # emerge from up side
+   "23":
+      "333": 0.0
+      "26": 0.0
+      "20": {{small_curve - big_curve}}
+      "21": {{small_curve}}
+      "222": {{small_curve - 4 * full_grid}}
+      "2222": {{small_curve}}
+      "3333": {{4 * full_grid}}
+      "27": {{big_curve}}
+   "333":
+      "23": 0.0
+      "26": 0.0
+      "14": {{2 * full_grid - big_curve_side_comp}}
+      "15": {{2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "111": {{2.5 * full_grid - 1.5 * full_grid}}
+      "1111": {{2.5 * full_grid + 2.5 * full_grid}}
+      "11": {{4 * full_grid - small_curve}}
+      "12": {{4 * full_grid}}
+      "20": {{2 * full_grid - big_curve_mid_comp - big_curve_side_comp}}
+      "21": {{2 * full_grid + big_curve_side_comp}}
+      "222": {{1.5 * full_grid - 2.5 * full_grid}}
+      "2222": {{1.5 * full_grid + 1.5 * full_grid}}
+      "8": {{4 * full_grid - big_curve}}
+      "9": {{4 * full_grid}}
+      "24": {{small_curve}}
+      "27": {{big_curve}}
+   "26":
+      "23": 0.0
+      "333": 0.0
+      "14": {{big_curve_side_comp - big_curve_mid_comp - big_curve_side_comp}}
+      "15": {{big_curve_side_comp + big_curve_side_comp}}
+      "111": {{big_curve - 4 * full_grid}}
+      "1111": {{big_curve}}
+      "17": {{big_curve - small_curve}}
+      "18": {{big_curve}}
+      "444": {{big_curve_side_comp + big_curve_mid_comp - 2 * full_grid}}
+      "4444": {{big_curve_side_comp + big_curve_mid_comp + 2 * full_grid}}
+      "8": {{big_curve_side_comp + big_curve_mid_comp - big_curve_side_comp}}
+      "9": {{big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "222": {{big_curve_side_comp - 2 * full_grid}}
+      "2222": {{big_curve_side_comp + 2 * full_grid}}
+      "24": {{small_curve}}
+      "3333": {{4 * full_grid}}
+   "24":
+      "2222": 0.0
+      "21": 0.0
+      "22222": {{long_straight_road}}
+      "22": {{long_straight_road}}
+   "3333":
+      "14": {{0 - 2 * full_grid - big_curve_side_comp}}
+      "15": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "111": {{0 - 1.5 * full_grid - 1.5 * full_grid}}
+      "1111": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
+      "11": {{0 - small_curve}}
+      "12": 0.0
+      "21": {{0 - 2 * full_grid + big_curve_side_comp}}
+      "2222": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
+      "9": 0.0  
+      "13": {{long_straight_road}}
+      "10": {{long_straight_road}}
+   "27":
+      "15": {{0 - big_curve_mid_comp - big_curve_side_comp + big_curve_side_comp}}
+      "1111": 0.0
+      "17": {{0 - small_curve}}
+      "18": 0.0
+      "444": {{0 - big_curve_side_comp - 2 * full_grid}}
+      "4444": {{0 - big_curve_side_comp + 2 * full_grid}}
+      "8": {{0 - big_curve_side_comp - big_curve_side_comp}}
+      "9": {{0 - big_curve_side_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "2222": {{0 - big_curve_side_comp - big_curve_mid_comp + 2 * full_grid}}
+      "11111": {{long_straight_road}}
+      "19": {{long_straight_road}}
+   # emerge from down side
+   "20":
+      "444": 0.0
+      "17": 0.0
+      "14": {{big_curve_mid_comp + big_curve_side_comp - big_curve_side_comp}}
+      "15": {{big_curve_mid_comp + big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp}}
+      "111": {{big_curve_side_comp - 2 * full_grid}}
+      "1111": {{big_curve_side_comp + 2 * full_grid}}
+      "23": {{big_curve - small_curve}}
+      "24": {{big_curve}}
+      "333": {{big_curve_side_comp + big_curve_mid_comp - 2 * full_grid}}
+      "3333": {{big_curve_side_comp + big_curve_mid_comp + 2 * full_grid}}
+      "8": {{big_curve_side_comp - big_curve_side_comp - big_curve_mid_comp}}
+      "9": {{big_curve_side_comp + big_curve_side_comp}}
+      "222": {{big_curve - 4 * full_grid}}
+      "2222": {{big_curve}}
+      "4444": {{4 * full_grid}}
+      "18": {{small_curve}}
+   "444":
+      "17": 0.0
+      "20": 0.0
+      "14": {{4 * full_grid - big_curve}}
+      "15": {{4 * full_grid}}
+      "111": {{1.5 * full_grid - 2.5 * full_grid}}
+      "1111": {{1.5 * full_grid + 1.5 * full_grid}}
+      "26": {{2 * full_grid - big_curve_side_comp - big_curve_mid_comp}}
+      "27": {{2 * full_grid + big_curve_side_comp}}
+      "5": {{4 * full_grid - small_curve}}
+      "6": {{4 * full_grid}}
+      "222": {{2.5 * full_grid - 1.5 * full_grid}}
+      "2222": {{2.5 * full_grid + 2.5 * full_grid}}
+      "8": {{2 * full_grid - big_curve_side_comp}}
+      "9": {{2 * full_grid + big_curve_side_comp + big_curve_mid_comp}}
+      "21": {{big_curve}}
+      "18": {{small_curve}}
+   "17":
+      "444": 0.0
+      "20": 0.0
+      "26": {{small_curve - big_curve}}
+      "27": {{small_curve}}
+      "111": {{small_curve - 4 * full_grid}}
+      "1111": {{small_curve}} 
+      "21": {{big_curve}}
+      "4444": {{4 * full_grid}}
+   "21":
+      "14": {{0 - big_curve_side_comp - big_curve_side_comp}}
+      "15": {{0 - big_curve_side_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "1111": {{0 - big_curve_mid_comp - big_curve_side_comp + 2 * full_grid}}
+      "23": {{0 - small_curve}}
+      "24": 0.0
+      "333": {{0 - big_curve_side_comp - 2 * full_grid}}
+      "3333": {{0 - big_curve_side_comp + 2 * full_grid}}
+      "2222": 0.0
+      "9": {{0 - big_curve_mid_comp - big_curve_side_comp + big_curve_side_comp}}
+      "22222": {{long_straight_road}}
+      "25": {{long_straight_road}}
+   "4444":
+      "15": 0.0
+      "1111": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
+      "27": {{0 - 2 * full_grid + big_curve_side_comp}}
+      "5": {{0 - small_curve}}
+      "6": 0.0
+      "222": {{0 - 1.5 * full_grid - 1.5 * full_grid}}
+      "2222": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
+      "8": {{0 - 2 * full_grid - big_curve_side_comp}}
+      "9": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "7": {{long_straight_road}}
+      "16": {{long_straight_road}}
+   "18":
+      "27": 0.0
+      "1111": 0.0
+      "28": {{long_straight_road}}
+      "11111": {{long_straight_road}}
+   # overlapping ending road
+   # end at up side
+   "7": 
+      "16": 0.0
+      "44444": 0.0
+   "16": 
+      "7": 0.0
+      "44444": 0.0
+   "44444":
+      "16": 0.0
+      "7": 0.0
+   # end at left side
+   "25":
+      "22222": 0.0
+      "22": 0.0
+   "22222":
+      "25": 0.0
+      "22": 0.0
+   "22":
+      "2222": 0.0
+      "25": 0.0   
+   # end at down side
+   "10": 
+      "13": 0.0
+      "33333": 0.0
+   "13": 
+      "10": 0.0
+      "33333": 0.0
+   "33333":
+      "13": 0.0
+      "10": 0.0
+   # end at right side   
+   "28":
+      "11111": 0.0
+      "19": 0.0
+   "11111":
+      "28": 0.0
+      "19": 0.0
+   "19":
+      "28": 0.0
+      "11111": 0.0
+
+levelOfAncestorVehicle: 12
+vehicleIdFont: 5
+
+
+
