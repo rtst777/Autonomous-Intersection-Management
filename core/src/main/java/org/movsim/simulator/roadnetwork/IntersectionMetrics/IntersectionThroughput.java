@@ -6,7 +6,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Intersection throughput is the total number of vehicles passing the intersection
+ * We define intersection throughput as the total number of vehicles passing the intersection and the average
+ * intersection throughput as the number of vehicles passing the intersection per second
  * */
 // FIXME movsim intentionally limit the maximum number of vehicle can exist in the road network, which limit maximum throughput
 public class IntersectionThroughput implements IntersectionMetrics{
@@ -30,6 +31,11 @@ public class IntersectionThroughput implements IntersectionMetrics{
     @Override
     public Number getValue() {
         return totalNumVehPassIntersection;
+    }
+
+    @Override
+    public Number getAverageValue(Number simulationTimeInSec) {
+        return totalNumVehPassIntersection / simulationTimeInSec.doubleValue();
     }
 
     @Override

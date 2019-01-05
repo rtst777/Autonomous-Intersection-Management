@@ -535,13 +535,13 @@ public class TrafficCanvas extends SimulationCanvasBase
                     drawVehicle(g, roadMapping, vehicle);
                 }
             }
-            drawMetrics(g);
+            drawMetrics(g, simulationRunnable.simulationTime());
             totalAnimationTime += System.currentTimeMillis() - timeBeforePaint_ms;
             drawAfterVehiclesMoved(g, simulationRunnable.simulationTime(), simulationRunnable.iterationCount());
         }
     }
 
-    private void drawMetrics(Graphics2D g){
+    private void drawMetrics(Graphics2D g, double simulationTime){
         final int fontHeight = VirtualRoadService.getMetricsFont();
         final Font font = new Font("DialogInput", Font.BOLD, fontHeight);
         g.setFont(font);
@@ -554,13 +554,14 @@ public class TrafficCanvas extends SimulationCanvasBase
 //        g.fillRect((int)(centerX - fontHeight * 0.4), (int)(centerY - fontHeight * 0.4), fontHeight * 16, fontHeight * 5);
 
         int metricsIndex = 0;
+        NumberFormat formatter = new DecimalFormat("#0.000");
         Map<String, Color> metricsColor = new HashMap<>(); // we want the metrics with the same name have the same color
         Map<String, Long> metricsThroughput = new HashMap<>();
 
         // draw intersection throughput metrics
         if (!VirtualRoadService.getIntersectionMetrics().isEmpty()){
             g.setColor(Color.black);
-//            TrafficCanvasUtils.drawText("IntersectionThroughput:", centerX, centerY, font, g);
+            TrafficCanvasUtils.drawText("Average Intersection Throughput:", centerX, centerY, font, g);
             for (IntersectionThroughput intersectionThroughput : VirtualRoadService.getIntersectionMetrics()){
                 String metricsName = intersectionThroughput.getName();
                 if (metricsColor.containsKey(metricsName)){
@@ -573,18 +574,17 @@ public class TrafficCanvas extends SimulationCanvasBase
                     metricsIndex++;
                 }
 
-                long throughput = intersectionThroughput.getValue().longValue();
-                metricsThroughput.put(metricsName, throughput);
-//                centerY += fontHeight * 1.2;
-//                String displayMetrics = metricsName + ": " + throughput;
-//                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
+                double averageThroughputInSec = intersectionThroughput.getAverageValue(simulationTime).doubleValue();
+                metricsThroughput.put(metricsName, intersectionThroughput.getValue().longValue());
+                centerY += fontHeight * 1.2;
+                String displayMetrics = metricsName + ": " + formatter.format(averageThroughputInSec * 60) + " /min";
+                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
             }
         }
 
         // draw intersection delay metrics
         // FIXME currently we assume intersection delay and intersection throughput come as a pair
         if (!VirtualRoadService.getIntersectionDelaysMetrics().isEmpty()){
-            NumberFormat formatter = new DecimalFormat("#0.000");
             g.setColor(Color.black);
             centerY += fontHeight;
             String intersectionDelayType = metricsThroughput.isEmpty() ?
@@ -602,10 +602,8 @@ public class TrafficCanvas extends SimulationCanvasBase
                     metricsIndex++;
                 }
 
-                double totalDelay = intersectionDelay.getValue().doubleValue();
                 long numVehPassIntersection = metricsThroughput.getOrDefault(metricsName, (long)1);
-                numVehPassIntersection = numVehPassIntersection == 0 ? 1 : numVehPassIntersection;  // to avoid divide by 0
-                double avgDelay = totalDelay / numVehPassIntersection;
+                double avgDelay = intersectionDelay.getAverageValue(numVehPassIntersection).doubleValue();
                 centerY += fontHeight * 1.2;
                 String displayMetrics = metricsName + ": " + formatter.format(avgDelay) + " s";
                 TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);

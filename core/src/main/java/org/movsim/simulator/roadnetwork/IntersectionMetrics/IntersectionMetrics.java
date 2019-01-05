@@ -17,6 +17,11 @@ public interface IntersectionMetrics {
     Number getValue();
 
     /**
+     * Return the average value of metrics (e.g. value per vehicle, value per second, etc)
+     */
+    Number getAverageValue(Number normalizationFactor);
+
+    /**
      * Record metrics
      *
      * @param value

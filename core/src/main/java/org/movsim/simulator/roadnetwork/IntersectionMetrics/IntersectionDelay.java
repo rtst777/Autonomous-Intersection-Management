@@ -34,6 +34,12 @@ public class IntersectionDelay implements IntersectionMetrics {
     }
 
     @Override
+    public Number getAverageValue(Number numVehicle) {
+        numVehicle = numVehicle.intValue() == 0 ? 1 : numVehicle;  // to avoid divide by 0
+        return totalDelayTime / numVehicle.intValue();
+    }
+
+    @Override
     public void record(Number value, Integer roadID) {
         if (intersectionRoads.contains(roadID)) {
             totalDelayTime += value.doubleValue();
