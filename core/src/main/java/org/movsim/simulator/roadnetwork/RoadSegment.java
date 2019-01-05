@@ -135,6 +135,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private List<RoadSegment> virtualRoadSegments = new ArrayList<>();
 
+    private List<RoadSegment> overLappingRoadSegments = new ArrayList<>();
+
     private Node origin = new NodeImpl("origin");
 
     private Node destination = new NodeImpl("destination");
@@ -1342,7 +1344,17 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return virtualRoadSegments;
     }
 
-    public void addVirtualRoadSegments(RoadSegment roadSegment){ virtualRoadSegments.add(roadSegment);}
+    public void addVirtualRoadSegments(RoadSegment roadSegment){
+        virtualRoadSegments.add(roadSegment);
+    }
+
+    public List<RoadSegment> getOverLappingRoadSegments() {
+        return overLappingRoadSegments;
+    }
+
+    public void addOverLappingRoadSegments(RoadSegment roadSegment) {
+        overLappingRoadSegments.add(roadSegment);
+    }
 
     public void setTrafficComposition(TrafficCompositionGenerator composition) {
         this.trafficComposition = composition;

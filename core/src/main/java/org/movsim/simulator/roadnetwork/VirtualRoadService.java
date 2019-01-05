@@ -49,6 +49,20 @@ public class VirtualRoadService {
     // The id of the (curve) road which has incorrect length -> the factor need to apply on the length of that road
     private static Map<Integer, Double> problematicCurve;
 
+    // id of road -> ids of the roads that are overlapping with that road
+    private static Map<Integer, List<Integer>> overlappingRoads;
+
+    // for all the (long straight) entry roads, we consider two different cases when doing target assignment:
+    //   case 1: if the distance from vehicle to end of the road is greater than controlZoneThreshold, we only consider
+    //           the overlapping roads to find the closet front vehicle
+    //   case 2: if the distance from vehicle to end of the road is smaller than (or equal to) the controlZoneThreshold,
+    //           we would consider all the virtual roads to find the closet front vehicle
+    //
+    // for other roads, the target assignment process should be unaffected
+    // Note: controlZoneThreshold has to be smaller than the length of the entry roads, but greater than intersection
+    //       dimension
+    private static double controlZoneThreshold = -1;
+
     private static List<IntersectionThroughput> intersectionThroughputMetrics;
     private static List<IntersectionDelay> intersectionDelaysMetrics;
     // The coordinates where we display the metrics value on the UI. The values should not be displayed when there is
@@ -119,14 +133,15 @@ public class VirtualRoadService {
         userIdToRoadId = new HashMap<>();
         distanceOffsetDueToCollisionPoint = new HashMap<>();
         collisionDistanceThreshold = new HashMap<>();
+        overlappingRoads = new HashMap<>();
         problematicCurve = new HashMap<>();
         intersectionThroughputMetrics = new ArrayList<>();
         intersectionDelaysMetrics = new ArrayList<>();
 
         // create rawVirtualRoadInfo if virtual road config file is present
-        if (rawVirtualRoadInfo != null && roadNetwork != null) {
+        if (rawVirtualRoadInfo != null && roadNetwork != null){
             // create userID to roadID mapping
-            for (final RoadSegment roadSegment : roadNetwork) {
+            for (final RoadSegment roadSegment : roadNetwork){
                 userIdToRoadId.put(roadSegment.userId(), roadSegment.id());
                 roadIdToUserId.put(roadSegment.id(), roadSegment.userId());
             }
@@ -152,10 +167,24 @@ public class VirtualRoadService {
                 });
             }
 
-            if (rawVirtualRoadInfo.rawProblematicCurve != null) {
+            if (rawVirtualRoadInfo.rawProblematicCurve != null){
                 rawVirtualRoadInfo.rawProblematicCurve.forEach((key, value) -> {
                     problematicCurve.put(userIdToRoadId.get(key), value);
                 });
+            }
+
+            if (rawVirtualRoadInfo.rawOverlappingRoads != null){
+                rawVirtualRoadInfo.rawOverlappingRoads.forEach((key, value) -> {
+                    List<Integer> overlappingRoadList = new ArrayList<>();
+                    value.forEach(overlappingRoad -> {
+                        overlappingRoadList.add(userIdToRoadId.get(overlappingRoad));
+                    });
+                    overlappingRoads.put(userIdToRoadId.get(key), overlappingRoadList);
+                });
+            }
+
+            if (rawVirtualRoadInfo.controlZoneThreshold != 0){
+                controlZoneThreshold = rawVirtualRoadInfo.controlZoneThreshold;
             }
 
             if (rawVirtualRoadInfo.rawIntersectionThroughput != null){
@@ -199,11 +228,13 @@ public class VirtualRoadService {
     }
 
     /**
-     * Add virtual roads (virtual road is the road containing vehicles to cause potential collision) to each road
+     * Add virtual roads (virtual road is other road containing vehicles to cause potential collision with the vehicle
+     * on the current road) and overlapping roads (overlapping road is other road that is overlapping with the current
+     * road) to every road
      *
      * @param roadNetwork
      */
-    public static void addVirtualRoads(RoadNetwork roadNetwork){
+    public static void addVirtualRoadsAndOverlappingRoads(RoadNetwork roadNetwork){
         checkInitialization();
 
         for (final RoadSegment roadSegment : roadNetwork) {
@@ -213,7 +244,38 @@ public class VirtualRoadService {
                     roadSegment.addVirtualRoadSegments(roadNetwork.findById(key));
                 });
             }
+
+            if (overlappingRoads.keySet().contains(roadID)){
+                overlappingRoads.get(roadID).forEach(overlappingRoadID -> {
+                    roadSegment.addOverLappingRoadSegments(roadNetwork.findById(overlappingRoadID));
+                });
+            }
         }
+    }
+
+    /**
+     * Return true if vehicle is inside the control zone, otherwise false.
+     *   - The vehicle is always in the control zone if it is on the non-overlapping road (the intersection roads are
+     *     always non-overlapping roads).
+     *   - When the vehicle is on the entry road, it is in the control zone if the distance to end of the road is smaller
+     *     or equal to controlZoneThreshold
+     *   - When vehicle is on the exit road, the return value doesn't matter since the virtual roads of the exit roads
+     *     are all overlapping roads
+     *
+     * @param vehicle the vehicle we want to assign a target to follow
+     * @param roadSegment the road where the vehicle is
+     * @return true if vehicle is inside the control zone, otherwise false
+     */
+    public static boolean isInsideControlZone(Vehicle vehicle, RoadSegment roadSegment){
+       if (controlZoneThreshold < 0){
+           return true;
+       }
+
+       if (!overlappingRoads.containsKey(roadSegment.id())){
+           return true;
+       }
+
+       return vehicle.getDistanceToRoadSegmentEnd() <= controlZoneThreshold;
     }
 
     /**

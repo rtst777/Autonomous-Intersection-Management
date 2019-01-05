@@ -106,8 +106,8 @@ public class OpenDriveHandler {
         // Initialize all the related information for virtual roads
         VirtualRoadService.initializeVirtualRoadService(roadNetwork);
 
-        // for each road, also add virtual roads (virtual road is the road containing vehicles to cause potential collision)
-        VirtualRoadService.addVirtualRoads(roadNetwork);
+        // for each road, also add virtual roads and overlapping roads
+        VirtualRoadService.addVirtualRoadsAndOverlappingRoads(roadNetwork);
 
         LOG.info("created {} roadSegments.", roadNetwork.size());
     }

@@ -636,7 +636,8 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
 
         // find the front vehicle from the virtual lane
-        List<RoadSegment> virtualRoadSegments = roadSegment.getVirtualRoadSegments();
+        List<RoadSegment> virtualRoadSegments = VirtualRoadService.isInsideControlZone(vehicle, roadSegment) ?
+                roadSegment.getVirtualRoadSegments() : roadSegment.getOverLappingRoadSegments();
         if (!virtualRoadSegments.isEmpty()){
             double virtualPrecedingDistance = Double.MAX_VALUE;
             Vehicle virtualFrontVehicle = null;
