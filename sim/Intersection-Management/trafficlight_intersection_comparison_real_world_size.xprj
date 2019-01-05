@@ -76,10 +76,10 @@
         <TrafficLights logging="true" n_timestep="5">
             <ControllerGroup id="plan1"  >
                 <Phase duration="30">
-                    <TrafficLightState type="stop_left" status="Red" condition="request"/>
-                    <TrafficLightState type="stop_right" status="Red" condition="request"/>
-                    <TrafficLightState type="stop_down" status="Green" condition="clear"/>
-                    <TrafficLightState type="stop_up" status="Green" condition="clear"/>
+                    <TrafficLightState type="stop_left" status="Red" />
+                    <TrafficLightState type="stop_right" status="Red" />
+                    <TrafficLightState type="stop_down" status="Green" />
+                    <TrafficLightState type="stop_up" status="Green" />
                 </Phase>
                 <Phase duration="8">
                     <TrafficLightState type="stop_left" status="Red" />
@@ -94,8 +94,8 @@
                     <TrafficLightState type="stop_up" status="Red" />
                 </Phase>
                 <Phase duration="30">
-                    <TrafficLightState type="stop_left" status="Green" condition="clear"/>
-                    <TrafficLightState type="stop_right" status="Green" condition="clear"/>
+                    <TrafficLightState type="stop_left" status="Green" />
+                    <TrafficLightState type="stop_right" status="Green" />
                     <TrafficLightState type="stop_down" status="Red" />
                     <TrafficLightState type="stop_up" status="Red" />
                 </Phase>
