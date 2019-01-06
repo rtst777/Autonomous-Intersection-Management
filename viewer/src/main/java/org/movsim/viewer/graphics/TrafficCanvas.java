@@ -575,9 +575,11 @@ public class TrafficCanvas extends SimulationCanvasBase
                 }
 
                 double averageThroughputInSec = intersectionThroughput.getAverageValue(simulationTime).doubleValue();
+                double averageThroughputInMin = averageThroughputInSec * 60;
                 metricsThroughput.put(metricsName, intersectionThroughput.getValue().longValue());
                 centerY += fontHeight * 1.2;
-                String displayMetrics = metricsName + ": " + formatter.format(averageThroughputInSec * 60) + " /min";
+                String unit = averageThroughputInMin > 1 ? " vehicles/min" : " vehicle/min";
+                String displayMetrics = metricsName + ": " + formatter.format(averageThroughputInMin) + unit;
                 TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
             }
         }

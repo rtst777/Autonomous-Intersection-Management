@@ -27,84 +27,84 @@
 
             <Road id="111">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="222">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="333">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="444">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="5">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="8">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="11">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="14">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="17">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="20">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
 
             <Road id="23">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
             
             <Road id="26">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="100" />
+                    <Inflow t="0" q_per_hour="70" />
                 </TrafficSource>
                 <Detectors />
             </Road>
