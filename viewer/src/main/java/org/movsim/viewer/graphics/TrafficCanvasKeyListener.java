@@ -28,7 +28,9 @@ package org.movsim.viewer.graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import org.movsim.simulator.roadnetwork.PedestrianService;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 
 public class TrafficCanvasKeyListener extends TrafficCanvasController implements KeyListener {
@@ -103,16 +105,36 @@ public class TrafficCanvasKeyListener extends TrafficCanvasController implements
             // 'faster'
             commandFaster();
             break;
-        case 'S':
-            // 'slower'
-            commandSlower();
-            break;
+//        case 'S':
+//            // 'slower'
+//            commandSlower();
+//            break;
         case 'P':
             // 'pause'
             commandTogglePause();
             break;
         case 'Z':
             commandLowMemory();
+            break;
+        case 'W':
+            if (VirtualRoadService.handlePedestrianCrossingRequest(PedestrianService.Direction.TOP)){
+                trafficCanvas.repaint();
+            }
+            break;
+        case 'S':
+            if (VirtualRoadService.handlePedestrianCrossingRequest(PedestrianService.Direction.BOTTOM)){
+                trafficCanvas.repaint();
+            }
+            break;
+        case 'A':
+            if (VirtualRoadService.handlePedestrianCrossingRequest(PedestrianService.Direction.LEFT)){
+                trafficCanvas.repaint();
+            }
+            break;
+        case 'D':
+            if (VirtualRoadService.handlePedestrianCrossingRequest(PedestrianService.Direction.RIGHT)){
+                trafficCanvas.repaint();
+            }
             break;
         }
         e.consume();

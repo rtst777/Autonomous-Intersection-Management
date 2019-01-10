@@ -2,7 +2,6 @@ package org.movsim.simulator.roadnetwork;
 
 import com.google.common.base.Preconditions;
 import org.movsim.autogen.TrafficLightStatus;
-import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionDelay;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.TrafficLightController;
 import org.slf4j.Logger;
@@ -36,7 +35,6 @@ public class PedestrianService {
     public static String extractRoadUserId(String directionString){
         validateDirectionString(directionString);
 
-        String roadUserID;
         if (directionString.startsWith(Direction.LEFT.toString())){
             return directionString.replaceFirst(Direction.LEFT.toString(), "");
         }
@@ -60,7 +58,6 @@ public class PedestrianService {
     public static String extractDirection(String directionString){
         validateDirectionString(directionString);
 
-        String direction;
         if (directionString.startsWith(Direction.LEFT.toString())){
             return Direction.LEFT.toString();
         }
@@ -108,14 +105,14 @@ public class PedestrianService {
     }
 
     /**
-     * Return true if the trafficLight is master traffic light, and is in Red status.
+     * Return true if the trafficLight is master traffic light, and is in GREEN status.
      *
      * Whenever pedestrian want to cross the intersection, they should send request to the master traffic light.
      * (in simulation UI, the request is a mouse click on the master traffic light). The request is accepted if the
      * master traffic light is in Red status.
      *
      * @param trafficLight
-     * @return Return true if the trafficLight is master traffic light, and is in Red status.
+     * @return Return true if the trafficLight is master traffic light, and is in GREEN status.
      */
     public boolean isPedestrianCrossingRequestAccepted(TrafficLight trafficLight){
         if (signalIdToTrafficLightControllers.containsKey(trafficLight.signalId())){
@@ -145,6 +142,36 @@ public class PedestrianService {
                 TrafficLightStatus trafficLightStatus = trafficLightController.getTrafficLights().
                         entrySet().iterator().next().getValue().status();
                 return trafficLightStatus == TrafficLightStatus.RED;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Handle pedestrian crossing request. If the request is accepted, trigger traffic light signal and return true
+     *
+     * @param diresction
+     * @return true if the request is accepted
+     */
+    public boolean handlePedestrianCrossingRequest(Direction diresction){
+        if (diresction == null){
+            return false;
+        }
+
+        for (Map.Entry<String, TrafficLightController> entry : signalIdToTrafficLightControllers.entrySet()) {
+            String key = entry.getKey();
+            TrafficLightController controller = entry.getValue();
+            if (key.startsWith(diresction.toString())){
+                TrafficLight masterTrafficLight = controller.getTrafficLights().entrySet().iterator().next().getValue();
+                if (masterTrafficLight.status() == TrafficLightStatus.GREEN){
+                    masterTrafficLight.triggerNextPhase();
+                    return true;
+                }
+                else {
+                    LOG.info("pedestrian crossing request is rejected since the master traffic light is not in GREEN status");
+                    return false;
+                }
             }
         }
 

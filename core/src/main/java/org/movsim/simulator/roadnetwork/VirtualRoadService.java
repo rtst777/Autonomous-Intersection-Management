@@ -345,6 +345,16 @@ public class VirtualRoadService {
     }
 
     /**
+     * Handle pedestrian crossing request by triggering traffic light signal
+     *
+     * @param diresction
+     * @return true if the request is accepted
+     */
+    public static boolean handlePedestrianCrossingRequest(PedestrianService.Direction diresction){
+        return pedestrianService.handlePedestrianCrossingRequest(diresction);
+    }
+
+    /**
      * Return true if vehicle is inside the control zone, otherwise false.
      *   - The vehicle is always in the control zone if it is on the non-overlapping road (the intersection roads are
      *     always non-overlapping roads).
