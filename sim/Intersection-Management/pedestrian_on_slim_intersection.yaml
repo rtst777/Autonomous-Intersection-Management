@@ -438,6 +438,8 @@ vehicleIdFont: 7
 
 rawPedestrianInfo:
    "cross_left111": ["cross_left111", "cross_left11", "cross_left14", "cross_left25", "cross_left22222", "cross_left22"]
-
+   "cross_top333": ["cross_top333", "cross_top23", "cross_top26", "cross_top7", "cross_top44444", "cross_top16"]
+   "cross_right222": ["cross_right222", "cross_right5", "cross_right8", "cross_right28", "cross_right11111", "cross_right19"]
+   "cross_bottom444": ["cross_bottom444", "cross_bottom20", "cross_bottom17", "cross_bottom13", "cross_bottom10", "cross_bottom33333"]
 
 

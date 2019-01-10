@@ -138,6 +138,84 @@
                     <TrafficLightState type="cross_left22" status="Red" />
                 </Phase>
             </ControllerGroup>
+            <ControllerGroup id="cross_top"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_top333" status="Green" />
+                    <TrafficLightState type="cross_top23" status="Green" />
+                    <TrafficLightState type="cross_top26" status="Green" />
+                    <TrafficLightState type="cross_top7" status="Green" />
+                    <TrafficLightState type="cross_top44444" status="Green" />
+                    <TrafficLightState type="cross_top16" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_top333" status="GreenRed" />
+                    <TrafficLightState type="cross_top23" status="GreenRed" />
+                    <TrafficLightState type="cross_top26" status="GreenRed" />
+                    <TrafficLightState type="cross_top7" status="GreenRed" />
+                    <TrafficLightState type="cross_top44444" status="GreenRed" />
+                    <TrafficLightState type="cross_top16" status="GreenRed" />
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="cross_top333" status="Red" />
+                    <TrafficLightState type="cross_top23" status="Red" />
+                    <TrafficLightState type="cross_top26" status="Red" />
+                    <TrafficLightState type="cross_top7" status="Red" />
+                    <TrafficLightState type="cross_top44444" status="Red" />
+                    <TrafficLightState type="cross_top16" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="cross_right"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_right222" status="Green" />
+                    <TrafficLightState type="cross_right5" status="Green" />
+                    <TrafficLightState type="cross_right8" status="Green" />
+                    <TrafficLightState type="cross_right28" status="Green" />
+                    <TrafficLightState type="cross_right11111" status="Green" />
+                    <TrafficLightState type="cross_right19" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_right222" status="GreenRed" />
+                    <TrafficLightState type="cross_right5" status="GreenRed" />
+                    <TrafficLightState type="cross_right8" status="GreenRed" />
+                    <TrafficLightState type="cross_right28" status="GreenRed" />
+                    <TrafficLightState type="cross_right11111" status="GreenRed" />
+                    <TrafficLightState type="cross_right19" status="GreenRed" />
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="cross_right222" status="Red" />
+                    <TrafficLightState type="cross_right5" status="Red" />
+                    <TrafficLightState type="cross_right8" status="Red" />
+                    <TrafficLightState type="cross_right28" status="Red" />
+                    <TrafficLightState type="cross_right11111" status="Red" />
+                    <TrafficLightState type="cross_right19" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="cross_bottom"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_bottom444" status="Green" />
+                    <TrafficLightState type="cross_bottom20" status="Green" />
+                    <TrafficLightState type="cross_bottom17" status="Green" />
+                    <TrafficLightState type="cross_bottom13" status="Green" />
+                    <TrafficLightState type="cross_bottom10" status="Green" />
+                    <TrafficLightState type="cross_bottom33333" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_bottom444" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom20" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom17" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom13" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom10" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom33333" status="GreenRed" />
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState type="cross_bottom444" status="Red" />
+                    <TrafficLightState type="cross_bottom20" status="Red" />
+                    <TrafficLightState type="cross_bottom17" status="Red" />
+                    <TrafficLightState type="cross_bottom13" status="Red" />
+                    <TrafficLightState type="cross_bottom10" status="Red" />
+                    <TrafficLightState type="cross_bottom33333" status="Red" />
+                </Phase>
+            </ControllerGroup>
         </TrafficLights>
         
     </Scenario>
