@@ -5,6 +5,7 @@
 {% set big_curve_mid_comp = 7.0947 %}
 {% set big_curve_side_comp = 16.0875 %}
 {% set half_grid = 5.0 %}
+{% set long_straight_road = 220.0 %}
 
 {% set big_curve = big_curve_side_comp * 2 + big_curve_mid_comp %}
 {% set full_grid = half_grid * 2 %}
@@ -83,6 +84,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "26": {{4 * full_grid - big_curve}}
       "3333": {{1.5 * full_grid + 1.5 * full_grid}}
       "27": {{4 * full_grid}}
+      "15": {{big_curve}}
+      "12": {{small_curve}}
    "11": 
       "111": 0.0
       "14": 0.0
@@ -90,6 +93,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "9": {{small_curve}}
       "333": {{small_curve - 4 * full_grid}}
       "33333": {{small_curve}}
+      "1111": {{4 * full_grid}}
+      "15": {{big_curve}}
    "14":
       "111": 0.0
       "11": 0.0
@@ -105,6 +110,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "26": {{big_curve_side_comp + big_curve_mid_comp - big_curve_side_comp}}
       "3333": {{big_curve_side_comp + 2 * full_grid}}
       "27": {{big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp + big_curve_mid_comp}}
+      "1111": {{4 * full_grid}}
+      "12": {{small_curve}}
    "15": 
       "6": 0.0
       "5": {{0 - small_curve}}
@@ -115,6 +122,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "3333": {{0 - big_curve_side_comp - big_curve_mid_comp + 2 * full_grid}}
       "27": {{0 - big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp}}
       "26": {{0 - big_curve_side_comp - big_curve_side_comp}}
+      "44444": {{long_straight_road}}
+      "7": {{long_straight_road}}
    "1111": 
       "9": {{big_curve_side_comp - 2 * full_grid}}
       "3333": {{0 - 2.5 * full_grid + 1.5 * full_grid}} 
@@ -125,9 +134,13 @@ rawDistanceOffsetDueToCollisionPoint:
       "444": {{0 - 1.5 * full_grid - 1.5 * full_grid}}
       "21": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
       "20": {{0 - 2 * full_grid - big_curve_side_comp}}
+      "28": {{long_straight_road}}
+      "19": {{long_straight_road}}
    "12": 
       "9": 0.0 
       "3333": 0.0
+      "33333": {{long_straight_road}}
+      "10": {{long_straight_road}}
    # emerge from right side
    "5": 
       "222": 0.0
@@ -136,6 +149,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "15": {{small_curve}}
       "444": {{small_curve - 4 * full_grid}}
       "4444": {{small_curve}}
+      "2222": {{4 * full_grid}}
+      "9": {{big_curve}}
    "222": 
       "5": 0.0
       "8": 0.0
@@ -149,6 +164,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "27": {{2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
       "333": {{2 * full_grid - 1.5 * full_grid}}
       "3333": {{2.5 * full_grid + 2.5 * full_grid}}
+      "6": {{small_curve}}
+      "9": {{big_curve}}
    "8":
       "222": 0.0
       "5": 0.0
@@ -164,9 +181,13 @@ rawDistanceOffsetDueToCollisionPoint:
       "27": {{big_curve_side_comp + big_curve_side_comp}}
       "333": {{big_curve - 4 * full_grid}}
       "3333": {{big_curve}}
+      "2222": {{4 * full_grid}}
+      "6": {{small_curve}}
    "6": 
       "15": 0.0
       "4444": 0.0
+      "44444": {{long_straight_road}}
+      "16": {{long_straight_road}}
    "2222": 
       "15": {{0 - 2 * full_grid + big_curve_side_comp}}
       "4444": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
@@ -177,6 +198,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "3333": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
       "24": 0.0
       "23": {{0 - small_curve}}
+      "25": {{long_straight_road}}
+      "22": {{long_straight_road}}
    "9": 
       "1111": {{0 - big_curve_side_comp + 2 * full_grid}}
       "111": {{0 - big_curve_side_comp - 2 * full_grid}}
@@ -187,6 +210,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "20": {{0 - big_curve_side_comp - big_curve_side_comp}}
       "3333": 0.0
       "27": {{0 - big_curve_side_comp - big_curve_mid_comp + big_curve_side_comp}}
+      "33333": {{long_straight_road}}
+      "13": {{long_straight_road}}
    # emerge from up side
    "23":
       "333": 0.0
@@ -195,6 +220,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "21": {{small_curve}}
       "222": {{small_curve - 4 * full_grid}}
       "2222": {{small_curve}}
+      "3333": {{4 * full_grid}}
+      "27": {{big_curve}}
    "333":
       "23": 0.0
       "26": 0.0
@@ -210,6 +237,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "2222": {{1.5 * full_grid + 1.5 * full_grid}}
       "8": {{4 * full_grid - big_curve}}
       "9": {{4 * full_grid}}
+      "24": {{small_curve}}
+      "27": {{big_curve}}
    "26":
       "23": 0.0
       "333": 0.0
@@ -225,9 +254,13 @@ rawDistanceOffsetDueToCollisionPoint:
       "9": {{big_curve_side_comp + big_curve_mid_comp + big_curve_side_comp + big_curve_mid_comp}}
       "222": {{big_curve_side_comp - 2 * full_grid}}
       "2222": {{big_curve_side_comp + 2 * full_grid}}
+      "24": {{small_curve}}
+      "3333": {{4 * full_grid}}
    "24":
       "2222": 0.0
       "21": 0.0
+      "22222": {{long_straight_road}}
+      "22": {{long_straight_road}}
    "3333":
       "14": {{0 - 2 * full_grid - big_curve_side_comp}}
       "15": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
@@ -238,6 +271,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "21": {{0 - 2 * full_grid + big_curve_side_comp}}
       "2222": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
       "9": 0.0  
+      "13": {{long_straight_road}}
+      "10": {{long_straight_road}}
    "27":
       "15": {{0 - big_curve_mid_comp - big_curve_side_comp + big_curve_side_comp}}
       "1111": 0.0
@@ -248,6 +283,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "8": {{0 - big_curve_side_comp - big_curve_side_comp}}
       "9": {{0 - big_curve_side_comp + big_curve_side_comp + big_curve_mid_comp}}
       "2222": {{0 - big_curve_side_comp - big_curve_mid_comp + 2 * full_grid}}
+      "11111": {{long_straight_road}}
+      "19": {{long_straight_road}}
    # emerge from down side
    "20":
       "444": 0.0
@@ -264,6 +301,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "9": {{big_curve_side_comp + big_curve_side_comp}}
       "222": {{big_curve - 4 * full_grid}}
       "2222": {{big_curve}}
+      "4444": {{4 * full_grid}}
+      "18": {{small_curve}}
    "444":
       "17": 0.0
       "20": 0.0
@@ -279,6 +318,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "2222": {{2.5 * full_grid + 2.5 * full_grid}}
       "8": {{2 * full_grid - big_curve_side_comp}}
       "9": {{2 * full_grid + big_curve_side_comp + big_curve_mid_comp}}
+      "21": {{big_curve}}
+      "18": {{small_curve}}
    "17":
       "444": 0.0
       "20": 0.0
@@ -286,6 +327,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "27": {{small_curve}}
       "111": {{small_curve - 4 * full_grid}}
       "1111": {{small_curve}} 
+      "21": {{big_curve}}
+      "4444": {{4 * full_grid}}
    "21":
       "14": {{0 - big_curve_side_comp - big_curve_side_comp}}
       "15": {{0 - big_curve_side_comp + big_curve_side_comp + big_curve_mid_comp}}
@@ -296,6 +339,8 @@ rawDistanceOffsetDueToCollisionPoint:
       "3333": {{0 - big_curve_side_comp + 2 * full_grid}}
       "2222": 0.0
       "9": {{0 - big_curve_mid_comp - big_curve_side_comp + big_curve_side_comp}}
+      "22222": {{long_straight_road}}
+      "25": {{long_straight_road}}
    "4444":
       "15": 0.0
       "1111": {{0 - 2.5 * full_grid + 1.5 * full_grid}}
@@ -306,9 +351,13 @@ rawDistanceOffsetDueToCollisionPoint:
       "2222": {{0 - 1.5 * full_grid + 2.5 * full_grid}}
       "8": {{0 - 2 * full_grid - big_curve_side_comp}}
       "9": {{0 - 2 * full_grid + big_curve_mid_comp + big_curve_side_comp}}
+      "7": {{long_straight_road}}
+      "16": {{long_straight_road}}
    "18":
       "27": 0.0
       "1111": 0.0
+      "28": {{long_straight_road}}
+      "11111": {{long_straight_road}}
    # overlapping ending road
    # end at up side
    "7": 
@@ -388,7 +437,7 @@ levelOfAncestorVehicle: 12
 vehicleIdFont: 7
 
 rawPedestrianInfo:
-   "cross_left111": ["cross_left111", "cross_left11", "cross_left14", "cross_left23", "cross_left222", "cross_left20"]
+   "cross_left111": ["cross_left111", "cross_left11", "cross_left14", "cross_left25", "cross_left22222", "cross_left22"]
 
 
 

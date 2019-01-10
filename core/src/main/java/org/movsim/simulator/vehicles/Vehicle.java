@@ -1074,6 +1074,10 @@ public class Vehicle {
         } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON && speed > 0.001) {
             brakeLightOn = true;
         }
+
+        if (VirtualRoadService.disableBrakeLight()){
+            brakeLightOn = false;
+        }
     }
 
     // ---------------------------------------------------------------------------------

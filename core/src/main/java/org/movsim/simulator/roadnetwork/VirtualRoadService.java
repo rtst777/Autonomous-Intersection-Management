@@ -302,6 +302,10 @@ public class VirtualRoadService {
      * @return true if the trafficLight is the assistant traffic light in the pedestrian service
      */
     public static boolean ifSkipTrafficLightMouseEvent(TrafficLight trafficLight){
+        if (pedestrianService == null){
+            return false;
+        }
+
         return pedestrianService.isAssistantTrafficLight(trafficLight) ||
                 !pedestrianService.isPedestrianCrossingRequestAccepted(trafficLight);
     }
@@ -314,6 +318,10 @@ public class VirtualRoadService {
      * @return true if the roads or its overlapping road is waiting for pedestrian
      */
     public static boolean isNonOverlappingRoadWaitingForPedestrian(int virtualRoadId, int hostRoadID){
+        if (pedestrianService == null){
+            return false;
+        }
+
         if (!pedestrianService.isRoadWaitingForPedestrian(virtualRoadId)){
             return false;
         }
@@ -325,6 +333,15 @@ public class VirtualRoadService {
         }
 
         return true;
+    }
+
+    /**
+     * When pedestrianService exists, we disable brake light so that the UI would be more clear
+     *
+     * @return true if pedestrianService exists
+     */
+    public static boolean disableBrakeLight(){
+        return pedestrianService != null;
     }
 
     /**
