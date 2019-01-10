@@ -642,6 +642,11 @@ public class LaneSegment implements Iterable<Vehicle> {
             double virtualPrecedingDistance = Double.MAX_VALUE;
             Vehicle virtualFrontVehicle = null;
             for (RoadSegment rs : virtualRoadSegments){
+                // skip the non overlapping virtual road if it is waiting for pedestrian
+                if (VirtualRoadService.isNonOverlappingRoadWaitingForPedestrian(rs.id(), roadSegment.id())){
+                    continue;
+                }
+
                 Iterator<LaneSegment> ls_iter = rs.laneSegmentIterator();
                 while (ls_iter.hasNext()) {
                     LaneSegment ls = ls_iter.next();

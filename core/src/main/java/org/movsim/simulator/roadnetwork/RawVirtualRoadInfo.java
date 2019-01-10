@@ -23,4 +23,5 @@ public class RawVirtualRoadInfo {
     public double metricsDisplayY;
     public int vehicleIdFont;
     public int metricsFont;
+    public Map<String, List<String>> rawPedestrianInfo;
 }

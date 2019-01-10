@@ -1,5 +1,6 @@
 package org.movsim.simulator.roadnetwork;
 
+import com.google.common.base.Preconditions;
 import com.hubspot.jinjava.Jinjava;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -8,6 +9,8 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionDelay;
 import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionMetrics;
 import org.movsim.simulator.roadnetwork.IntersectionMetrics.IntersectionThroughput;
+import org.movsim.simulator.roadnetwork.controller.TrafficLight;
+import org.movsim.simulator.roadnetwork.controller.TrafficLightController;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -50,7 +53,7 @@ public class VirtualRoadService {
     private static Map<Integer, Double> problematicCurve;
 
     // id of road -> ids of the roads that are overlapping with that road
-    private static Map<Integer, List<Integer>> overlappingRoads;
+    private static Map<Integer, Set<Integer>> overlappingRoads;
 
     // for all the (long straight) entry roads, we consider two different cases when doing target assignment:
     //   case 1: if the distance from vehicle to end of the road is greater than controlZoneThreshold, we only consider
@@ -82,6 +85,8 @@ public class VirtualRoadService {
 
     // Only for debugging purpose
     public static Map<Integer, String> roadIdToUserId = new HashMap<>();
+
+    private static PedestrianService pedestrianService;
 
     public static int getLevelOfAncestorVehicle() {
         return levelOfAncestorVehicle;
@@ -175,7 +180,7 @@ public class VirtualRoadService {
 
             if (rawVirtualRoadInfo.rawOverlappingRoads != null){
                 rawVirtualRoadInfo.rawOverlappingRoads.forEach((key, value) -> {
-                    List<Integer> overlappingRoadList = new ArrayList<>();
+                    Set<Integer> overlappingRoadList = new HashSet<>();
                     value.forEach(overlappingRoad -> {
                         overlappingRoadList.add(userIdToRoadId.get(overlappingRoad));
                     });
@@ -251,6 +256,75 @@ public class VirtualRoadService {
                 });
             }
         }
+    }
+
+    /**
+     * initialize pedestrian service if rawVirtualRoadInfo.rawPedestrianInfo is not null
+     *
+     * @param trafficLightControllers
+     */
+    public static void initializePedestrianService(List<TrafficLightController> trafficLightControllers){
+        if (rawVirtualRoadInfo.rawPedestrianInfo != null){
+            Map<String, Set<Integer>> signalIdToRoadIds = new HashMap<>();
+            Set<String> assistantTrafficLights = new HashSet<>();
+            Map<String, String> signalIdToDirection = new HashMap<>();
+            rawVirtualRoadInfo.rawPedestrianInfo.forEach((key, value) -> {
+                PedestrianService.validateDirectionString(key);
+
+                Set<Integer> roads = new HashSet<>();
+                value.forEach(trafficLightSignalId -> {
+                        roads.add(userIdToRoadId.get(PedestrianService.extractRoadUserId(trafficLightSignalId)));
+                        if (!trafficLightSignalId.equals(key)){
+                            assistantTrafficLights.add(trafficLightSignalId);
+                        }
+                });
+                signalIdToRoadIds.put(key, roads);
+                signalIdToDirection.put(PedestrianService.extractDirection(key), key);
+            });
+
+            Map<String, TrafficLightController> signalIdToTrafficLightControllers = new HashMap<>();
+            trafficLightControllers.forEach(trafficLightController -> {
+                if (signalIdToDirection.containsKey(trafficLightController.groupId())){
+                    signalIdToTrafficLightControllers.put(
+                            signalIdToDirection.get(trafficLightController.groupId()), trafficLightController);
+                }
+            });
+
+            pedestrianService = new PedestrianService(signalIdToRoadIds, assistantTrafficLights, signalIdToTrafficLightControllers);
+        }
+    }
+
+    /**
+     * Return true if the trafficLight is the assistant traffic light in the pedestrian service or master traffic light
+     * in the pedestrian service but is not in GREEN status
+     *
+     * @param trafficLight
+     * @return true if the trafficLight is the assistant traffic light in the pedestrian service
+     */
+    public static boolean ifSkipTrafficLightMouseEvent(TrafficLight trafficLight){
+        return pedestrianService.isAssistantTrafficLight(trafficLight) ||
+                !pedestrianService.isPedestrianCrossingRequestAccepted(trafficLight);
+    }
+
+    /**
+     * Return true if the virtualRoad is waiting for pedestrian and is not overlapping road of the host road
+     *
+     * @param virtualRoadId
+     * @param hostRoadID
+     * @return true if the roads or its overlapping road is waiting for pedestrian
+     */
+    public static boolean isNonOverlappingRoadWaitingForPedestrian(int virtualRoadId, int hostRoadID){
+        if (!pedestrianService.isRoadWaitingForPedestrian(virtualRoadId)){
+            return false;
+        }
+
+        if (overlappingRoads.containsKey(hostRoadID)){
+            if (overlappingRoads.get(hostRoadID).contains(virtualRoadId)){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

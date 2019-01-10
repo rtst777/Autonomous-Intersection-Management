@@ -38,6 +38,7 @@ import org.movsim.output.FileTrafficLightControllerRecorder;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,6 +127,8 @@ public class TrafficLights implements SimulationTimeStep {
                 trafficLightController.add(trafficLight);
             }
         }
+
+        VirtualRoadService.initializePedestrianService(trafficLightControllers);
     }
 
     private static Map<String, ControllerGroup> createControllerMapping(org.movsim.autogen.TrafficLights input) {

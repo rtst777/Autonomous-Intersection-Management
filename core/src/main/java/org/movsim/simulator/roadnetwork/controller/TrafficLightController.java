@@ -125,4 +125,8 @@ public abstract class TrafficLightController implements SimulationTimeStep, Trig
         this.recordDataCallback = Preconditions.checkNotNull(recordDataCallback);
     }
 
+    public Map<String, TrafficLight> getTrafficLights() {
+        return trafficLights;
+    }
+
 }

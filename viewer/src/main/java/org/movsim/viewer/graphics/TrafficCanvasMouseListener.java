@@ -41,6 +41,7 @@ import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.VirtualRoadService;
 import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
@@ -109,6 +110,12 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             final PosTheta posTheta = roadMapping.map(trafficLight.position(), 0);
             final Rectangle2D trafficLightRect = TrafficCanvasUtils.getRectangle(posTheta, widthHeight);
             if (trafficLightRect.contains(transformedPoint)) {
+                // skip this mouse event if:
+                //   - the traffic light is assistant traffic light in pedestrian service
+                //   - the traffic light is master traffic light in pedestrian service, but it is not in GREEN status
+                if (VirtualRoadService.ifSkipTrafficLightMouseEvent(trafficLight)){
+                    continue;
+                }
                 LOG.info("mouse clicked: traffic light triggers next phase");
                 trafficLight.triggerNextPhase();
                 trafficCanvas.repaint();
