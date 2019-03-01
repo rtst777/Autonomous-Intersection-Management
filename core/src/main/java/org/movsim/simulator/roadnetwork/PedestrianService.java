@@ -108,8 +108,8 @@ public class PedestrianService {
      * Return true if the trafficLight is master traffic light, and is in GREEN status.
      *
      * Whenever pedestrian want to cross the intersection, they should send request to the master traffic light.
-     * (in simulation UI, the request is a mouse click on the master traffic light). The request is accepted if the
-     * master traffic light is in Red status.
+     * (in simulation UI, the request is a mouse click on the master traffic light or arrow key input).
+     * The request is accepted if the master traffic light is in Red status.
      *
      * @param trafficLight
      * @return Return true if the trafficLight is master traffic light, and is in GREEN status.

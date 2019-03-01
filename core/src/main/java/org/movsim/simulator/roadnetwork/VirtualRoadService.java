@@ -294,6 +294,10 @@ public class VirtualRoadService {
         }
     }
 
+    public static boolean isPedestrianServiceEnabled(){
+        return pedestrianService != null;
+    }
+
     /**
      * Return true if the trafficLight is the assistant traffic light in the pedestrian service or master traffic light
      * in the pedestrian service but is not in GREEN status

@@ -72,6 +72,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import static org.movsim.autogen.TrafficLightStatus.GREEN;
+import static org.movsim.autogen.TrafficLightStatus.GREEN_RED;
+
 /**
  * <p>
  * TrafficCanvas class.
@@ -759,6 +762,10 @@ public class TrafficCanvas extends SimulationCanvasBase
             assert roadSegment.trafficLights() != null;
             for (TrafficLight trafficLight : roadSegment.trafficLights()) {
                 Color color = getTrafficLightColor(trafficLight);
+                // don't draw the traffic light if pedestrian is enabled and the traffic is in passing status
+                if (VirtualRoadService.isPedestrianServiceEnabled() && (trafficLight.status() == GREEN || trafficLight.status() == GREEN_RED)){
+                    continue;
+                }
                 TrafficCanvasUtils.drawLine(g, roadSegment.roadMapping(), trafficLight.position(), strokeWidth, color);
             }
         }
@@ -774,7 +781,12 @@ public class TrafficCanvas extends SimulationCanvasBase
                 color = Color.YELLOW;
                 break;
             case RED:
-                color = Color.RED;
+                if (VirtualRoadService.isPedestrianServiceEnabled()){
+                    color = Color.WHITE;
+                }
+                else {
+                    color = Color.RED;
+                }
                 break;
             case RED_GREEN:
                 color = Color.ORANGE;
