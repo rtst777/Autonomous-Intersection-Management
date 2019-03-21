@@ -129,7 +129,7 @@
                     <TrafficLightState type="cross_left22222" status="GreenRed" />
                     <TrafficLightState type="cross_left22" status="GreenRed" />
                 </Phase>
-                <Phase duration="40">
+                <Phase duration="20">
                     <TrafficLightState type="cross_left111" status="Red" />
                     <TrafficLightState type="cross_left11" status="Red" />
                     <TrafficLightState type="cross_left14" status="Red" />
@@ -155,7 +155,7 @@
                     <TrafficLightState type="cross_top44444" status="GreenRed" />
                     <TrafficLightState type="cross_top16" status="GreenRed" />
                 </Phase>
-                <Phase duration="40">
+                <Phase duration="20">
                     <TrafficLightState type="cross_top333" status="Red" />
                     <TrafficLightState type="cross_top23" status="Red" />
                     <TrafficLightState type="cross_top26" status="Red" />
@@ -181,7 +181,7 @@
                     <TrafficLightState type="cross_right11111" status="GreenRed" />
                     <TrafficLightState type="cross_right19" status="GreenRed" />
                 </Phase>
-                <Phase duration="40">
+                <Phase duration="20">
                     <TrafficLightState type="cross_right222" status="Red" />
                     <TrafficLightState type="cross_right5" status="Red" />
                     <TrafficLightState type="cross_right8" status="Red" />
@@ -207,7 +207,7 @@
                     <TrafficLightState type="cross_bottom10" status="GreenRed" />
                     <TrafficLightState type="cross_bottom33333" status="GreenRed" />
                 </Phase>
-                <Phase duration="40">
+                <Phase duration="20">
                     <TrafficLightState type="cross_bottom444" status="Red" />
                     <TrafficLightState type="cross_bottom20" status="Red" />
                     <TrafficLightState type="cross_bottom17" status="Red" />
