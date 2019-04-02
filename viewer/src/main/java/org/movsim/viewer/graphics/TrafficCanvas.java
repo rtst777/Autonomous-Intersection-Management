@@ -564,7 +564,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         // draw intersection throughput metrics
         if (!VirtualRoadService.getIntersectionMetrics().isEmpty()){
             g.setColor(Color.black);
-            TrafficCanvasUtils.drawText("Average Intersection Throughput:", centerX, centerY, font, g);
+//            TrafficCanvasUtils.drawText("Average Intersection Throughput:", centerX, centerY, font, g);
             for (IntersectionThroughput intersectionThroughput : VirtualRoadService.getIntersectionMetrics()){
                 String metricsName = intersectionThroughput.getName();
                 if (metricsColor.containsKey(metricsName)){
@@ -580,10 +580,10 @@ public class TrafficCanvas extends SimulationCanvasBase
                 double averageThroughputInSec = intersectionThroughput.getAverageValue(simulationTime).doubleValue();
                 double averageThroughputInMin = averageThroughputInSec * 60;
                 metricsThroughput.put(metricsName, intersectionThroughput.getValue().longValue());
-                centerY += fontHeight * 1.2;
+//                centerY += fontHeight * 1.2;
                 String unit = averageThroughputInMin > 1 ? " vehicles/min" : " vehicle/min";
                 String displayMetrics = metricsName + ": " + formatter.format(averageThroughputInMin) + unit;
-                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
+//                TrafficCanvasUtils.drawText(displayMetrics, centerX + fontHeight, centerY, font, g);
             }
         }
 
@@ -650,7 +650,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         g.setColor(Color.BLACK);
         double centerX = (polygon.getXPoint(0) + polygon.getXPoint(1) + polygon.getXPoint(2) + polygon.getXPoint(3)) / 4.0;
         double centerY = (polygon.getYPoint(0) + polygon.getYPoint(1) + polygon.getYPoint(2) + polygon.getYPoint(3)) / 4.0;
-        TrafficCanvasUtils.drawText(String.valueOf(vehicle.getId()), centerX, centerY, font, g);
+     //   TrafficCanvasUtils.drawText(String.valueOf(vehicle.getId()), centerX, centerY, font, g);
     }
 
     /**
@@ -708,7 +708,9 @@ public class TrafficCanvas extends SimulationCanvasBase
                 continue;
             }
             TrafficCanvasUtils.drawRoadSegment(g, roadMapping);
-            drawRoadSegmentLines(g, roadMapping);
+            if (!roadSegment.userId().equals("123456789222") && !roadSegment.userId().equals("123456789111")){
+                drawRoadSegmentLines(g, roadMapping);
+            }
         }
     }
 
@@ -895,6 +897,10 @@ public class TrafficCanvas extends SimulationCanvasBase
      */
     private void drawSources(Graphics2D g) {
         for (RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.userId().equals("123456789222") || roadSegment.userId().equals("123456789111")){
+                continue;
+            }
+
             AbstractTrafficSource trafficSource = roadSegment.trafficSource();
             if (trafficSource != null) {
                 TrafficCanvasUtils.drawLine(g, roadSegment.roadMapping(), 0, 4, sourceColor);
@@ -909,6 +915,10 @@ public class TrafficCanvas extends SimulationCanvasBase
      */
     private void drawSinks(Graphics2D g) {
         for (RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.userId().equals("123456789222") || roadSegment.userId().equals("123456789111")){
+                continue;
+            }
+
             TrafficSink sink = roadSegment.sink();
             if (sink != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();

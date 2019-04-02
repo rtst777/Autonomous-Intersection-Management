@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ADD1" length="5" width="3.7" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.2" s0="5" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD2" length="5" width="3.7" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.2" s0="5" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ADD3" length="5" width="3.7" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="5" T="1.2" s0="5" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="pedestrian_on_slim_intersection_refined.xodr">
+        <Simulation timestep="0.2" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ADD1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="ADD2" fraction="0.3" relative_v0_randomization="0.2" />
+                <VehicleType label="ADD3" fraction="0.3" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+
+            <Road id="111">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="222">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="333">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="444">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="5">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="8">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="11">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="14">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="17">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="20">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+            <Road id="23">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            
+            <Road id="26">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="40" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+
+        </Simulation>
+        
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="cross_left"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_left111" status="Green" />
+                    <TrafficLightState type="cross_left11" status="Green" />
+                    <TrafficLightState type="cross_left14" status="Green" />
+                    <TrafficLightState type="cross_left25" status="Green" />
+                    <TrafficLightState type="cross_left22222" status="Green" />
+                    <TrafficLightState type="cross_left22" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_left111" status="GreenRed" />
+                    <TrafficLightState type="cross_left11" status="GreenRed" />
+                    <TrafficLightState type="cross_left14" status="GreenRed" />
+                    <TrafficLightState type="cross_left25" status="GreenRed" />
+                    <TrafficLightState type="cross_left22222" status="GreenRed" />
+                    <TrafficLightState type="cross_left22" status="GreenRed" />
+                </Phase>
+                <Phase duration="20">
+                    <TrafficLightState type="cross_left111" status="Red" />
+                    <TrafficLightState type="cross_left11" status="Red" />
+                    <TrafficLightState type="cross_left14" status="Red" />
+                    <TrafficLightState type="cross_left25" status="Red" />
+                    <TrafficLightState type="cross_left22222" status="Red" />
+                    <TrafficLightState type="cross_left22" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="cross_top"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_top333" status="Green" />
+                    <TrafficLightState type="cross_top23" status="Green" />
+                    <TrafficLightState type="cross_top26" status="Green" />
+                    <TrafficLightState type="cross_top7" status="Green" />
+                    <TrafficLightState type="cross_top44444" status="Green" />
+                    <TrafficLightState type="cross_top16" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_top333" status="GreenRed" />
+                    <TrafficLightState type="cross_top23" status="GreenRed" />
+                    <TrafficLightState type="cross_top26" status="GreenRed" />
+                    <TrafficLightState type="cross_top7" status="GreenRed" />
+                    <TrafficLightState type="cross_top44444" status="GreenRed" />
+                    <TrafficLightState type="cross_top16" status="GreenRed" />
+                </Phase>
+                <Phase duration="20">
+                    <TrafficLightState type="cross_top333" status="Red" />
+                    <TrafficLightState type="cross_top23" status="Red" />
+                    <TrafficLightState type="cross_top26" status="Red" />
+                    <TrafficLightState type="cross_top7" status="Red" />
+                    <TrafficLightState type="cross_top44444" status="Red" />
+                    <TrafficLightState type="cross_top16" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="cross_right"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_right222" status="Green" />
+                    <TrafficLightState type="cross_right5" status="Green" />
+                    <TrafficLightState type="cross_right8" status="Green" />
+                    <TrafficLightState type="cross_right28" status="Green" />
+                    <TrafficLightState type="cross_right11111" status="Green" />
+                    <TrafficLightState type="cross_right19" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_right222" status="GreenRed" />
+                    <TrafficLightState type="cross_right5" status="GreenRed" />
+                    <TrafficLightState type="cross_right8" status="GreenRed" />
+                    <TrafficLightState type="cross_right28" status="GreenRed" />
+                    <TrafficLightState type="cross_right11111" status="GreenRed" />
+                    <TrafficLightState type="cross_right19" status="GreenRed" />
+                </Phase>
+                <Phase duration="20">
+                    <TrafficLightState type="cross_right222" status="Red" />
+                    <TrafficLightState type="cross_right5" status="Red" />
+                    <TrafficLightState type="cross_right8" status="Red" />
+                    <TrafficLightState type="cross_right28" status="Red" />
+                    <TrafficLightState type="cross_right11111" status="Red" />
+                    <TrafficLightState type="cross_right19" status="Red" />
+                </Phase>
+            </ControllerGroup>
+            <ControllerGroup id="cross_bottom"  >
+                <Phase duration="9999999">
+                    <TrafficLightState type="cross_bottom444" status="Green" />
+                    <TrafficLightState type="cross_bottom20" status="Green" />
+                    <TrafficLightState type="cross_bottom17" status="Green" />
+                    <TrafficLightState type="cross_bottom13" status="Green" />
+                    <TrafficLightState type="cross_bottom10" status="Green" />
+                    <TrafficLightState type="cross_bottom33333" status="Green" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState type="cross_bottom444" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom20" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom17" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom13" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom10" status="GreenRed" />
+                    <TrafficLightState type="cross_bottom33333" status="GreenRed" />
+                </Phase>
+                <Phase duration="20">
+                    <TrafficLightState type="cross_bottom444" status="Red" />
+                    <TrafficLightState type="cross_bottom20" status="Red" />
+                    <TrafficLightState type="cross_bottom17" status="Red" />
+                    <TrafficLightState type="cross_bottom13" status="Red" />
+                    <TrafficLightState type="cross_bottom10" status="Red" />
+                    <TrafficLightState type="cross_bottom33333" status="Red" />
+                </Phase>
+            </ControllerGroup>
+        </TrafficLights>
+        
+    </Scenario>
+</Movsim>
+

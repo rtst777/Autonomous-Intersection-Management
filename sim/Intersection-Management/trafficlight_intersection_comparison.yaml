@@ -51,5 +51,7 @@ rawIntersectionDelay:
     - "105-"
     - "106-"
 
-metricsDisplayX: 430
-metricsDisplayY: -120
+metricsDisplayX: 440
+metricsDisplayY: -180
+vehicleIdFont: 7
+metricsFont: 17
