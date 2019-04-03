@@ -121,7 +121,7 @@
                     <TrafficLightState type="cross_left22222" status="Green" />
                     <TrafficLightState type="cross_left22" status="Green" />
                 </Phase>
-                <Phase duration="8">
+                <Phase duration="4">
                     <TrafficLightState type="cross_left111" status="GreenRed" />
                     <TrafficLightState type="cross_left11" status="GreenRed" />
                     <TrafficLightState type="cross_left14" status="GreenRed" />
@@ -147,7 +147,7 @@
                     <TrafficLightState type="cross_top44444" status="Green" />
                     <TrafficLightState type="cross_top16" status="Green" />
                 </Phase>
-                <Phase duration="8">
+                <Phase duration="4">
                     <TrafficLightState type="cross_top333" status="GreenRed" />
                     <TrafficLightState type="cross_top23" status="GreenRed" />
                     <TrafficLightState type="cross_top26" status="GreenRed" />
@@ -173,7 +173,7 @@
                     <TrafficLightState type="cross_right11111" status="Green" />
                     <TrafficLightState type="cross_right19" status="Green" />
                 </Phase>
-                <Phase duration="8">
+                <Phase duration="4">
                     <TrafficLightState type="cross_right222" status="GreenRed" />
                     <TrafficLightState type="cross_right5" status="GreenRed" />
                     <TrafficLightState type="cross_right8" status="GreenRed" />
@@ -199,7 +199,7 @@
                     <TrafficLightState type="cross_bottom10" status="Green" />
                     <TrafficLightState type="cross_bottom33333" status="Green" />
                 </Phase>
-                <Phase duration="8">
+                <Phase duration="4">
                     <TrafficLightState type="cross_bottom444" status="GreenRed" />
                     <TrafficLightState type="cross_bottom20" status="GreenRed" />
                     <TrafficLightState type="cross_bottom17" status="GreenRed" />
