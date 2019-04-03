@@ -663,7 +663,7 @@ public class TrafficCanvas extends SimulationCanvasBase
         if (backgroundPicture != null) {
             int height = backgroundPicture.getHeight();
             int width = backgroundPicture.getWidth();
-            g.drawImage(backgroundPicture, 0, -height, (int) (width * 1.01), 0, 0, 0, width, height, null);
+            g.drawImage(backgroundPicture, -220, 60 - 480 - 110 - 10, 260, 540 - 480 - 110 - 10, 0, 0, width, height, null);
         }
 
         drawRoadSegmentsAndLines(g);
@@ -784,7 +784,7 @@ public class TrafficCanvas extends SimulationCanvasBase
                 break;
             case RED:
                 if (VirtualRoadService.isPedestrianServiceEnabled()){
-                    color = Color.WHITE;
+                    color = new Color(235, 234, 224);
                 }
                 else {
                     color = Color.RED;
