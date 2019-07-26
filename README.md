@@ -18,7 +18,7 @@ The system consists of four major components:
   <tbody>
     <tr>
       <th align="center">Scenario Initializer</th>
-      <th>Central Server</th>
+      <th align="center">Central Server</th>
     </tr>
     <tr>
       <td>
@@ -43,7 +43,7 @@ The system consists of four major components:
       </td>
     </tr>
     <tr>
-      <th align="center">Vehicle</th>
+      <th align="center">Autonomous Vehicle</th>
       <th align="center">Graphical User Interface</th>
     </tr>
     <tr>
