@@ -7,7 +7,7 @@ The project was originally forked from [Movsim](https://github.com/movsim/movsim
 ## Core Algorithm
 This project leverages the idea of virtual platooning from the paper “”. Each vehicle within the intersection area is assigned with a preceding vehicle to follow. The preceding vehicle can be on the same road or different road.
 
-Figure: Three Images.
+<img src = "https://github.com/rtst777/Toxic-Language-Classifier/blob/develop/img/virtual_platooning_visualization.png" width="1000" height="200">
 
 Once the vehicle receives the preceding vehicle information, it will keep following that vehicle with safe distance until it is assigned with a new preceding vehicle. If the vehicle has no preceding vehicle assigned, it will move with its constant desired speed.
 
