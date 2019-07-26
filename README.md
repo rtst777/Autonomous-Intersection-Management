@@ -86,7 +86,7 @@ The system consists of four major components:
 
 <br/>
 With the following system-level diagram: <br/><br/>
-<img src = "https://github.com/rtst777/Autonomous-Intersection-Management/blob/develop/img/system_design_diagram.jpg" width="350" height="400">
+<img src = "https://github.com/rtst777/Autonomous-Intersection-Management/blob/develop/img/system_design_diagram.jpg" width="430" height="500">
 
 
 ## Video Demo
