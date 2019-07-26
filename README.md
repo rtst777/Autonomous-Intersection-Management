@@ -89,7 +89,7 @@ With the following system-level diagram: <br/><br/>
 <img src = "https://github.com/rtst777/Autonomous-Intersection-Management/blob/develop/img/system_design_diagram.jpg" width="430" height="500">
 
 
-## Video Demo
+## Demo Videos
 - [demo with high traffic load](https://youtu.be/sH3L4d5EbE0)
 - [demo with pedestrian](https://youtu.be/JaevMnvq1zc)
 - [performance comparison](https://youtu.be/h8SUe_SF_aI)
