@@ -1,5 +1,5 @@
 # Autonomous-Intersection-Management 
-## Description
+## Overview
 This project implements an automated intersection management system, which can control and manage the intersection traffic without the help of traffic lights. It reduces the intersection delay by roughly 37% compared to the traffic lights systems. In addition, it allows pedestrians to cross the road with minimum waiting time.
 
 The project was originally forked from [Movsim](https://github.com/movsim/movsim).
