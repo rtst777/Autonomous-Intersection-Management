@@ -5,7 +5,7 @@ This project implements an automated intersection management system, which can c
 The project was originally forked from [Movsim](https://github.com/movsim/movsim).
 
 ## Core Algorithm
-This project leverages the idea of virtual platooning from the paper “Cooperative Intersection Control Based on Virtual Platooning”. Each vehicle within the intersection area is assigned with a preceding vehicle to follow. The preceding vehicle can be on the same road or different road.
+This project leverages the idea of virtual platooning from the paper “[Cooperative Intersection Control Based on Virtual Platooning](https://ieeexplore.ieee.org/abstract/document/8013718)”. Each vehicle within the intersection area is assigned with a preceding vehicle to follow. The preceding vehicle can be on the same road or different road.
 <br/><br/>
 <img src = "https://github.com/rtst777/Autonomous-Intersection-Management/blob/develop/img/virtual_platooning_visualization.png" width="700" height="300">
 
